@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biotrade eats – Rescue Delicious Food</title>
+  <meta name="description" content="Grab surprise bags of delicious food at 50-70% off from restaurants, bakeries, and supermarkets near you. Save food, save money." />
+
+  <!-- Google Fonts – Inter & Prompt (Thai) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- i18n Translation Engine -->
+  <script src="i18n.js"></script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            neon: '#00FF9D',
+            slate: {
+              950: '#0B0F19',
+              900: '#0F1423',
+              850: '#141A2E',
+              800: '#1A2138',
+              750: '#1F2847',
+            },
+            warm: {
+              DEFAULT: '#F59E0B',
+              deep: '#D97706',
+              light: '#FBBF24',
+              glow: 'rgba(245,158,11,0.15)',
+            },
+          },
+          borderRadius: {
+            '2xl': '16px',
+            '3xl': '24px',
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'slide-up': 'slideUp 0.6s ease-out forwards',
+            'slide-down': 'slideDown 0.4s ease-out forwards',
+            'pulse-dot': 'pulseDot 2s ease-in-out infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+            'bounce-subtle': 'bounceSub 2s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(24px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            slideDown: {
+              '0%': { opacity: '0', transform: 'translateY(-12px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulseDot: {
+              '0%, 100%': { transform: 'scale(1)', opacity: '1' },
+              '50%': { transform: 'scale(1.5)', opacity: '0.5' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            },
+            bounceSub: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-4px)' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0B0F19;
+      color: #f1f5f9;
+    }
+
+    /* ── Scrollbar ─────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.3); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.5); }
+
+    /* ── Glass ─────────────────────────────────────── */
+    .glass {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .glass-strong {
+      background: rgba(255,255,255,0.06);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Surprise Bag Card ─────────────────────────── */
+    .bag-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+    }
+    .bag-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      padding: 1px;
+      background: linear-gradient(160deg, rgba(255,255,255,0.08), transparent 40%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .bag-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(245,158,11,0.2);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.3),
+        0 0 60px rgba(245,158,11,0.06);
+    }
+    .bag-card:hover .bag-img {
+      transform: scale(1.06);
+    }
+    .bag-card:hover .btn-reserve {
+      box-shadow: 0 6px 24px rgba(245,158,11,0.4);
+    }
+
+    /* ── Image Container ──────────────────────────── */
+    .bag-img-wrap {
+      position: relative;
+      overflow: hidden;
+      height: 180px;
+    }
+    .bag-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .bag-img-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(11,15,25,0.8) 100%);
+      pointer-events: none;
+    }
+
+    /* ── Badge ─────────────────────────────────────── */
+    .badge-save {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      letter-spacing: 0.03em;
+      z-index: 2;
+      box-shadow: 0 2px 10px rgba(245,158,11,0.4);
+    }
+    .badge-category {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(11,15,25,0.7);
+      backdrop-filter: blur(8px);
+      color: rgba(255,255,255,0.7);
+      font-size: 0.65rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      z-index: 2;
+    }
+
+    /* ── Reserve Button ────────────────────────────── */
+    .btn-reserve {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px 0;
+      border-radius: 14px;
+      border: none;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.88rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.25);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-reserve:hover {
+      transform: translateY(-1px);
+    }
+    .btn-reserve::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .btn-reserve:hover::after { opacity: 1; }
+
+    /* ── Filter Pill ──────────────────────────────── */
+    .filter-pill {
+      padding: 8px 20px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: rgba(255,255,255,0.55);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .filter-pill:hover {
+      border-color: rgba(245,158,11,0.3);
+      color: rgba(255,255,255,0.8);
+      background: rgba(245,158,11,0.08);
+    }
+    .filter-pill.active {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 2px 12px rgba(245,158,11,0.3);
+    }
+
+    /* ── Floating Bottom Nav ──────────────────────── */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: rgba(11,15,25,0.85);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 8px 0;
+      padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    }
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      font-size: 0.65rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: color 0.3s;
+      padding: 4px 0;
+      position: relative;
+    }
+    .bottom-nav-item:hover,
+    .bottom-nav-item.active {
+      color: #F59E0B;
+    }
+    .bottom-nav-item.active::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      width: 20px;
+      height: 3px;
+      background: #F59E0B;
+      border-radius: 0 0 3px 3px;
+    }
+
+    /* ── Search Input ─────────────────────────────── */
+    .search-input {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px 16px 10px 42px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.85rem;
+      color: #f1f5f9;
+      outline: none;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+    .search-input:focus {
+      border-color: rgba(245,158,11,0.4);
+      background: rgba(255,255,255,0.08);
+      box-shadow: 0 0 0 3px rgba(245,158,11,0.08);
+    }
+
+    /* ── Hero ─────────────────────────────────────── */
+    .hero-eats {
+      position: relative;
+      border-radius: 24px;
+      overflow: hidden;
+      min-height: 220px;
+      background:
+        linear-gradient(135deg,
+          rgba(245,158,11,0.25) 0%,
+          rgba(217,119,6,0.15) 50%,
+          rgba(11,15,25,0.9) 100%),
+        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80') center/cover;
+    }
+    .hero-eats::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,
+        rgba(11,15,25,0.85) 0%,
+        rgba(11,15,25,0.4) 60%,
+        transparent 100%);
+    }
+
+    /* ── Time Indicator ───────────────────────────── */
+    .time-block {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: rgba(0,255,157,0.06);
+      border: 1px solid rgba(0,255,157,0.12);
+    }
+
+    /* ── Left count pill ──────────────────────────── */
+    .bags-left {
+      position: absolute;
+      bottom: 12px;
+      left: 12px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(11,15,25,0.8);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: #00FF9D;
+      border: 1px solid rgba(0,255,157,0.15);
+      z-index: 2;
+    }
+
+    /* ── Skeleton Shimmer (preload hint) ───────────── */
+    .skeleton {
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0.04) 25%,
+        rgba(255,255,255,0.08) 50%,
+        rgba(255,255,255,0.04) 75%);
+      background-size: 200% 100%;
+    }
+
+    /* ── Stagger children ─────────────────────────── */
+    .stagger > * { opacity: 0; animation: slideUp 0.5s ease-out forwards; }
+    .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+    .stagger > *:nth-child(2) { animation-delay: 0.10s; }
+    .stagger > *:nth-child(3) { animation-delay: 0.15s; }
+    .stagger > *:nth-child(4) { animation-delay: 0.20s; }
+    .stagger > *:nth-child(5) { animation-delay: 0.25s; }
+    .stagger > *:nth-child(6) { animation-delay: 0.30s; }
+
+    /* ── Nav Link ──────────────────────────────── */
+    .nav-link {
+      font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      padding: 6px 14px; border-radius: 10px;
+      transition: all 0.3s; cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.95); background: rgba(255,255,255,0.06); }
+    .nav-link.active {
+      color: #00FF9D; background: rgba(0,255,157,0.08);
+      border: 1px solid rgba(0,255,157,0.18);
+      font-weight: 600;
+    }
+
+    /* hide bottom nav on desktop */
+    @media (min-width: 768px) {
+      .bottom-nav { display: none; }
+    }
+
+    .start-hidden { opacity: 0; }
+
+    /* ── Language Switcher ─────────────────────────── */
+    .lang-btn {
+      color: rgba(255,255,255,0.4);
+      transition: all 0.25s ease;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .lang-btn:hover {
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.06);
+    }
+    .lang-btn.active-lang {
+      background: #00FF9D;
+      color: #0B0F19 !important;
+      font-weight: 800;
+      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-950 pb-20 md:pb-0">
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════════════ -->
+  <nav class="sticky top-0 z-40 glass-strong animate-slide-down">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-4">
+
+        <!-- Logo -->
+        <a href="index.html" id="nav-logo" class="flex items-center gap-2 shrink-0 group">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-warm/20 to-warm/5 border border-warm/25 flex items-center justify-center group-hover:border-warm/50 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+              <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+            </svg>
+          </div>
+          <span class="text-lg font-bold tracking-wide text-white/90">biotrade <span class="text-warm">eats</span></span>
+        </a>
+
+        <!-- Center Nav Links -->
+        <nav class="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+          <a href="index.html" data-i18n="nav.gateway" class="nav-link">Gateway</a>
+          <a href="eats.html" data-i18n="nav.eats" class="nav-link active">biotrade eats</a>
+          <a href="raw.html" data-i18n="nav.raw" class="nav-link">biotrade raw</a>
+          <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">Post Waste</a>
+        </nav>
+
+        <!-- Search (hidden on small mobile) -->
+        <div class="hidden xl:flex flex-1 max-w-xs relative">
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          </svg>
+          <input id="search-input" type="text" placeholder="Search food bags…" data-i18n-placeholder="eats.searchPlaceholder" class="search-input" />
+        </div>
+
+        <!-- Right Controls -->
+        <div class="flex items-center gap-3">
+          <!-- Language Switcher (EN | TH) -->
+          <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+            <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
+            <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+          </div>
+
+          <!-- Location -->
+          <button id="btn-location" class="flex items-center gap-1.5 text-sm text-white/50 hover:text-warm transition-colors shrink-0">
+            <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span class="hidden md:inline">Nakhon Pathom</span>
+          </button>
+
+          <!-- Profile -->
+          <button id="btn-profile" class="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-warm/30 transition-colors">
+            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN CONTENT
+  ════════════════════════════════════════════════ -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
+
+    <!-- ── HERO BANNER ── -->
+    <section id="hero-banner" class="hero-eats mb-8 start-hidden animate-slide-up">
+      <div class="relative z-10 p-6 sm:p-10 flex flex-col justify-center min-h-[220px]">
+        <div class="inline-flex items-center gap-2 bg-warm/15 border border-warm/20 text-warm text-xs font-semibold px-3 py-1.5 rounded-full w-fit mb-4">
+          <span class="w-1.5 h-1.5 rounded-full bg-warm animate-pulse-dot"></span>
+          Limited time offers
+        </div>
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight max-w-md mb-3" data-i18n="eats.heroTitle">
+          Grab a Surprise Bag<br />before it's gone!
+        </h2>
+        <p class="text-white/50 text-sm sm:text-base max-w-sm mb-6" data-i18n="eats.heroDesc">
+          Rescue food from your favourite local shops at up to 70% off.
+        </p>
+        <a href="#cards-grid" id="btn-hero-browse" class="inline-flex items-center gap-2 bg-gradient-to-r from-warm to-warm-deep text-white font-semibold text-sm px-6 py-3 rounded-2xl w-fit shadow-lg shadow-warm/20 hover:shadow-warm/35 hover:-translate-y-0.5 transition-all">
+          Browse nearby
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      <!-- Decorative circles -->
+      <div class="absolute top-6 right-6 w-32 h-32 rounded-full bg-warm/10 blur-2xl pointer-events-none"></div>
+      <div class="absolute bottom-0 right-16 w-48 h-48 rounded-full bg-warm/5 blur-3xl pointer-events-none"></div>
+    </section>
+
+    <!-- ── Mobile Search (shown only on xs) ── -->
+    <div class="sm:hidden mb-5 relative">
+      <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      </svg>
+      <input type="text" placeholder="Search restaurants, bakeries…" data-i18n-placeholder="eats.searchPlaceholder" class="search-input" />
+    </div>
+
+    <!-- ── FILTER TAGS ── -->
+    <section id="filters" class="flex items-center gap-2.5 overflow-x-auto pb-2 mb-6 scrollbar-none start-hidden animate-slide-up" style="animation-delay:0.1s; -ms-overflow-style:none; scrollbar-width:none;">
+      <button class="filter-pill active" data-filter="all">
+        <span class="flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          <span data-i18n="eats.filterAll">All</span>
+        </span>
+      </button>
+      <button class="filter-pill" data-filter="bakery">
+        <span class="flex items-center gap-1.5">🥐 <span data-i18n="eats.filterBakery">Bakery</span></span>
+      </button>
+      <button class="filter-pill" data-filter="meals">
+        <span class="flex items-center gap-1.5">🍱 <span data-i18n="eats.filterMeals">Meals</span></span>
+      </button>
+      <button class="filter-pill" data-filter="supermarket">
+        <span class="flex items-center gap-1.5">🛒 <span data-i18n="eats.filterSupermarket">Supermarket</span></span>
+      </button>
+      <button class="filter-pill" data-filter="vegetarian">
+        <span class="flex items-center gap-1.5">🥗 <span data-i18n="eats.filterVegetarian">Vegetarian</span></span>
+      </button>
+    </section>
+
+    <!-- ── Section Heading ── -->
+    <div class="flex items-center justify-between mb-5 start-hidden animate-slide-up" style="animation-delay:0.15s;">
+      <h3 class="text-lg font-bold text-white/90" data-i18n="eats.availTitle">Surprise Bags Near You</h3>
+      <span class="text-xs text-white/30 font-medium">24 available</span>
+    </div>
+
+    <!-- ── SURPRISE BAG CARDS GRID ── -->
+    <section id="cards-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6 stagger mb-12">
+
+      <!-- ─── Card 1: Siam Bakery ─── -->
+      <article class="bag-card" data-category="bakery">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80" alt="Assorted bakery pastries" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 70%</span>
+          <span class="badge-category">🥐 Bakery</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            3 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <!-- Store Info -->
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Siam Bakery</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.8</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">1.2 km</span>
+              </div>
+            </div>
+            <!-- Heart -->
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Pickup Time -->
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 20:00 – 21:00</span>
+          </div>
+
+          <!-- Price + Button -->
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿200</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿59</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── Card 2: Green Bowl Cafe ─── -->
+      <article class="bag-card" data-category="vegetarian">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80" alt="Colorful vegetarian salad bowl" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 60%</span>
+          <span class="badge-category">🥗 Vegetarian</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            5 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Green Bowl Café</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.6</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">0.8 km</span>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 18:30 – 19:30</span>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿180</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿69</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── Card 3: Thai Kitchen Express ─── -->
+      <article class="bag-card" data-category="meals">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600&q=80" alt="Thai cuisine pad thai and spring rolls" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 55%</span>
+          <span class="badge-category">🍱 Meals</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            2 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Thai Kitchen Express</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.9</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">2.1 km</span>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 20:00 – 21:00</span>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿250</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿99</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── Card 4: Tops Supermarket ─── -->
+      <article class="bag-card" data-category="supermarket">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80" alt="Fresh grocery produce and fruits" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 65%</span>
+          <span class="badge-category">🛒 Supermarket</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            8 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Tops Supermarket</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.3</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">3.5 km</span>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 21:00 – 22:00</span>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿350</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿119</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── Card 5: Baan Kanom Thai ─── -->
+      <article class="bag-card" data-category="bakery">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80" alt="Thai desserts and sweets" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 50%</span>
+          <span class="badge-category">🥐 Bakery</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            4 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Baan Kanom Thai</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.7</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">0.5 km</span>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 17:00 – 18:00</span>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿160</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿79</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+      <!-- ─── Card 6: Panda Fresh Mart ─── -->
+      <article class="bag-card" data-category="supermarket">
+        <div class="bag-img-wrap">
+          <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc608a?w=600&q=80" alt="Fresh fruits and groceries" class="bag-img" loading="lazy" />
+          <div class="bag-img-overlay"></div>
+          <span class="badge-save">Save 60%</span>
+          <span class="badge-category">🛒 Supermarket</span>
+          <div class="bags-left">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
+            6 bags left
+          </div>
+        </div>
+        <div class="p-5">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <h4 class="font-bold text-white text-[0.95rem]">Panda Fresh Mart</h4>
+              <div class="flex items-center gap-2 mt-0.5">
+                <div class="flex items-center gap-0.5">
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span class="text-xs text-white/50 font-medium">4.5</span>
+                </div>
+                <span class="text-white/15">·</span>
+                <span class="text-xs text-white/40">1.8 km</span>
+              </div>
+            </div>
+            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+              </svg>
+            </button>
+          </div>
+          <div class="time-block mb-4">
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span class="text-xs text-white/60 font-medium">Today 19:00 – 20:00</span>
+          </div>
+          <div class="flex items-end justify-between gap-3">
+            <div>
+              <span class="text-xs text-white/30 line-through">฿300</span>
+              <div class="text-xl font-extrabold text-warm leading-none mt-0.5">฿109</div>
+            </div>
+            <button class="btn-reserve flex-1 max-w-[160px]">Reserve Now</button>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       FLOATING BOTTOM NAV (Mobile Only)
+  ════════════════════════════════════════════════ -->
+  <nav class="bottom-nav md:hidden" id="bottom-nav">
+    <div class="flex items-center justify-around max-w-md mx-auto">
+
+      <button class="bottom-nav-item active" id="nav-home">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span data-i18n="eats.bottomHome">Home</span>
+      </button>
+
+      <button class="bottom-nav-item" id="nav-map">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        <span data-i18n="eats.bottomMap">Map View</span>
+      </button>
+
+      <button class="bottom-nav-item" id="nav-orders">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        </svg>
+        <span data-i18n="eats.bottomOrders">Orders</span>
+      </button>
+
+      <button class="bottom-nav-item" id="nav-profile">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+        </svg>
+        <span data-i18n="eats.bottomProfile">Profile</span>
+      </button>
+
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════════ -->
+  <script>
+    // ── Filter Tags ─────────────────────────────────
+    const filterBtns = document.querySelectorAll('.filter-pill');
+    const cards = document.querySelectorAll('.bag-card');
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        // Toggle active
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const filter = btn.dataset.filter;
+
+        cards.forEach((card, i) => {
+          const cat = card.dataset.category;
+          const show = filter === 'all' || cat === filter;
+
+          if (show) {
+            card.style.display = '';
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(16px)';
+            setTimeout(() => {
+              card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+              card.style.opacity = '1';
+              card.style.transform = 'translateY(0)';
+            }, i * 60);
+          } else {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(8px)';
+            setTimeout(() => {
+              card.style.display = 'none';
+            }, 300);
+          }
+        });
+
+        // Update count
+        const count = filter === 'all'
+          ? cards.length
+          : document.querySelectorAll(`.bag-card[data-category="${filter}"]`).length;
+        // This is demo so we just update the visible count text
+      });
+    });
+
+    // ── Bottom Nav Active Toggle ─────────────────────
+    const navItems = document.querySelectorAll('.bottom-nav-item');
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(n => n.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+
+    // ── Reserve Button Micro-Interaction ─────────────
+    document.querySelectorAll('.btn-reserve').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const original = this.textContent;
+        this.innerHTML = `
+          <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Reserving…
+        `;
+        this.style.opacity = '0.7';
+        this.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+          this.innerHTML = `
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Reserved!
+          `;
+          this.style.opacity = '1';
+          this.style.background = 'linear-gradient(135deg, #00FF9D, #00CC7D)';
+          this.style.color = '#0B0F19';
+          this.style.boxShadow = '0 4px 16px rgba(0,255,157,0.3)';
+        }, 1200);
+      });
+    });
+
+    // ── Favourite Heart Toggle ────────────────────────
+    document.querySelectorAll('.group\\/fav').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const svg = this.querySelector('svg');
+        const isFilled = svg.getAttribute('fill') === 'currentColor' && svg.getAttribute('stroke-width') === '0';
+        if (isFilled) {
+          svg.setAttribute('fill', 'none');
+          svg.setAttribute('stroke-width', '2');
+          svg.classList.remove('text-warm');
+          svg.classList.add('text-white/25');
+        } else {
+          svg.setAttribute('fill', 'currentColor');
+          svg.setAttribute('stroke-width', '0');
+          svg.classList.remove('text-white/25');
+          svg.classList.add('text-warm');
+        }
+        // Little pop animation
+        this.style.transform = 'scale(1.3)';
+        setTimeout(() => { this.style.transform = 'scale(1)'; }, 200);
+      });
+    });
+
+    // ── Google Maps Store Finder Integration ─────────
+    let eatsMap;
+    const eatsStores = [
+      { name: "Siam Bakery", lat: 13.8210, lng: 100.0460, price: "฿59", time: "Today 20:00 - 21:00", type: "Bakery", left: "3 left" },
+      { name: "Green Bowl Salad & Cafe", lat: 13.8180, lng: 100.0420, price: "฿89", time: "Today 19:30 - 20:30", type: "Meals", left: "5 left" },
+      { name: "Sweet Treats Bakery", lat: 13.8230, lng: 100.0500, price: "฿45", time: "Today 21:00 - 22:00", type: "Bakery", left: "2 left" },
+      { name: "Fresh Mart Supermarket", lat: 13.8150, lng: 100.0380, price: "฿99", time: "Today 20:30 - 21:30", type: "Supermarket", left: "8 left" },
+      { name: "Vegan Paradise Cafe", lat: 13.8260, lng: 100.0410, price: "฿79", time: "Today 18:30 - 19:30", type: "Vegetarian", left: "4 left" },
+      { name: "Artisan Bakehouse", lat: 13.8120, lng: 100.0480, price: "฿65", time: "Today 20:00 - 21:00", type: "Bakery", left: "1 left" }
+    ];
+
+    function initEatsMap() {
+      const mapEl = document.getElementById('eats-google-map');
+      if (!mapEl || typeof google === 'undefined' || !google.maps) return;
+
+      eatsMap = new google.maps.Map(mapEl, {
+        center: { lat: 13.8196, lng: 100.0443 },
+        zoom: 14,
+        mapTypeId: 'roadmap',
+        styles: [
+          { "featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{ "color": "#cbd5e1" }] },
+          { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#0f172a" }] },
+          { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "road", "elementType": "all", "stylers": [{ "color": "#1e293b" }] },
+          { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#020617" }] }
+        ]
+      });
+
+      const infoWindow = new google.maps.InfoWindow();
+
+      eatsStores.forEach(store => {
+        // Orange custom food bag pin
+        const markerIcon = {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="18" cy="18" r="16" fill="#0B0F19" stroke="#F59E0B" stroke-width="3"/>
+              <circle cx="18" cy="18" r="7" fill="#F59E0B"/>
+            </svg>
+          `),
+          scaledSize: new google.maps.Size(32, 32),
+          anchor: new google.maps.Point(16, 16)
+        };
+
+        const m = new google.maps.Marker({
+          position: { lat: store.lat, lng: store.lng },
+          map: eatsMap,
+          icon: markerIcon,
+          title: store.name
+        });
+
+        m.addListener('click', () => {
+          infoWindow.setContent(`
+            <div style="font-family:Inter,sans-serif; padding:6px; color:#0f172a; min-width:180px;">
+              <span style="font-size:10px; font-weight:700; color:#ea580c; text-transform:uppercase;">${store.type} · ${store.left}</span>
+              <h4 style="font-size:14px; font-weight:800; margin:2px 0 4px 0;">${store.name}</h4>
+              <p style="font-size:11px; color:#64748b; margin:0 0 6px 0;">${store.time}</p>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="font-size:14px; font-weight:800; color:#ea580c;">${store.price}</span>
+                <span style="font-size:10px; background:#0f172a; color:#fff; padding:3px 8px; border-radius:6px; font-weight:700;">Reserve</span>
+              </div>
+            </div>
+          `);
+          infoWindow.open(eatsMap, m);
+        });
+      });
+    }
+
+    function openEatsMapModal() {
+      const modal = document.getElementById('modal-eats-map');
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        setTimeout(() => {
+          if (!eatsMap) initEatsMap();
+          else google.maps.event.trigger(eatsMap, 'resize');
+        }, 150);
+      }
+    }
+
+    function closeEatsMapModal() {
+      const modal = document.getElementById('modal-eats-map');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    // Attach to Map View nav and location button
+    const navMapBtn = document.getElementById('nav-map');
+    const btnLocation = document.getElementById('btn-location');
+    if (navMapBtn) navMapBtn.addEventListener('click', openEatsMapModal);
+    if (btnLocation) btnLocation.addEventListener('click', openEatsMapModal);
+  </script>
+
+  <!-- ═══════════════════════════════════════════════
+       GOOGLE MAP MODAL (EATS SURPRISE BAG FINDER)
+  ════════════════════════════════════════════════ -->
+  <div id="modal-eats-map" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in" onclick="if(event.target===this)closeEatsMapModal()">
+    <div class="bg-slate-900 border border-warm/30 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="flex items-center justify-between pb-3 border-b border-white/8 shrink-0">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-warm/20 text-warm flex items-center justify-center">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-white" data-i18n="eats.mapTitle">Surprise Bags Map View</h3>
+            <span class="text-xs text-warm" data-i18n="eats.mapSubtitle">6 active food rescue spots in Nakhon Pathom</span>
+          </div>
+        </div>
+        <button onclick="closeEatsMapModal()" class="text-white/40 hover:text-white p-1.5 cursor-pointer">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <!-- Map Element -->
+      <div class="mt-4 rounded-2xl overflow-hidden border border-white/10 flex-1 min-h-[350px] relative">
+        <div id="eats-google-map" class="w-full h-full min-h-[350px] bg-slate-950"></div>
+      </div>
+
+      <div class="mt-4 flex items-center justify-between text-xs text-white/50 shrink-0">
+        <span>Click any orange pin to view bag details & pricing</span>
+        <button onclick="closeEatsMapModal()" data-i18n="eats.mapClose" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold cursor-pointer">Close Map</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Google Maps API with user key -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCtGCYw5n9W7Igirw661E-Wdc0vJGiST0&callback=initEatsMap&v=weekly" async defer></script>
+
+</body>
+</html>

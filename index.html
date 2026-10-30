@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biotrade – Save Food. Trade Waste. Zero Landfill.</title>
+  <meta name="description" content="biotrade is a dual-gateway platform: rescue delicious food at 50-70% off with biotrade eats, or trade organic waste on the B2B marketplace with biotrade raw. Zero landfill starts here." />
+
+  <!-- Google Fonts – Inter & Prompt (Thai) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- i18n Translation Engine -->
+  <script src="i18n.js"></script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            neon: '#00FF9D',
+            slate: {
+              950: '#0B0F19',
+              900: '#0F1423',
+              850: '#141A2E',
+              800: '#1A2138',
+            },
+            warm: '#F59E0B',
+            'warm-deep': '#D97706',
+            tech: {
+              blue: '#3B82F6',
+              gray: '#64748B',
+            },
+          },
+          borderRadius: {
+            '2xl': '16px',
+            '3xl': '24px',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'float-delayed': 'float 8s ease-in-out 2s infinite',
+            'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+            'slide-up': 'slideUp 0.8s ease-out forwards',
+            'slide-up-delay': 'slideUp 0.8s ease-out 0.2s forwards',
+            'fade-in': 'fadeIn 1s ease-out forwards',
+            'shimmer': 'shimmer 3s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            pulseGlow: {
+              '0%, 100%': { opacity: '0.4' },
+              '50%': { opacity: '0.8' },
+            },
+            slideUp: {
+              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% center' },
+              '100%': { backgroundPosition: '200% center' },
+            },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    /* ── Base ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0B0F19;
+      color: #f1f5f9;
+      overflow-x: hidden;
+    }
+
+    /* ── Animated Grid Background ─────────────────── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,157,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,157,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Floating Orbs ────────────────────────────── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(0,255,157,0.15), transparent 70%);
+      top: -100px; left: -100px;
+    }
+    .orb-2 {
+      width: 350px; height: 350px;
+      background: radial-gradient(circle, rgba(245,158,11,0.12), transparent 70%);
+      bottom: -80px; right: -80px;
+    }
+    .orb-3 {
+      width: 250px; height: 250px;
+      background: radial-gradient(circle, rgba(59,130,246,0.08), transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* ── Glass Card ────────────────────────────────── */
+    .glass-card {
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 24px;
+      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 24px;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+    .glass-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    /* ── Eats Card Specifics ──────────────────────── */
+    .card-eats {
+      background: linear-gradient(160deg,
+        rgba(245,158,11,0.12) 0%,
+        rgba(245,158,11,0.04) 40%,
+        rgba(255,255,255,0.03) 100%);
+    }
+    .card-eats:hover {
+      background: linear-gradient(160deg,
+        rgba(245,158,11,0.20) 0%,
+        rgba(245,158,11,0.08) 40%,
+        rgba(255,255,255,0.05) 100%);
+      box-shadow:
+        0 20px 60px rgba(245,158,11,0.15),
+        0 0 80px rgba(245,158,11,0.05);
+    }
+
+    /* ── Raw Card Specifics ───────────────────────── */
+    .card-raw {
+      background: linear-gradient(160deg,
+        rgba(0,255,157,0.08) 0%,
+        rgba(0,255,157,0.02) 40%,
+        rgba(255,255,255,0.03) 100%);
+    }
+    .card-raw:hover {
+      background: linear-gradient(160deg,
+        rgba(0,255,157,0.18) 0%,
+        rgba(0,255,157,0.06) 40%,
+        rgba(255,255,255,0.05) 100%);
+      box-shadow:
+        0 20px 60px rgba(0,255,157,0.12),
+        0 0 80px rgba(0,255,157,0.04);
+    }
+
+    /* ── Buttons ──────────────────────────────────── */
+    .btn-gateway {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 0.02em;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-gateway::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.35s;
+    }
+    .btn-gateway:hover::after { opacity: 1; }
+
+    .btn-eats {
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+    }
+    .btn-eats:hover {
+      box-shadow: 0 8px 36px rgba(245,158,11,0.45);
+      transform: translateY(-2px);
+    }
+
+    .btn-raw {
+      background: linear-gradient(135deg, #00FF9D, #00CC7D);
+      color: #0B0F19;
+      box-shadow: 0 4px 20px rgba(0,255,157,0.25);
+    }
+    .btn-raw:hover {
+      box-shadow: 0 8px 36px rgba(0,255,157,0.4);
+      transform: translateY(-2px);
+    }
+
+    /* ── Icon Circles ─────────────────────────────── */
+    .icon-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      position: relative;
+    }
+    .icon-circle::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      border: 2px solid transparent;
+      animation: pulseGlow 4s ease-in-out infinite;
+    }
+    .icon-eats {
+      background: rgba(245,158,11,0.15);
+      border: 1px solid rgba(245,158,11,0.3);
+    }
+    .icon-eats::after { border-color: rgba(245,158,11,0.2); }
+    .icon-raw {
+      background: rgba(0,255,157,0.1);
+      border: 1px solid rgba(0,255,157,0.25);
+    }
+    .icon-raw::after { border-color: rgba(0,255,157,0.15); }
+
+    /* ── Tag Pill ─────────────────────────────────── */
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* ── Shimmer Title ────────────────────────────── */
+    .shimmer-text {
+      background: linear-gradient(
+        90deg,
+        #f1f5f9 0%,
+        #00FF9D 25%,
+        #f1f5f9 50%,
+        #F59E0B 75%,
+        #f1f5f9 100%
+      );
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ── Particle Canvas ──────────────────────────── */
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Nav Link ──────────────────────────────── */
+    .nav-link {
+      font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      padding: 6px 14px; border-radius: 10px;
+      transition: all 0.3s; cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+    .nav-link.active {
+      color: #00FF9D; background: rgba(0,255,157,0.08);
+      border: 1px solid rgba(0,255,157,0.15);
+    }
+
+    /* ── Scroll indicator ─────────────────────────── */
+    .scroll-hint {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    /* ── Opacity-0 for animations ─────────────────── */
+    .start-hidden { opacity: 0; }
+
+    /* ── Language Switcher ─────────────────────────── */
+    .lang-btn {
+      color: rgba(255,255,255,0.4);
+      transition: all 0.25s ease;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .lang-btn:hover {
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.06);
+    }
+    .lang-btn.active-lang {
+      background: #00FF9D;
+      color: #0B0F19 !important;
+      font-weight: 800;
+      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col relative">
+
+  <!-- ═══════ Background Layers ═══════ -->
+  <div class="bg-grid"></div>
+  <div class="orb orb-1 animate-float"></div>
+  <div class="orb orb-2 animate-float-delayed"></div>
+  <div class="orb orb-3 animate-pulse-glow"></div>
+  <canvas id="particles"></canvas>
+
+  <!-- ═══════ Universal Top Bar ═══════ -->
+  <header class="sticky top-0 z-40 w-full bg-[#0B0F19]/80 backdrop-blur-xl border-b border-white/5 py-3 px-4 sm:px-6 lg:px-8 animate-fade-in">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      
+      <!-- Brand Logo -->
+      <a href="index.html" id="logo-link" class="group flex items-center gap-2.5 shrink-0">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-neon/20 to-neon/5 border border-neon/25 flex items-center justify-center group-hover:border-neon/50 transition-colors duration-300">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <span class="text-lg font-bold tracking-[0.1em] text-white/95 group-hover:text-neon transition-colors duration-300">
+          biotrade
+        </span>
+      </a>
+
+      <!-- Center Nav Links -->
+      <nav class="flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-x-auto">
+        <a href="index.html" data-i18n="nav.gateway" class="nav-link active">Gateway</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link">biotrade eats</a>
+        <a href="raw.html" data-i18n="nav.raw" class="nav-link">biotrade raw</a>
+        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">Post Waste</a>
+      </nav>
+
+      <!-- Right Controls -->
+      <div class="flex items-center gap-2.5">
+        <!-- Language Switcher (EN | TH) -->
+        <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
+          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+        </div>
+
+        <a href="eats.html" data-i18n="nav.eatsB2c" class="hidden sm:inline-block text-xs font-semibold text-amber-300 hover:text-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-500/10 transition-colors">
+          Eats
+        </a>
+        <a href="raw.html" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-950 bg-neon hover:bg-neon-dim px-3.5 py-1.5 rounded-xl transition-all shadow-sm shadow-neon/20">
+          <span data-i18n="nav.enterRaw">Marketplace</span>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ═══════ Main Content ═══════ -->
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pb-8">
+
+    <!-- ── Hero Title Section ── -->
+    <div class="text-center mb-10 md:mb-14 start-hidden animate-slide-up max-w-2xl">
+      <div class="tag-pill bg-neon/10 text-neon border border-neon/20 mx-auto mb-6">
+        <span class="w-2 h-2 rounded-full bg-neon inline-block animate-pulse"></span>
+        <span data-i18n="gateway.badge">Launching the circular economy</span>
+      </div>
+      <h1 data-i18n="gateway.heroTitle" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 shimmer-text animate-shimmer">
+        Save Food. Trade Waste.<br />Zero Landfill.
+      </h1>
+      <p data-i18n="gateway.heroDesc" class="text-base sm:text-lg text-white/50 max-w-lg mx-auto font-light leading-relaxed">
+        The dual-gateway platform connecting consumers to surplus meals and industries to valorized organic waste streams.
+      </p>
+    </div>
+
+    <!-- ── Gateway Cards ── -->
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 start-hidden animate-slide-up-delay">
+
+      <!-- Card 1 – biotrade eats -->
+      <div id="card-eats" class="glass-card card-eats p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
+        <!-- Icon -->
+        <div class="icon-circle icon-eats">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 010 8h-1"/>
+            <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
+            <line x1="6" y1="1" x2="6" y2="4"/>
+            <line x1="10" y1="1" x2="10" y2="4"/>
+            <line x1="14" y1="1" x2="14" y2="4"/>
+          </svg>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
+          biotrade <span class="text-warm">eats</span>
+        </h2>
+
+        <!-- Tag -->
+        <div data-i18n="gateway.eatsBadge" class="tag-pill bg-warm/10 text-warm/80 border border-warm/15 mb-5">
+          B2C · Food Rescue
+        </div>
+
+        <!-- Description -->
+        <p data-i18n="gateway.eatsDesc" class="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">
+          Rescue delicious surplus meals, baked goods, and fresh produce from local restaurants, cafes, and supermarkets at 50–70% off. Every bag saves CO2.
+        </p>
+
+        <!-- CTA -->
+        <a href="eats.html" id="btn-explore-eats" class="btn-gateway btn-eats mt-auto">
+          <span data-i18n="gateway.eatsBtn">Explore Eats</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+            <path d="M5 12h14"/>
+            <path d="M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+      <!-- Card 2 – biotrade raw -->
+      <div id="card-raw" class="glass-card card-raw p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
+        <!-- Icon -->
+        <div class="icon-circle icon-raw">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+
+        <!-- Title -->
+        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
+          biotrade <span class="text-neon">raw</span>
+        </h2>
+
+        <!-- Tag -->
+        <div data-i18n="gateway.rawBadge" class="tag-pill bg-neon/8 text-neon/70 border border-neon/12 mb-5">
+          B2B · Waste-to-Value
+        </div>
+
+        <!-- Description -->
+        <p data-i18n="gateway.rawDesc" class="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">
+          Connect food processors, breweries, and agriculture with verified off-takers. Trade coffee grounds, spent grain, peels, and biomass at commercial scale.
+        </p>
+
+        <!-- CTA -->
+        <a href="raw.html" id="btn-enter-raw" class="btn-gateway btn-raw mt-auto">
+          <span data-i18n="gateway.rawBtn">Enter Raw Market</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+            <path d="M5 12h14"/>
+            <path d="M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+
+    <!-- ── Bottom Stats ── -->
+    <div class="mt-10 md:mt-14 flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-center start-hidden animate-fade-in" style="animation-delay: 0.6s;">
+      <div>
+        <div class="text-2xl sm:text-3xl font-bold text-neon">12K+</div>
+        <div data-i18n="gateway.statMeals" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Meals Rescued</div>
+      </div>
+      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+      <div>
+        <div class="text-2xl sm:text-3xl font-bold text-warm">340+</div>
+        <div data-i18n="gateway.statPartners" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Partner Businesses</div>
+      </div>
+      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
+      <div>
+        <div class="text-2xl sm:text-3xl font-bold text-white/80">98%</div>
+        <div data-i18n="gateway.statWaste" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Waste Diverted</div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════ Footer ═══════ -->
+  <footer class="relative z-10 py-6 text-center animate-fade-in" style="animation-delay: 0.8s;">
+    <p data-i18n="gateway.footerCopy" class="text-xs text-white/25 tracking-wide">
+      &copy; 2026 biotrade · Building the circular economy
+    </p>
+  </footer>
+
+  <!-- ═══════ Particle Animation ═══════ -->
+  <script>
+    (function () {
+      const canvas = document.getElementById('particles');
+      const ctx = canvas.getContext('2d');
+      let width, height, particles;
+
+      function resize() {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+
+      function createParticles() {
+        const count = Math.min(Math.floor((width * height) / 18000), 80);
+        particles = [];
+        for (let i = 0; i < count; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            r: Math.random() * 1.5 + 0.5,
+            dx: (Math.random() - 0.5) * 0.3,
+            dy: (Math.random() - 0.5) * 0.3,
+            opacity: Math.random() * 0.4 + 0.1,
+            color: Math.random() > 0.5 ? '0,255,157' : '245,158,11',
+          });
+        }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, width, height);
+        for (const p of particles) {
+          p.x += p.dx;
+          p.y += p.dy;
+          if (p.x < 0) p.x = width;
+          if (p.x > width) p.x = 0;
+          if (p.y < 0) p.y = height;
+          if (p.y > height) p.y = 0;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${p.color},${p.opacity})`;
+          ctx.fill();
+        }
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => {
+        resize();
+        createParticles();
+      });
+
+      resize();
+      createParticles();
+      draw();
+    })();
+  </script>
+
+  <!-- ═══════ Card Tilt on Mouse Move ═══════ -->
+  <script>
+    document.querySelectorAll('.glass-card').forEach((card) => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+        const rotateX = ((y - cy) / cy) * -4;
+        const rotateY = ((x - cx) / cx) * 4;
+        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+  </script>
+
+</body>
+</html>

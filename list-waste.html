@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Organic Waste – biotrade raw</title>
+  <meta name="description" content="List your industrial or commercial organic waste on biotrade raw. Connect with bio-refiners, composters, and animal feed producers." />
+
+  <!-- Google Fonts – Inter & Prompt (Thai) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- i18n Translation Engine -->
+  <script src="i18n.js"></script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'] },
+          colors: {
+            neon: { DEFAULT: '#00FF9D', dim: '#00CC7D', dark: '#009960' },
+            slate: {
+              950: '#0B0F19',
+              900: '#0F1423',
+              850: '#141A2E',
+              800: '#1A2138',
+              700: '#334155',
+            },
+          },
+          borderRadius: { '2xl': '16px', '3xl': '24px' },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: #F3F4F6;
+      color: #1E293B;
+      min-height: 100vh;
+    }
+
+    /* Subtle geometric grid background */
+    .bg-pattern {
+      background-image: 
+        radial-gradient(#CBD5E1 1px, transparent 1px),
+        linear-gradient(to bottom, #F8FAFC 0%, #F1F5F9 100%);
+      background-size: 24px 24px, 100% 100%;
+    }
+
+    /* Big Neon Submit Button */
+    .btn-neon-publish {
+      background: linear-gradient(135deg, #00FF9D 0%, #00DF89 100%);
+      color: #0B0F19;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 20px rgba(0, 255, 157, 0.35);
+    }
+    .btn-neon-publish:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(0, 255, 157, 0.55);
+      background: linear-gradient(135deg, #10FFA3 0%, #00E68E 100%);
+    }
+    .btn-neon-publish:active {
+      transform: translateY(0);
+    }
+
+    /* Custom Radio Card */
+    .radio-card {
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1.5px solid #E2E8F0;
+    }
+    .radio-card:hover {
+      border-color: #94A3B8;
+      background-color: #F8FAFC;
+    }
+    input[type="radio"]:checked + .radio-card {
+      border-color: #00CC7D;
+      background-color: #ECFDF5;
+      box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.4);
+    }
+
+    /* Custom Toggle Switch */
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #00FF9D;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #0B0F19;
+    }
+
+    /* ── Nav Link ──────────────────────────────── */
+    .nav-link {
+      font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.5);
+      padding: 6px 14px; border-radius: 10px;
+      transition: all 0.3s; cursor: pointer;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+    .nav-link.active {
+      color: #00FF9D; background: rgba(0,255,157,0.08);
+      border: 1px solid rgba(0,255,157,0.15);
+    }
+
+    /* Toast Notification */
+    #success-toast {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      transform: translate(-50%, -100px);
+      opacity: 0;
+      pointer-events: none;
+    }
+    #success-toast.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+  /* -- Language Switcher -- */
+    .lang-btn { color: rgba(255,255,255,0.4); transition: all 0.25s ease; border-radius: 8px; letter-spacing: 0.05em; }
+    .lang-btn:hover { color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.06); }
+    .lang-btn.active-lang { background: #00FF9D; color: #0B0F19 !important; font-weight: 800; box-shadow: 0 2px 10px rgba(0,255,157,0.35); }
+  </style>
+</head>
+<body class="bg-pattern antialiased text-slate-800 flex flex-col min-h-screen">
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR (Minimal Slate / Neon)
+  ════════════════════════════════════════════════ -->
+  <header class="bg-slate-950 border-b border-slate-850 sticky top-0 z-40">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <!-- Logo -->
+      <a href="raw.html" id="nav-brand" class="flex items-center gap-2.5 shrink-0 group">
+        <div class="w-8 h-8 rounded-xl bg-neon/15 border border-neon/30 flex items-center justify-center group-hover:border-neon transition-colors">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </div>
+        <span class="text-lg font-bold text-white tracking-tight">biotrade <span class="text-neon">raw</span></span>
+      </a>
+
+      <!-- Center Nav Links (Standardized 4 tabs) -->
+      <nav class="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.04] border border-white/[0.06]">
+        <a href="index.html" data-i18n="nav.gateway" class="nav-link">Gateway</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link">biotrade eats</a>
+        <a href="raw.html" data-i18n="nav.raw" class="nav-link">biotrade raw</a>
+        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link active">Post Waste</a>
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-3">
+        <!-- Language Switcher (EN | TH) -->
+        <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
+          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+        </div>
+
+        <a href="raw.html" class="text-xs font-semibold text-slate-400 hover:text-white flex items-center gap-1.5 transition-colors">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+          </svg>
+          <span class="hidden sm:inline" data-i18n="nav.backMarket">Back to Marketplace</span>
+        </a>
+        <div class="h-4 w-px bg-slate-800"></div>
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-neon text-xs font-bold">
+            GH
+          </div>
+          <span class="text-xs font-medium text-slate-300 hidden lg:inline">Green Harvest Co.</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN FORM CARD
+  ════════════════════════════════════════════════ -->
+  <main class="flex-1 py-10 px-4 sm:px-6 flex justify-center items-start">
+    <div class="w-full max-w-2xl bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80 overflow-hidden">
+      
+      <!-- Card Header -->
+      <div class="bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-8 py-8 text-white relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-neon/10 blur-3xl pointer-events-none"></div>
+        
+        <div class="flex items-center justify-between mb-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[0.68rem] font-bold tracking-widest uppercase bg-neon/15 text-neon border border-neon/30">
+            <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
+            <span data-i18n="form.stepBadge">Supplier Gateway</span>
+          </span>
+          <span class="text-xs text-slate-400">Step 1 to 4</span>
+        </div>
+
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mt-1" data-i18n="form.title">
+          Post your organic waste
+        </h1>
+        <p class="text-xs sm:text-sm text-slate-300 mt-1 max-w-lg" data-i18n="form.desc">
+          Connect your industrial, agricultural, or commercial byproducts directly with verified bio-processors, composters, and feed producers.
+        </p>
+
+        <!-- Progress Steps Indicator -->
+        <div class="grid grid-cols-4 gap-2 mt-6 pt-5 border-t border-slate-800/80 text-center">
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-neon text-slate-950 text-xs font-bold flex items-center justify-center shadow-md shadow-neon/20">1</div>
+            <span class="text-[0.68rem] font-semibold text-neon mt-1" data-i18n="form.step1">Type & Qty</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-neon text-slate-950 text-xs font-bold flex items-center justify-center shadow-md shadow-neon/20">2</div>
+            <span class="text-[0.68rem] font-semibold text-slate-300 mt-1" data-i18n="form.step2">Quality</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-neon text-slate-950 text-xs font-bold flex items-center justify-center shadow-md shadow-neon/20">3</div>
+            <span class="text-[0.68rem] font-semibold text-slate-300 mt-1" data-i18n="form.step3">Logistics</span>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="w-7 h-7 rounded-full bg-neon text-slate-950 text-xs font-bold flex items-center justify-center shadow-md shadow-neon/20">4</div>
+            <span class="text-[0.68rem] font-semibold text-slate-300 mt-1" data-i18n="form.step4">Pricing</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Listing Form -->
+      <form id="waste-listing-form" class="p-6 sm:p-8 space-y-8" onsubmit="event.preventDefault(); publishListing();">
+        
+        <!-- ═════════════════════════════════════════════
+             STEP 1: Type & Quantity
+        ══════════════════════════════════════════════ -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span class="w-6 h-6 rounded-md bg-slate-900 text-neon text-xs font-bold flex items-center justify-center">1</span>
+            <h2 class="text-base font-bold text-slate-900" data-i18n="form.sec1Title">Type & Quantity</h2>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+            <!-- Dropdown for Waste Type -->
+            <div>
+              <label for="waste-type" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <span data-i18n="form.wasteTypeLabel">Waste Type</span> <span class="text-rose-500">*</span>
+              </label>
+              <div class="relative">
+                <select id="waste-type" required class="w-full appearance-none bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl py-2.5 px-3.5 pr-10 outline-none focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-neon/20 transition-all font-medium">
+                  <option value="" disabled selected data-i18n="form.wasteTypeSelect">Select waste category…</option>
+                  <option value="coffee-grounds" data-i18n="form.wasteCoffee">Used Coffee Grounds</option>
+                  <option value="spent-grain" data-i18n="form.wasteSpentGrain">Brewery Spent Grain</option>
+                  <option value="soy-residue" data-i18n="form.wasteSoy">Soybean Meal / Okara Residue</option>
+                  <option value="fruit-peels" data-i18n="form.wasteFruit">Mixed Citrus & Fruit Peels</option>
+                  <option value="rice-husk" data-i18n="form.wasteRiceHusk">Rice Husk & Chaff Biomass</option>
+                  <option value="vegetable-waste" data-i18n="form.wasteVeg">Vegetable Processing Waste</option>
+                  <option value="bagasse" data-i18n="form.wasteBagasse">Sugarcane Bagasse</option>
+                  <option value="other" data-i18n="form.wasteOther">Other Organic Byproducts</option>
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                  <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Input for Weight (Tons or Kg) -->
+            <div>
+              <label for="weight-val" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                <span data-i18n="form.weightLabel">Available Weight</span> <span class="text-rose-500">*</span>
+              </label>
+              <div class="flex rounded-xl shadow-sm">
+                <input type="number" id="weight-val" min="1" step="any" required placeholder="e.g. 10" class="w-full bg-slate-50 border border-r-0 border-slate-300 text-slate-900 text-sm rounded-l-xl py-2.5 px-3.5 outline-none focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-neon/20 transition-all font-semibold" />
+                <select id="weight-unit" class="bg-slate-100 border border-slate-300 text-slate-700 text-xs font-bold rounded-r-xl px-3 outline-none focus:bg-white transition-colors cursor-pointer">
+                  <option value="Tons">Tons</option>
+                  <option value="Kg">Kg</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ═════════════════════════════════════════════
+             STEP 2: Quality
+        ══════════════════════════════════════════════ -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span class="w-6 h-6 rounded-md bg-slate-900 text-neon text-xs font-bold flex items-center justify-center">2</span>
+            <h2 class="text-base font-bold text-slate-900" data-i18n="form.sec2Title">Quality Assessment</h2>
+          </div>
+
+          <!-- Radio buttons for Moisture Level -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+              <span data-i18n="form.moistureLabel">Moisture Level</span> <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-3 gap-3">
+              <!-- Low -->
+              <label class="relative block">
+                <input type="radio" name="moisture" value="Low" class="sr-only" />
+                <div class="radio-card p-3 rounded-xl text-center">
+                  <span class="block text-xs font-bold text-slate-900" data-i18n="form.moistLow">Low</span>
+                  <span class="block text-[0.68rem] text-slate-500 mt-0.5" data-i18n="form.moistLowDesc">&lt; 15% (Dry)</span>
+                </div>
+              </label>
+
+              <!-- Medium -->
+              <label class="relative block">
+                <input type="radio" name="moisture" value="Medium" checked class="sr-only" />
+                <div class="radio-card p-3 rounded-xl text-center">
+                  <span class="block text-xs font-bold text-slate-900" data-i18n="form.moistMed">Medium</span>
+                  <span class="block text-[0.68rem] text-slate-500 mt-0.5" data-i18n="form.moistMedDesc">15% – 50%</span>
+                </div>
+              </label>
+
+              <!-- High -->
+              <label class="relative block">
+                <input type="radio" name="moisture" value="High" class="sr-only" />
+                <div class="radio-card p-3 rounded-xl text-center">
+                  <span class="block text-xs font-bold text-slate-900" data-i18n="form.moistHigh">High</span>
+                  <span class="block text-[0.68rem] text-slate-500 mt-0.5" data-i18n="form.moistHighDesc">&gt; 50% (Wet)</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Checkbox for Separated/No Plastics -->
+          <div class="pt-2">
+            <label class="flex items-start gap-3 p-3.5 rounded-xl border border-emerald-200 bg-emerald-50/60         <section class="space-y-4">
+          <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span class="w-6 h-6 rounded-md bg-slate-900 text-neon text-xs font-bold flex items-center justify-center">3</span>
+            <h2 class="text-base font-bold text-slate-900" data-i18n="form.sec3Title">Logistics & Location</h2>
+          </div>
+
+          <!-- Radio buttons: Buyer must pickup OR I can deliver -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
+              <span data-i18n="form.fulfillLabel">Fulfillment Method</span> <span class="text-rose-500">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <label class="relative block">
+                <input type="radio" name="logistics" value="pickup" checked class="sr-only" />
+                <div class="radio-card p-3.5 rounded-xl flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 block" data-i18n="form.fulfillBuyer">Buyer must pickup</span>
+                    <span class="text-[0.68rem] text-slate-500" data-i18n="form.fulfillBuyerDesc">Pickup directly at facility bay</span>
+                  </div>
+                </div>
+              </label>
+
+              <label class="relative block">
+                <input type="radio" name="logistics" value="deliver" class="sr-only" />
+                <div class="radio-card p-3.5 rounded-xl flex items-center gap-3">
+                  <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center text-slate-700 shrink-0">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="text-xs font-bold text-slate-900 block" data-i18n="form.fulfillSupplier">I can deliver</span>
+                    <span class="text-[0.68rem] text-slate-500" data-i18n="form.fulfillSupplierDesc">Supplier truck fleet delivery</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Google Maps Location Section -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                <span data-i18n="form.locationLabel">Facility Location Pin</span> <span class="text-rose-500">*</span>
+              </label>
+              <button type="button" id="btn-detect-gps" onclick="detectGPS()" class="text-[0.7rem] font-semibold text-emerald-600 hover:text-emerald-700 flex items-center gap-1.5 px-2 py-1 rounded-lg hover:bg-emerald-50 transition-colors cursor-pointer">
+                <svg class="w-3.5 h-3.5 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2a8 8 0 00-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 00-8-8z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span id="gps-btn-text" data-i18n="form.detectGps">Detect current GPS</span>
+              </button>
+            </div>
+
+            <!-- Google Map Canvas Box -->
+            <div class="relative rounded-2xl overflow-hidden border border-slate-300 shadow-md group">
+              <!-- Actual Google Map Container -->
+              <div id="google-map" class="w-full h-56 bg-slate-100"></div>
+
+              <!-- Top Floating Address / Coordinates Bar -->
+              <div class="absolute top-2.5 left-2.5 right-2.5 z-10 bg-slate-950/90 backdrop-blur-md border border-slate-800 text-white rounded-xl px-3 py-2 flex items-center justify-between gap-2 shadow-lg">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-6 h-6 rounded-lg bg-neon/20 text-neon flex items-center justify-center shrink-0">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                    </svg>
+                  </div>
+                  <div class="min-w-0">
+                    <span id="map-address-display" class="text-xs font-bold text-white block truncate">Nakhon Pathom Industrial Zone</span>
+                    <span id="map-coords-display" class="text-[0.65rem] text-neon font-mono block">13.8196° N, 100.0443° E</span>
+                  </div>
+                </div>
+                <span class="text-[0.65rem] text-slate-400 shrink-0 hidden sm:inline" data-i18n="form.mapPinHelper">Drag pin to reposition</span>
+              </div>
+
+              <!-- Hidden input to store chosen coordinates -->
+              <input type="hidden" id="facility-lat" name="facility-lat" value="13.8196" />
+              <input type="hidden" id="facility-lng" name="facility-lng" value="100.0443" />
+            </div>
+            <p class="text-[0.7rem] text-slate-500 mt-1.5 flex items-center gap-1">
+              <svg class="w-3.5 h-3.5 text-emerald-600 shrink-0" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+              <span data-i18n="form.mapVerified">Google Maps verified location for carrier pickup & route optimization</span>
+            </p>
+          </div>
+        </section>
+
+        <!-- ═════════════════════════════════════════════
+             STEP 4: Pricing
+        ══════════════════════════════════════════════ -->
+        <section class="space-y-4">
+          <div class="flex items-center gap-2 pb-2 border-b border-slate-100">
+            <span class="w-6 h-6 rounded-md bg-slate-900 text-neon text-xs font-bold flex items-center justify-center">4</span>
+            <h2 class="text-base font-bold text-slate-900" data-i18n="form.sec4Title">Commercial Terms & Pricing</h2>
+          </div>
+
+          <!-- Free Giveaway Toggle Switch -->
+          <div class="flex items-center justify-between p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <div>
+              <span class="text-xs font-bold text-slate-900 block" data-i18n="form.freeToggle">Give away for free</span>
+              <span class="text-[0.7rem] text-slate-500" data-i18n="form.freeToggleDesc">Offer zero charge for immediate waste pickup & landfill diversion</span>
+            </div>
+            
+            <!-- Toggle UI -->
+            <label for="free-toggle" class="flex items-center cursor-pointer select-none">
+              <div class="relative">
+                <input type="checkbox" id="free-toggle" class="sr-only" onchange="toggleFreePricing(this.checked)" />
+                <div class="block bg-slate-300 w-12 h-7 rounded-full transition-colors duration-200" id="toggle-bg"></div>
+                <div class="dot absolute left-1 top-1 bg-white w-5 h-5 rounded-full transition-transform duration-200 shadow-sm" id="toggle-dot"></div>
+              </div>
+            </label>
+          </div>
+
+          <!-- Price per ton input -->
+          <div id="price-container">
+            <label for="price-val" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+              <span data-i18n="form.priceLabel">Price per Ton (THB ฿)</span> <span class="text-rose-500">*</span>
+            </label>
+            <div class="relative rounded-xl shadow-sm">
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-500 text-sm font-bold">
+                ฿
+              </div>
+              <input type="number" id="price-val" min="10" step="10" placeholder="500" required class="w-full bg-slate-50 border border-slate-300 text-slate-900 text-sm rounded-xl py-3 pl-9 pr-16 outline-none focus:border-slate-900 focus:bg-white focus:ring-2 focus:ring-neon/20 transition-all font-bold" />
+              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-xs font-semibold text-slate-400">
+                / Ton
+              </div>
+            </div>
+            <p class="text-[0.7rem] text-slate-500 mt-1.5" data-i18n="form.priceReference">Standard market reference for this category: ฿350 – ฿600 / Ton</p>
+          </div>
+        </section>
+
+        <!-- ═════════════════════════════════════════════
+             SUBMIT BUTTON
+        ══════════════════════════════════════════════ -->
+        <div class="pt-4 border-t border-slate-100">
+          <button type="submit" id="btn-publish" class="btn-neon-publish w-full py-4 px-6 rounded-2xl flex items-center justify-center gap-2 text-base cursor-pointer">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+            </svg>
+            <span data-i18n="form.publishBtn">Publish Listing</span>
+          </button>
+          
+          <p class="text-center text-[0.7rem] text-slate-400 mt-3" data-i18n="form.publishNote">
+            By publishing, your listing will be immediately broadcast to 340+ verified bio-economy off-takers.
+          </p>
+        </div>
+
+      </form>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════
+       SUCCESS TOAST NOTIFICATION
+  ════════════════════════════════════════════════ -->
+  <div id="success-toast" class="fixed top-6 left-1/2 z-50 w-full max-w-md px-4">
+    <div class="bg-slate-950 text-white rounded-2xl p-4 shadow-2xl border border-neon/30 flex items-start gap-3.5">
+      <div class="w-9 h-9 rounded-xl bg-neon/20 border border-neon/40 flex items-center justify-center text-neon shrink-0 mt-0.5">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          <span data-i18n="form.toastTitle">Listing Published Successfully!</span>
+          <span class="inline-block px-1.5 py-0.5 rounded text-[0.62rem] bg-neon text-slate-950 font-extrabold uppercase" data-i18n="form.toastLive">Live</span>
+        </h4>
+        <p class="text-xs text-slate-300 mt-0.5" id="toast-summary">
+          Your listing has been submitted to the biotrade raw marketplace.
+        </p>
+        
+        <div class="flex items-center gap-3 mt-3">
+          <a href="raw.html" class="inline-flex items-center gap-1 text-xs font-bold text-neon hover:underline">
+            <span data-i18n="form.toastViewMarket">View in Marketplace</span>
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <button type="button" onclick="closeToast()" class="text-xs text-slate-400 hover:text-white" data-i18n="form.toastPostAnother">
+            Post Another
+          </button>
+        </div>
+      </div>�═════ -->
+  <div id="success-toast" class="fixed top-6 left-1/2 z-50 w-full max-w-md px-4">
+    <div class="bg-slate-950 text-white rounded-2xl p-4 shadow-2xl border border-neon/30 flex items-start gap-3.5">
+      <div class="w-9 h-9 rounded-xl bg-neon/20 border border-neon/40 flex items-center justify-center text-neon shrink-0 mt-0.5">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+
+      <div class="flex-1 min-w-0">
+        <h4 class="text-sm font-bold text-white flex items-center gap-2">
+          Listing Published Successfully!
+          <span class="inline-block px-1.5 py-0.5 rounded text-[0.62rem] bg-neon text-slate-950 font-extrabold uppercase">Live</span>
+        </h4>
+        <p class="text-xs text-slate-300 mt-0.5" id="toast-summary">
+          Your listing has been submitted to the biotrade raw marketplace.
+        </p>
+        
+        <div class="flex items-center gap-3 mt-3">
+          <a href="raw.html" class="inline-flex items-center gap-1 text-xs font-bold text-neon hover:underline">
+            View in Marketplace
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </a>
+          <button type="button" onclick="closeToast()" class="text-xs text-slate-400 hover:text-white">
+            Post Another
+          </button>
+        </div>
+      </div>
+
+      <button type="button" onclick="closeToast()" class="text-slate-400 hover:text-white p-1">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT LOGIC
+  ════════════════════════════════════════════════ -->
+  <script>
+    // ── Toggle Free Pricing ──────────────────────────
+    function toggleFreePricing(isFree) {
+      const priceContainer = document.getElementById('price-container');
+      const priceInput = document.getElementById('price-val');
+      const toggleBg = document.getElementById('toggle-bg');
+      const toggleDot = document.getElementById('toggle-dot');
+
+      if (isFree) {
+        toggleBg.classList.remove('bg-slate-300');
+        toggleBg.classList.add('bg-neon');
+        toggleDot.style.transform = 'translateX(20px)';
+        
+        priceInput.value = '0';
+        priceInput.disabled = true;
+        priceContainer.style.opacity = '0.4';
+        priceContainer.style.pointerEvents = 'none';
+      } else {
+        toggleBg.classList.remove('bg-neon');
+        toggleBg.classList.add('bg-slate-300');
+        toggleDot.style.transform = 'translateX(0)';
+
+        priceInput.value = '';
+        priceInput.disabled = false;
+        priceContainer.style.opacity = '1';
+        priceContainer.style.pointerEvents = 'auto';
+      }
+    }
+
+    // ── Submit & Show Toast ──────────────────────────
+    function publishListing() {
+      const publishBtn = document.getElementById('btn-publish');
+      const wasteTypeSelect = document.getElementById('waste-type');
+      const wasteTypeText = wasteTypeSelect.options[wasteTypeSelect.selectedIndex]?.text || 'Organic Waste';
+      const weightVal = document.getElementById('weight-val').value || '10';
+      const weightUnit = document.getElementById('weight-unit').value || 'Tons';
+      const isFree = document.getElementById('free-toggle').checked;
+      const priceVal = isFree ? 'FREE' : ('฿' + (document.getElementById('price-val').value || '500') + ' / Ton');
+
+      // Button loading state
+      const originalContent = publishBtn.innerHTML;
+      publishBtn.disabled = true;
+      publishBtn.innerHTML = `
+        <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+        </svg>
+        Broadcasting to Marketplace…
+      `;
+
+      setTimeout(() => {
+        // Reset button
+        publishBtn.disabled = false;
+        publishBtn.innerHTML = originalContent;
+
+        // Populate and show Toast
+        const summary = document.getElementById('toast-summary');
+        summary.textContent = `"${weightVal} ${weightUnit} of ${wasteTypeText}" is now live at ${priceVal}.`;
+
+        const toast = document.getElementById('success-toast');
+        toast.classList.add('show');
+
+        // Optional auto-dismiss after 6 seconds
+        setTimeout(() => {
+          if (toast.classList.contains('show')) {
+            toast.classList.remove('show');
+          }
+        }, 6000);
+      }, 900);
+    }
+
+    function closeToast() {
+      document.getElementById('success-toast').classList.remove('show');
+      document.getElementById('waste-listing-form').reset();
+      toggleFreePricing(false);
+    }
+
+    // ── Google Maps Integration ───────────────────────
+    let map, marker, geocoder;
+    const defaultLocation = { lat: 13.8196, lng: 100.0443 }; // Nakhon Pathom Industrial Center
+
+    function initMap() {
+      const mapContainer = document.getElementById('google-map');
+      if (!mapContainer) return;
+
+      const mapOptions = {
+        center: defaultLocation,
+        zoom: 14,
+        mapTypeId: 'roadmap',
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: true,
+        zoomControl: true,
+        styles: [
+          { "featureType": "administrative", "elementType": "labels.text.fill", "stylers": [{ "color": "#334155" }] },
+          { "featureType": "landscape", "elementType": "all", "stylers": [{ "color": "#f8fafc" }] },
+          { "featureType": "poi", "elementType": "all", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "road", "elementType": "all", "stylers": [{ "saturation": -100 }, { "lightness": 35 }] },
+          { "featureType": "road.highway", "elementType": "all", "stylers": [{ "visibility": "simplified" }, { "color": "#e2e8f0" }] },
+          { "featureType": "transit", "elementType": "all", "stylers": [{ "visibility": "off" }] },
+          { "featureType": "water", "elementType": "all", "stylers": [{ "color": "#cbd5e1" }, { "visibility": "on" }] }
+        ]
+      };
+
+      try {
+        if (typeof google !== 'undefined' && google.maps) {
+          map = new google.maps.Map(mapContainer, mapOptions);
+          geocoder = new google.maps.Geocoder();
+
+          // Custom neon marker icon SVG
+          const markerSvg = {
+            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="18" fill="#0B0F19" stroke="#00FF9D" stroke-width="3"/>
+                <circle cx="20" cy="20" r="7" fill="#00FF9D"/>
+              </svg>
+            `),
+            scaledSize: new google.maps.Size(36, 36),
+            anchor: new google.maps.Point(18, 18)
+          };
+
+          marker = new google.maps.Marker({
+            position: defaultLocation,
+            map: map,
+            draggable: true,
+            icon: markerSvg,
+            title: "Drag to set pickup bay"
+          });
+
+          marker.addListener('dragend', function(e) {
+            updateLocation(e.latLng);
+          });
+
+          map.addListener('click', function(e) {
+            marker.setPosition(e.latLng);
+            updateLocation(e.latLng);
+          });
+
+          updateLocationText(defaultLocation.lat, defaultLocation.lng);
+        }
+      } catch (err) {
+        console.error("Google Maps init error:", err);
+      }
+    }
+
+    function updateLocation(latLng) {
+      const lat = latLng.lat();
+      const lng = latLng.lng();
+      document.getElementById('facility-lat').value = lat.toFixed(5);
+      document.getElementById('facility-lng').value = lng.toFixed(5);
+      updateLocationText(lat, lng);
+
+      if (geocoder) {
+        geocoder.geocode({ location: latLng }, function(results, status) {
+          if (status === 'OK' && results[0]) {
+            document.getElementById('map-address-display').textContent = results[0].formatted_address;
+          }
+        });
+      }
+    }
+
+    function updateLocationText(lat, lng) {
+      const coordsDisplay = document.getElementById('map-coords-display');
+      if (coordsDisplay) {
+        coordsDisplay.textContent = `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`;
+      }
+    }
+
+    function detectGPS() {
+      const btnText = document.getElementById('gps-btn-text');
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser");
+        return;
+      }
+
+      btnText.textContent = "Acquiring GPS…";
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const userPos = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+          if (map && marker) {
+            map.setCenter(userPos);
+            map.setZoom(16);
+            marker.setPosition(userPos);
+            updateLocation(marker.getPosition());
+          }
+          btnText.textContent = "GPS Located ✓";
+          setTimeout(() => { btnText.textContent = "Detect current GPS"; }, 3000);
+        },
+        (err) => {
+          btnText.textContent = "Detect current GPS";
+          alert("GPS Notice: " + (err.message || "Please allow GPS location access."));
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+
+    // Graceful fallback handler
+    window.gm_authFailure = function() {
+      console.warn("Google Maps Auth Notice: Falling back to styled map canvas.");
+      const mapContainer = document.getElementById('google-map');
+      if (mapContainer && !map) {
+        mapContainer.innerHTML = `
+          <div class="h-full w-full bg-slate-900 flex flex-col items-center justify-center text-center p-4">
+            <svg class="w-8 h-8 text-neon mb-2 animate-bounce" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+            </svg>
+            <span class="text-xs font-bold text-white">Nakhon Pathom Industrial Zone (Pin Set)</span>
+            <span class="text-[0.65rem] text-neon font-mono mt-1">13.8196° N, 100.0443° E</span>
+          </div>
+        `;
+      }
+    };
+  </script>
+
+  <!-- Google Maps API -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCtGCYw5n9W7Igirw661E-Wdc0vJGiST0&callback=initMap&v=weekly" async defer></script>
+
+</body>
+</html>

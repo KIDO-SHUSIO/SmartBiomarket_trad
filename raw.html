@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biotrade raw – B2B Organic Waste Marketplace</title>
+  <meta name="description" content="Trade organic waste at scale. Connect with verified buyers and sellers of food waste, biomass, and by-products. Turn waste into revenue." />
+
+  <!-- Google Fonts – Inter & Prompt (Thai) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- i18n Translation Engine -->
+  <script src="i18n.js"></script>
+
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'] },
+          colors: {
+            neon: { DEFAULT: '#00FF9D', dim: '#00CC7D', dark: '#009960' },
+            slate: {
+              950: '#0B0F19',
+              900: '#0F1423',
+              850: '#141A2E',
+              800: '#1A2138',
+              750: '#1F2847',
+              700: '#263052',
+            },
+            tech: { blue: '#3B82F6', gray: '#64748B' },
+          },
+          borderRadius: { '2xl': '16px', '3xl': '24px' },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out forwards',
+            'slide-up': 'slideUp 0.5s ease-out forwards',
+            'slide-down': 'slideDown 0.35s ease-out forwards',
+            'pulse-neon': 'pulseNeon 3s ease-in-out infinite',
+            'count-up': 'fadeIn 0.8s ease-out forwards',
+            'glow': 'glowPulse 4s ease-in-out infinite',
+          },
+          keyframes: {
+            fadeIn:    { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
+            slideUp:   { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            slideDown: { '0%': { opacity: '0', transform: 'translateY(-10px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+            pulseNeon: { '0%,100%': { opacity: '0.6' }, '50%': { opacity: '1' } },
+            glowPulse: { '0%,100%': { boxShadow: '0 0 20px rgba(0,255,157,0.05)' }, '50%': { boxShadow: '0 0 40px rgba(0,255,157,0.12)' } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      height: 100%; margin: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #0B0F19; color: #e2e8f0;
+    }
+
+    /* ── Scrollbar ──────────────────────────────── */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: #0B0F19; }
+    ::-webkit-scrollbar-thumb { background: rgba(0,255,157,0.2); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,157,0.4); }
+
+    /* ── Subtle Grid BG ────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,255,157,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,157,0.02) 1px, transparent 1px);
+      background-size: 48px 48px;
+      pointer-events: none; z-index: 0;
+    }
+
+    /* ── Glass Panels ──────────────────────────── */
+    .glass {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+    .glass-strong {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* ── Impact Stat Widget ─────────────────────── */
+    .stat-widget {
+      background: rgba(0,255,157,0.03);
+      border: 1px solid rgba(0,255,157,0.08);
+      border-radius: 16px;
+      padding: 20px 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s ease;
+    }
+    .stat-widget::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 16px; padding: 1px;
+      background: linear-gradient(135deg, rgba(0,255,157,0.1), transparent 60%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none;
+    }
+    .stat-widget:hover {
+      border-color: rgba(0,255,157,0.18);
+      background: rgba(0,255,157,0.06);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0,255,157,0.08);
+    }
+
+    /* ── Listing Card ──────────────────────────── */
+    .listing-card {
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      position: relative;
+    }
+    .listing-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      border-radius: 20px; padding: 1px;
+      background: linear-gradient(160deg, rgba(0,255,157,0.06), transparent 40%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none; z-index: 1;
+    }
+    .listing-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(0,255,157,0.15);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 50px rgba(0,255,157,0.05);
+    }
+
+    /* ── Neon CTA Button ───────────────────────── */
+    .btn-neon {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 24px; border-radius: 14px;
+      font-weight: 600; font-size: 0.85rem; letter-spacing: 0.02em;
+      background: linear-gradient(135deg, #00FF9D, #00CC7D);
+      color: #0B0F19; border: none; cursor: pointer;
+      box-shadow: 0 4px 18px rgba(0,255,157,0.2);
+      transition: all 0.3s ease;
+      position: relative; overflow: hidden;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-neon::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .btn-neon:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,255,157,0.35); }
+    .btn-neon:hover::after { opacity: 1; }
+
+    /* ── Ghost Button ──────────────────────────── */
+    .btn-ghost {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 10px 20px; border-radius: 12px;
+      font-weight: 500; font-size: 0.82rem;
+      background: transparent;
+      color: rgba(0,255,157,0.7);
+      border: 1px solid rgba(0,255,157,0.15);
+      cursor: pointer; transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-ghost:hover {
+      background: rgba(0,255,157,0.06);
+      border-color: rgba(0,255,157,0.3);
+      color: #00FF9D;
+    }
+
+    /* ── Tag Badges ────────────────────────────── */
+    .tag-grade {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 8px;
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .tag-grade-a {
+      background: #00FF9D; color: #0B0F19;
+      box-shadow: 0 0 12px rgba(0,255,157,0.3);
+    }
+    .tag-grade-b {
+      background: rgba(59,130,246,0.15); color: #60A5FA;
+      border: 1px solid rgba(59,130,246,0.3);
+    }
+    .tag-moisture {
+      background: #00FF9D; color: #0B0F19;
+      box-shadow: 0 0 12px rgba(0,255,157,0.3);
+    }
+
+    /* ── Sidebar Filter ────────────────────────── */
+    .filter-panel {
+      background: rgba(255,255,255,0.025);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 20px;
+      padding: 28px;
+    }
+    .filter-section-title {
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 14px;
+    }
+
+    /* ── Custom Checkbox ───────────────────────── */
+    .cb-wrap {
+      display: flex; align-items: center; gap: 10px;
+      padding: 8px 0; cursor: pointer;
+      transition: color 0.2s;
+    }
+    .cb-wrap:hover { color: #00FF9D; }
+    .cb-wrap input[type="checkbox"] { display: none; }
+    .cb-box {
+      width: 18px; height: 18px; border-radius: 5px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.03);
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.25s ease; flex-shrink: 0;
+    }
+    .cb-wrap input:checked + .cb-box {
+      background: #00FF9D; border-color: #00FF9D;
+    }
+    .cb-wrap input:checked + .cb-box svg { opacity: 1; }
+    .cb-box svg { opacity: 0; transition: opacity 0.2s; }
+    .cb-label {
+      font-size: 0.85rem; font-weight: 400;
+      color: rgba(255,255,255,0.6);
+      transition: color 0.2s;
+    }
+    .cb-wrap:hover .cb-label { color: rgba(255,255,255,0.85); }
+    .cb-wrap input:checked ~ .cb-label { color: #00FF9D; font-weight: 500; }
+
+    /* ── Range Slider ──────────────────────────── */
+    .range-slider {
+      -webkit-appearance: none; appearance: none;
+      width: 100%; height: 4px; border-radius: 2px;
+      background: rgba(255,255,255,0.08);
+      outline: none; cursor: pointer;
+    }
+    .range-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #00FF9D;
+      border: 3px solid #0B0F19;
+      box-shadow: 0 0 10px rgba(0,255,157,0.4);
+      cursor: pointer; transition: box-shadow 0.3s;
+    }
+    .range-slider::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 18px rgba(0,255,157,0.6);
+    }
+    .range-slider::-moz-range-thumb {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: #00FF9D; border: 3px solid #0B0F19;
+      box-shadow: 0 0 10px rgba(0,255,157,0.4); cursor: pointer;
+    }
+
+    /* ── Nav Link ──────────────────────────────── */
+    .nav-link {
+      font-size: 0.82rem; font-weight: 500;
+      color: rgba(255,255,255,0.4);
+      padding: 6px 14px; border-radius: 10px;
+      transition: all 0.3s; cursor: pointer;
+      text-decoration: none;
+    }
+    .nav-link:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+    .nav-link.active {
+      color: #00FF9D; background: rgba(0,255,157,0.08);
+      border: 1px solid rgba(0,255,157,0.1);
+    }
+
+    /* ── Detail Row ────────────────────────────── */
+    .detail-row {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.8rem; color: rgba(255,255,255,0.45);
+    }
+    .detail-row svg { flex-shrink: 0; }
+
+    /* ── Stagger ───────────────────────────────── */
+    .stagger > * { opacity: 0; animation: slideUp 0.45s ease-out forwards; }
+    .stagger > *:nth-child(1) { animation-delay: 0.05s; }
+    .stagger > *:nth-child(2) { animation-delay: 0.10s; }
+    .stagger > *:nth-child(3) { animation-delay: 0.12s; }
+    .stagger > *:nth-child(4) { animation-delay: 0.17s; }
+    .stagger > *:nth-child(5) { animation-delay: 0.22s; }
+    .stagger > *:nth-child(6) { animation-delay: 0.27s; }
+
+    .start-hidden { opacity: 0; }
+
+    /* ── Mobile filter toggle ──────────────────── */
+    .filter-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 50;
+    }
+    .filter-overlay.open { display: block; }
+    @media (max-width: 1023px) {
+      .filter-sidebar { display: none; }
+      .filter-sidebar.open {
+        display: block;
+        position: fixed; top: 0; left: 0; bottom: 0;
+        width: 300px; z-index: 51;
+        border-radius: 0 20px 20px 0;
+        overflow-y: auto;
+        background: #0F1423;
+      }
+    }
+
+    /* ── Language Switcher ─────────────────────────── */
+    .lang-btn {
+      color: rgba(255,255,255,0.4);
+      transition: all 0.25s ease;
+      border-radius: 8px;
+      letter-spacing: 0.05em;
+    }
+    .lang-btn:hover {
+      color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.06);
+    }
+    .lang-btn.active-lang {
+      background: #00FF9D;
+      color: #0B0F19 !important;
+      font-weight: 800;
+      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen relative">
+
+  <!-- ═══════════════════════════════════════════════
+       NAVBAR
+  ════════════════════════════════════════════════ -->
+  <nav class="sticky top-0 z-40 glass-strong animate-slide-down">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 gap-4">
+
+        <!-- Logo -->
+        <a href="index.html" id="nav-logo" class="flex items-center gap-2.5 shrink-0 group">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-neon/15 to-neon/5 border border-neon/20 flex items-center justify-center group-hover:border-neon/40 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+            </svg>
+          </div>
+          <span class="text-lg font-bold tracking-wide text-white/90">biotrade <span class="text-neon">raw</span></span>
+        </a>
+
+        <!-- Center Nav Links (Standardized 4 tabs) -->
+        <nav class="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+          <a href="index.html" data-i18n="nav.gateway" class="nav-link">Gateway</a>
+          <a href="eats.html" data-i18n="nav.eats" class="nav-link">biotrade eats</a>
+          <a href="raw.html" data-i18n="nav.raw" class="nav-link active">biotrade raw</a>
+          <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">Post Waste</a>
+        </nav>
+
+        <!-- Right -->
+        <div class="flex items-center gap-2.5">
+          <!-- Language Switcher (EN | TH) -->
+          <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+            <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
+            <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+          </div>
+
+          <button type="button" id="nav-esg" class="hidden xl:inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-neon px-3 py-1.5 rounded-lg border border-white/8 hover:border-neon/25 transition-colors cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span data-i18n="nav.esgReport">ESG Report</span>
+          </button>
+          <button type="button" id="nav-my-listings" class="hidden xl:inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-neon px-3 py-1.5 rounded-lg border border-white/8 hover:border-neon/25 transition-colors cursor-pointer">
+            <span data-i18n="nav.myListings">My Listings</span>
+          </button>
+          <!-- New Listing CTA -->
+          <a href="list-waste.html" id="btn-new-listing" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-slate-950 bg-neon hover:bg-neon-dim px-4 py-2 rounded-xl transition-colors shadow-md shadow-neon/15">
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <span data-i18n="nav.newListing">New Listing</span>
+          </a>
+          <!-- User Icon -->
+          <button id="btn-user" class="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-neon/25 transition-colors">
+            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </button>
+          <!-- Mobile menu -->
+          <button id="btn-mobile-menu" class="md:hidden w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-neon/25 transition-colors">
+            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════
+       IMPACT BAR
+  ════════════════════════════════════════════════ -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 stagger">
+
+      <!-- Widget 1 – Waste Traded -->
+      <div class="stat-widget animate-glow">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statWasteTitle">Total Waste Traded</span>
+          <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
+          <span data-count="1240">1,240</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statWasteUnit">Tons</span>
+        </div>
+        <div class="flex items-center gap-1 mt-3">
+          <svg class="w-3 h-3 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statWasteTrend">+12.4% this month</span>
+        </div>
+      </div>
+
+      <!-- Widget 2 – CO2 Saved -->
+      <div class="stat-widget animate-glow">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statCo2Title">CO₂ Saved</span>
+          <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/>
+              <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
+          <span data-count="450">450</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statCo2Unit">MT</span>
+        </div>
+        <div class="flex items-center gap-1 mt-3">
+          <svg class="w-3 h-3 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statCo2Trend">+8.7% this month</span>
+        </div>
+      </div>
+
+      <!-- Widget 3 – Active Listings -->
+      <div class="stat-widget animate-glow">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statActiveTitle">Active Listings</span>
+          <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
+            <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+          </div>
+        </div>
+        <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
+          <span data-count="24">24</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statActiveUnit">Listings</span>
+        </div>
+        <div class="flex items-center gap-1 mt-3">
+          <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statActiveTrend">6 new today</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════════
+       MAIN TWO-COLUMN LAYOUT
+  ════════════════════════════════════════════════ -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+    <div class="flex gap-6 lg:gap-8">
+
+      <!-- ══ LEFT: Filter Sidebar ══ -->
+      <aside id="filter-sidebar" class="filter-sidebar w-[260px] shrink-0 hidden lg:block">
+        <div class="filter-panel sticky top-24">
+
+          <!-- Section: Category -->
+          <div class="mb-8">
+            <h3 class="filter-section-title flex items-center gap-2">
+              <svg class="w-3 h-3 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+              <span data-i18n="raw.filterCategory">Category</span>
+            </h3>
+            <label class="cb-wrap">
+              <input type="checkbox" value="food-waste" checked />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.catFood">Food Waste</span>
+            </label>
+            <label class="cb-wrap">
+              <input type="checkbox" value="soy-waste" checked />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.catSoy">Soy Waste</span>
+            </label>
+            <label class="cb-wrap">
+              <input type="checkbox" value="fruit-peels" checked />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.catFruit">Fruit Peels</span>
+            </label>
+            <label class="cb-wrap">
+              <input type="checkbox" value="biomass" />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.catBiomass">Biomass</span>
+            </label>
+          </div>
+
+          <!-- Section: Distance -->
+          <div class="mb-8">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="filter-section-title flex items-center gap-2 mb-0">
+                <svg class="w-3 h-3 text-neon/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                </svg>
+                <span data-i18n="raw.filterDistance">Distance</span>
+              </h3>
+              <span class="text-xs font-bold text-neon" id="distance-val">30 km</span>
+            </div>
+            <div class="mt-2">
+              <input type="range" min="1" max="30" value="30" class="range-slider" id="distance-slider" />
+              <div class="flex justify-between mt-2">
+                <span class="text-[0.7rem] text-white/40">1 km</span>
+                <span class="text-[0.7rem] text-white/50 font-medium" data-i18n="raw.maxDist">Max 30km</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Listing Type -->
+          <div class="mb-8">
+            <h3 class="filter-section-title flex items-center gap-2">
+              <svg class="w-3 h-3 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
+              <span data-i18n="raw.filterListingType">Listing Type</span>
+            </h3>
+            <label class="cb-wrap">
+              <input type="checkbox" value="sell" checked />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.typeSale">For Sale</span>
+            </label>
+            <label class="cb-wrap">
+              <input type="checkbox" value="free" />
+              <span class="cb-box">
+                <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              </span>
+              <span class="cb-label" data-i18n="raw.typeFree">Free Pickup</span>
+            </label>
+          </div>
+
+          <!-- Apply Button -->
+          <button class="btn-neon w-full">
+            <span data-i18n="raw.btnApply">Apply Filters</span>
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </button>
+        </div>
+      </aside>
+
+      <!-- ══ RIGHT: Listings Grid ══ -->
+      <div class="flex-1 min-w-0">
+
+        <!-- Toolbar Row -->
+        <div class="flex items-center justify-between mb-5 start-hidden animate-slide-up gap-3">
+          <div class="flex items-center gap-3">
+            <!-- Mobile filter toggle -->
+            <button id="btn-toggle-filters" class="lg:hidden btn-ghost text-xs py-2 px-3">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+              <span data-i18n="raw.filterTitle">Filters</span>
+            </button>
+            <h3 class="text-base font-bold text-white/85" data-i18n="raw.gridHeading">Active Listings</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-white/30 hidden sm:inline" data-i18n="raw.sortBy">Sort by:</span>
+            <select id="sort-select" class="bg-white/5 border border-white/8 rounded-lg text-xs text-white/60 py-1.5 px-3 outline-none focus:border-neon/30 transition-colors cursor-pointer" style="font-family: Inter, sans-serif;">
+              <option>Newest</option>
+              <option>Price: Low → High</option>
+              <option>Price: High → Low</option>
+              <option>Distance</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Cards Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 stagger" id="listings-grid">
+
+          <!-- ─── Listing 1 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <!-- Tags -->
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-a">Grade A</span>
+                <span class="tag-grade tag-moisture">High Moisture</span>
+              </div>
+              <!-- Title -->
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">10 Tons Used Coffee Grounds</h4>
+              <!-- Details -->
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                  </svg>
+                  <span>Green Harvest Co., Ltd.</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>Nakhon Pathom, 5km away</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>
+                  </svg>
+                  <span>Self-Pickup or Truck Delivery</span>
+                </div>
+              </div>
+              <!-- Price + CTA -->
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿500 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ─── Listing 2 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-a">Grade A</span>
+              </div>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">25 Tons Soybean Meal Residue</h4>
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Thai Protein Industries</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Sam Phran · <span class="text-neon/60 font-medium">12 km</span></span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <span>Truck Delivery Available</span>
+                </div>
+              </div>
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿350 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ─── Listing 3 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-b">Grade B</span>
+                <span class="tag-grade tag-moisture">High Moisture</span>
+              </div>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">8 Tons Mixed Fruit Peels</h4>
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>SiamFruit Processing</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Kamphaeng Saen · <span class="text-neon/60 font-medium">18 km</span></span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <span>Self-Pickup Only</span>
+                </div>
+              </div>
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿200 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ─── Listing 4 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-a">Grade A</span>
+              </div>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">50 Tons Rice Husk Biomass</h4>
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Ratchaburi Rice Mill</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Ratchaburi · <span class="text-neon/60 font-medium">28 km</span></span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <span>Truck Delivery Available</span>
+                </div>
+              </div>
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿150 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ─── Listing 5 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-a">Grade A</span>
+                <span class="tag-grade tag-moisture">Fermented</span>
+              </div>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">15 Tons Brewery Spent Grain</h4>
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Singha Brewery (Pathum Thani)</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Pathum Thani · <span class="text-neon/60 font-medium">22 km</span></span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <span>Self-Pickup or Truck Delivery</span>
+                </div>
+              </div>
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿420 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- ─── Listing 6 ─── -->
+          <article class="listing-card">
+            <div class="p-5 sm:p-6">
+              <div class="flex items-center gap-2 mb-4">
+                <span class="tag-grade tag-grade-b">Grade B</span>
+              </div>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">30 Tons Vegetable Processing Waste</h4>
+              <div class="space-y-2.5 mb-5">
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Central Kitchen Group</span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>Nakhon Pathom · <span class="text-neon/60 font-medium">3 km</span></span>
+                </div>
+                <div class="detail-row">
+                  <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                  <span>Self-Pickup Only</span>
+                </div>
+              </div>
+              <div class="flex items-end justify-between gap-3 pt-4 border-t border-white/5">
+                <div>
+                  <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
+                  <div class="text-xl font-extrabold text-neon leading-none mt-0.5">FREE <span class="text-xs font-medium text-white/30">pickup</span></div>
+                </div>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Load More -->
+        <div class="mt-8 flex justify-center">
+          <button id="btn-load-more" class="btn-ghost text-sm px-8 py-3">
+            Load More Listings
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MOBILE FILTER OVERLAY
+  ════════════════════════════════════════════════ -->
+  <div id="filter-overlay" class="filter-overlay"></div>
+
+  <!-- ═══════════════════════════════════════════════
+       JAVASCRIPT
+  ════════════════════════════════════════════════ -->
+  <script>
+    // ── Distance Slider ──────────────────────────────
+    const slider = document.getElementById('distance-slider');
+    const distVal = document.getElementById('distance-val');
+    slider.addEventListener('input', () => {
+      distVal.textContent = slider.value + ' km';
+      // Update the slider track fill
+      const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+      slider.style.background = `linear-gradient(to right, #00FF9D ${pct}%, rgba(255,255,255,0.08) ${pct}%)`;
+    });
+    // Init fill
+    slider.dispatchEvent(new Event('input'));
+
+    // ── Mobile Filter Toggle ─────────────────────────
+    const btnToggle = document.getElementById('btn-toggle-filters');
+    const sidebar = document.getElementById('filter-sidebar');
+    const overlay = document.getElementById('filter-overlay');
+
+    if (btnToggle) {
+      btnToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+        overlay.classList.toggle('open');
+      });
+      overlay.addEventListener('click', () => {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+      });
+    }
+
+    // ── Make Offer / Reserve Button Interaction ──────
+    document.querySelectorAll('.btn-neon').forEach(btn => {
+      if (btn.closest('.filter-panel') || btn.id) return; // skip filter apply & other fixed btns
+
+      btn.addEventListener('click', function () {
+        const original = this.innerHTML;
+        this.innerHTML = `
+          <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+          </svg>
+          Processing…
+        `;
+        this.style.opacity = '0.7';
+        this.style.pointerEvents = 'none';
+
+        setTimeout(() => {
+          this.innerHTML = `
+            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+            Offer Sent!
+          `;
+          this.style.opacity = '1';
+        }, 1500);
+      });
+    });
+
+    // ── Counter Animation (on load) ──────────────────
+    function animateCounter(el, target, duration) {
+      let start = 0;
+      const startTime = performance.now();
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const ease = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+        const current = Math.round(ease * target);
+        el.textContent = current.toLocaleString();
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // Animate all stat numbers
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const target = parseInt(el.dataset.count, 10);
+      if (!isNaN(target)) {
+        setTimeout(() => animateCounter(el, target, 1800), 400);
+      }
+    });
+
+    // ── ESG Modal & My Listings Modal Logic ──────────
+    const esgModal = document.getElementById('modal-esg');
+    const myListingsModal = document.getElementById('modal-my-listings');
+    const btnEsg = document.getElementById('nav-esg');
+    const btnMyListings = document.getElementById('nav-my-listings');
+
+    if (btnEsg && esgModal) {
+      btnEsg.addEventListener('click', () => {
+        esgModal.classList.remove('hidden');
+        esgModal.classList.add('flex');
+      });
+    }
+
+    if (btnMyListings && myListingsModal) {
+      btnMyListings.addEventListener('click', () => {
+        myListingsModal.classList.remove('hidden');
+        myListingsModal.classList.add('flex');
+      });
+    }
+
+    function closeModal(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      }
+    }
+  </script>
+
+  <!-- ═══════════════════════════════════════════════
+       ESG REPORT MODAL
+  ════════════════════════════════════════════════ -->
+  <div id="modal-esg" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in" onclick="if(event.target===this)closeModal('modal-esg')">
+    <div class="bg-slate-900 border border-white/10 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      <div class="absolute -top-16 -right-16 w-40 h-40 bg-neon/15 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="flex items-center justify-between pb-4 border-b border-white/8">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-neon/15 border border-neon/30 flex items-center justify-center text-neon">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-white">ESG Impact Audit Report</h3>
+            <span class="text-xs text-neon font-mono">Verified Circular Partner 2026</span>
+          </div>
+        </div>
+        <button onclick="closeModal('modal-esg')" class="text-white/40 hover:text-white p-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3.5 my-6">
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <span class="text-[0.68rem] text-white/40 uppercase font-semibold tracking-wider">Landfill Diverted</span>
+          <div class="text-2xl font-extrabold text-neon mt-1">1,240 <span class="text-xs text-white/50">Tons</span></div>
+          <span class="text-[0.7rem] text-emerald-400 mt-1 block">94.8% zero landfill rate</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <span class="text-[0.68rem] text-white/40 uppercase font-semibold tracking-wider">Avoided GHG Emissions</span>
+          <div class="text-2xl font-extrabold text-neon mt-1">450 <span class="text-xs text-white/50">MT CO₂e</span></div>
+          <span class="text-[0.7rem] text-emerald-400 mt-1 block">Scope 3 emissions saved</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <span class="text-[0.68rem] text-white/40 uppercase font-semibold tracking-wider">Economic Valorization</span>
+          <div class="text-2xl font-extrabold text-white mt-1">฿2.84M</div>
+          <span class="text-[0.7rem] text-white/40 mt-1 block">Waste-to-revenue created</span>
+        </div>
+        <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/5">
+          <span class="text-[0.68rem] text-white/40 uppercase font-semibold tracking-wider">ESG Rating</span>
+          <div class="text-2xl font-extrabold text-neon mt-1">Grade A+</div>
+          <span class="text-[0.7rem] text-white/40 mt-1 block">ISO 14044 LCA compliant</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button class="btn-neon flex-1 py-3 text-xs" onclick="alert('Downloading Certified ESG Carbon Audit PDF…'); closeModal('modal-esg');">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download Official ESG Certificate
+        </button>
+        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-esg')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════
+       MY LISTINGS MODAL
+  ════════════════════════════════════════════════ -->
+  <div id="modal-my-listings" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-md p-4 animate-fade-in" onclick="if(event.target===this)closeModal('modal-my-listings')">
+    <div class="bg-slate-900 border border-white/10 rounded-3xl max-w-xl w-full p-6 sm:p-8 shadow-2xl relative overflow-hidden">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-white/8">
+        <div>
+          <h3 class="text-lg font-bold text-white">My Active Listings</h3>
+          <span class="text-xs text-white/40">Logged in as: Green Harvest Co., Ltd.</span>
+        </div>
+        <button onclick="closeModal('modal-my-listings')" class="text-white/40 hover:text-white p-2">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 my-5 max-h-72 overflow-y-auto pr-1">
+        <!-- Listing item 1 -->
+        <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/8 flex items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="tag-grade tag-grade-a">Grade A</span>
+              <span class="text-xs font-bold text-white">10 Tons Used Coffee Grounds</span>
+            </div>
+            <span class="text-[0.72rem] text-white/40 mt-1 block">฿500 / Ton · Nakhon Pathom · 4 Pending Offers</span>
+          </div>
+          <a href="raw.html" class="btn-ghost text-xs py-1.5 px-3" onclick="closeModal('modal-my-listings')">View</a>
+        </div>
+        
+        <!-- Listing item 2 -->
+        <div class="p-3.5 rounded-2xl bg-white/[0.04] border border-white/8 flex items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="tag-grade tag-grade-a">Grade A</span>
+              <span class="text-xs font-bold text-white">15 Tons Spent Grain</span>
+            </div>
+            <span class="text-[0.72rem] text-white/40 mt-1 block">฿420 / Ton · Pathum Thani · 2 Pending Offers</span>
+          </div>
+          <a href="raw.html" class="btn-ghost text-xs py-1.5 px-3" onclick="closeModal('modal-my-listings')">View</a>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3 pt-3 border-t border-white/8">
+        <a href="list-waste.html" class="btn-neon flex-1 py-3 text-xs text-center">
+          + Create New Waste Listing
+        </a>
+        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-my-listings')">Close</button>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
