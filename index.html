@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,15 @@
   <!-- Google Fonts – Inter & Prompt (Thai) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- i18n Translation Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="authModal.js"></script>
   <script src="i18n.js"></script>
+  <script src="carbonEngine.js"></script>
+  <script src="db.js"></script>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,9 +25,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'],
-          },
+          fontFamily: { sans: ['Prompt', 'Inter', 'system-ui', 'sans-serif'] },
           colors: {
             neon: '#00FF9D',
             slate: {
@@ -302,16 +305,32 @@
 
     /* ── Nav Link ──────────────────────────────── */
     .nav-link {
-      font-size: 0.82rem; font-weight: 500;
-      color: rgba(255,255,255,0.5);
-      padding: 6px 14px; border-radius: 10px;
-      transition: all 0.3s; cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 6px 13px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      cursor: pointer;
       text-decoration: none;
+      line-height: 1.5;
     }
-    .nav-link:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.05); }
+    .nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
     .nav-link.active {
-      color: #00FF9D; background: rgba(0,255,157,0.08);
-      border: 1px solid rgba(0,255,157,0.15);
+      color: #00FF9D;
+      background: rgba(0, 255, 157, 0.08);
+      border-color: rgba(0, 255, 157, 0.25);
+      box-shadow: 0 0 14px rgba(0, 255, 157, 0.12);
+      font-weight: 600;
     }
 
     /* ── Scroll indicator ─────────────────────────── */
@@ -338,6 +357,32 @@
       color: #0B0F19 !important;
       font-weight: 800;
       box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+    }
+  
+    /* ── Thai Typography & Tone Mark Optimization ── */
+    html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+      font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+    h1, h2, h3, h4, .shimmer-text {
+      line-height: 1.35 !important;
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+    p, span, label, td, th {
+      line-height: 1.6;
+    }
+    button, input, select, textarea {
+      line-height: 1.5 !important;
+    }
+    .nav-link, .btn-gateway, .btn-neon, .btn-reserve, .tab-btn {
+      padding-top: 9px;
+      padding-bottom: 9px;
     }
   </style>
 </head>
@@ -370,26 +415,28 @@
       </a>
 
       <!-- Center Nav Links -->
-      <nav class="flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] overflow-x-auto">
-        <a href="index.html" data-i18n="nav.gateway" class="nav-link active">Gateway</a>
-        <a href="eats.html" data-i18n="nav.eats" class="nav-link">biotrade eats</a>
-        <a href="raw.html" data-i18n="nav.raw" class="nav-link">biotrade raw</a>
-        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">Post Waste</a>
+      <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+        <a href="index.html" data-i18n="nav.gateway" class="nav-link active">หน้าแรก</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link ">กู้อาหาร (Eats)</a>
+        <a href="raw.html" data-i18n="nav.raw" class="nav-link ">ตลาดขยะ (Raw)</a>
+        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
+        <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link ">แดชบอร์ด & ESG</a>
       </nav>
 
       <!-- Right Controls -->
       <div class="flex items-center gap-2.5">
         <!-- Language Switcher (EN | TH) -->
         <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
-          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
-          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="en">EN</button>
+          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="th">TH</button>
         </div>
 
-        <a href="eats.html" data-i18n="nav.eatsB2c" class="hidden sm:inline-block text-xs font-semibold text-amber-300 hover:text-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-500/10 transition-colors">
-          Eats
-        </a>
+        <!-- Auth User Slot -->
+        <div class="auth-nav-slot"></div>
+
+        <a href="eats.html" data-i18n="nav.eatsB2c" class="hidden sm:inline-block text-xs font-semibold text-amber-300 hover:text-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-500/10 transition-colors">อาหาร</a>
         <a href="raw.html" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-950 bg-neon hover:bg-neon-dim px-3.5 py-1.5 rounded-xl transition-all shadow-sm shadow-neon/20">
-          <span data-i18n="nav.enterRaw">Marketplace</span>
+          <span data-i18n="nav.enterRaw">ตลาดขยะ</span>
           <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
         </a>
       </div>
@@ -404,14 +451,10 @@
     <div class="text-center mb-10 md:mb-14 start-hidden animate-slide-up max-w-2xl">
       <div class="tag-pill bg-neon/10 text-neon border border-neon/20 mx-auto mb-6">
         <span class="w-2 h-2 rounded-full bg-neon inline-block animate-pulse"></span>
-        <span data-i18n="gateway.badge">Launching the circular economy</span>
+        <span data-i18n="gateway.badge">ขับเคลื่อนเศรษฐกิจหมุนเวียน</span>
       </div>
-      <h1 data-i18n="gateway.heroTitle" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-4 shimmer-text animate-shimmer">
-        Save Food. Trade Waste.<br />Zero Landfill.
-      </h1>
-      <p data-i18n="gateway.heroDesc" class="text-base sm:text-lg text-white/50 max-w-lg mx-auto font-light leading-relaxed">
-        The dual-gateway platform connecting consumers to surplus meals and industries to valorized organic waste streams.
-      </p>
+      <h1 data-i18n="gateway.heroTitle" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-normal mb-4 shimmer-text animate-shimmer">กู้อาหารอร่อย แลกเปลี่ยนขยะอินทรีย์<br /><span class="shimmer-text">มุ่งสู่เป้าหมายขยะเป็นศูนย์</span></h1>
+      <p data-i18n="gateway.heroDesc" class="text-base sm:text-lg text-white/60 max-w-lg mx-auto font-normal leading-relaxed">แพลตฟอร์มทวิภาคีที่เชื่อมต่อผู้บริโภคเข้ากับอาหารส่วนเกิน และเชื่อมโยงภาคอุตสาหกรรมสู่วงจรขยะอินทรีย์มูลค่าสูง</p>
     </div>
 
     <!-- ── Gateway Cards ── -->
@@ -432,22 +475,18 @@
 
         <!-- Title -->
         <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
-          biotrade <span class="text-warm">eats</span>
+          biotrade <span class="text-warm">eats (กู้อาหารราคาประหยัด)</span>
         </h2>
 
         <!-- Tag -->
-        <div data-i18n="gateway.eatsBadge" class="tag-pill bg-warm/10 text-warm/80 border border-warm/15 mb-5">
-          B2C · Food Rescue
-        </div>
+        <div data-i18n="gateway.eatsBadge" class="tag-pill bg-warm/10 text-warm/80 border border-warm/15 mb-5">กู้ภัยอาหารส่วนเกิน B2C</div>
 
         <!-- Description -->
-        <p data-i18n="gateway.eatsDesc" class="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">
-          Rescue delicious surplus meals, baked goods, and fresh produce from local restaurants, cafes, and supermarkets at 50–70% off. Every bag saves CO2.
-        </p>
+        <p data-i18n="gateway.eatsDesc" class="text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">ช่วยกู้อาหารส่วนเกินแสนอร่อย เบเกอรี่ และผลผลิตสดจากร้านอาหาร คาเฟ่ และซูเปอร์มาร์เก็ตในราคาลด 50–70% ทุกถุงช่วยลดคาร์บอนและช่วยโลก</p>
 
         <!-- CTA -->
         <a href="eats.html" id="btn-explore-eats" class="btn-gateway btn-eats mt-auto">
-          <span data-i18n="gateway.eatsBtn">Explore Eats</span>
+          <span data-i18n="gateway.eatsBtn">เข้าสู่ biotrade eats</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
             <path d="M5 12h14"/>
             <path d="M12 5l7 7-7 7"/>
@@ -466,22 +505,18 @@
 
         <!-- Title -->
         <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
-          biotrade <span class="text-neon">raw</span>
+          biotrade <span class="text-neon">raw (ตลาดขยะ B2B)</span>
         </h2>
 
         <!-- Tag -->
-        <div data-i18n="gateway.rawBadge" class="tag-pill bg-neon/8 text-neon/70 border border-neon/12 mb-5">
-          B2B · Waste-to-Value
-        </div>
+        <div data-i18n="gateway.rawBadge" class="tag-pill bg-neon/8 text-neon/70 border border-neon/12 mb-5">เปลี่ยนขยะเป็นมูลค่า B2B</div>
 
         <!-- Description -->
-        <p data-i18n="gateway.rawDesc" class="text-white/55 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">
-          Connect food processors, breweries, and agriculture with verified off-takers. Trade coffee grounds, spent grain, peels, and biomass at commercial scale.
-        </p>
+        <p data-i18n="gateway.rawDesc" class="text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">เชื่อมโยงโรงงานแปรรูปอาหาร โรงเบียร์ และภาคเกษตรเข้ากับผู้รับซื้อที่ผ่านการตรวจสอบ ซื้อขายกากกาแฟ กากเบียร์ เปลือกผลไม้ และชีวมวลในระดับอุตสาหกรรม</p>
 
         <!-- CTA -->
         <a href="raw.html" id="btn-enter-raw" class="btn-gateway btn-raw mt-auto">
-          <span data-i18n="gateway.rawBtn">Enter Raw Market</span>
+          <span data-i18n="gateway.rawBtn">เข้าสู่ตลาด biotrade raw</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
             <path d="M5 12h14"/>
             <path d="M12 5l7 7-7 7"/>
@@ -495,26 +530,35 @@
     <div class="mt-10 md:mt-14 flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-center start-hidden animate-fade-in" style="animation-delay: 0.6s;">
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-neon">12K+</div>
-        <div data-i18n="gateway.statMeals" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Meals Rescued</div>
+        <div data-i18n="gateway.statMeals" class="text-xs text-white/50 mt-1 font-medium tracking-wide">มื้ออาหารที่กู้ภัยได้</div>
       </div>
       <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-warm">340+</div>
-        <div data-i18n="gateway.statPartners" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Partner Businesses</div>
+        <div data-i18n="gateway.statPartners" class="text-xs text-white/50 mt-1 font-medium tracking-wide">ธุรกิจพาร์ทเนอร์</div>
       </div>
       <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
       <div>
         <div class="text-2xl sm:text-3xl font-bold text-white/80">98%</div>
-        <div data-i18n="gateway.statWaste" class="text-xs text-white/40 mt-1 uppercase tracking-wider">Waste Diverted</div>
+        <div data-i18n="gateway.statWaste" class="text-xs text-white/50 mt-1 font-medium tracking-wide">ขยะที่เบี่ยงเบนจากหลุมฝังกลบ</div>
       </div>
     </div>
   </main>
 
   <!-- ═══════ Footer ═══════ -->
   <footer class="relative z-10 py-6 text-center animate-fade-in" style="animation-delay: 0.8s;">
-    <p data-i18n="gateway.footerCopy" class="text-xs text-white/25 tracking-wide">
-      &copy; 2026 biotrade · Building the circular economy
-    </p>
+    <p data-i18n="gateway.footerCopy" class="text-xs text-white/25 tracking-wide">&copy; 2026 biotrade · ขับเคลื่อนเศรษฐกิจ BCG ในเอเชียตะวันออกเฉียงใต้</p>
+
+
+
+
+
+
+
+
+
+
+
   </footer>
 
   <!-- ═══════ Particle Animation ═══════ -->

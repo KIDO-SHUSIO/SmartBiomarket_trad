@@ -1,19 +1,21 @@
 /**
  * biotrade i18n Translation Engine
- * Supports English (en) and Thai (th)
- * Persists selection via localStorage across all pages
+ * Complete English (en) and Thai (th) localization dictionary
+ * Supports static UI elements, legal/PDPA agreements, ESG Carbon engine,
+ * database tables, financial ledger, and dynamic category translations.
  */
 
 const translations = {
   en: {
     // ── Universal Navbar ──
-    "nav.gateway": "Gateway",
+    "nav.gateway": "Home",
     "nav.eats": "biotrade eats",
     "nav.raw": "biotrade raw",
     "nav.postWaste": "Post Waste",
+    "nav.dashboard": "Dashboard & ESG",
     "nav.enterRaw": "Marketplace",
     "nav.eatsB2c": "Eats",
-    "nav.newListing": "New Listing",
+    "nav.newListing": "+ New Listing",
     "nav.esgReport": "ESG Report",
     "nav.myListings": "My Listings",
     "nav.backMarket": "Back to Marketplace",
@@ -110,7 +112,7 @@ const translations = {
     "form.step1": "Type & Qty",
     "form.step2": "Quality",
     "form.step3": "Logistics",
-    "form.step4": "Pricing",
+    "form.step4": "Pricing & Legal",
     "form.sec1Title": "Type & Quantity",
     "form.wasteTypeLabel": "Waste Type",
     "form.wasteTypeSelect": "Select waste category…",
@@ -153,15 +155,137 @@ const translations = {
     "form.toastTitle": "Listing Published Successfully!",
     "form.toastLive": "Live",
     "form.toastViewMarket": "View in Marketplace",
-    "form.toastPostAnother": "Post Another"
+    "form.toastPostAnother": "Post Another",
+
+    // ── Legal & Compliance System (PDPA & Strict Terms) ──
+    "legal.secTitle": "Legal Compliance & Guarantees",
+    "legal.secDesc": "Mandatory consent required under the Thailand PDPA and biotrade Quality Assurance framework.",
+    "legal.pdpaLabel": "I acknowledge and agree to the biotrade PDPA Data Disclosure & Privacy Policy for trade settlement, carbon verification, and logistics tracking.",
+    "legal.pdpaView": "View Policy Details",
+    "legal.tosLabel": "Strict Terms of Service (ToS): Sellers are fully responsible for all return shipping costs and platform penalties if the delivered waste contains plastic contamination or exceeds the declared rot/moisture levels.",
+    "legal.warningRequired": "You must agree to both the PDPA Policy and Strict Terms of Service before proceeding.",
+    "legal.modalTitle": "Thailand PDPA Compliance & Quality Charter",
+    "legal.modalClose": "I Understand & Accept",
+
+    // ── User Dashboard Portal (dashboard.html) ──
+    "dash.title": "Operations & ESG Command Center",
+    "dash.subtitle": "Manage your bio-resource listings, financial settlements, and certified carbon offset impact.",
+    "dash.tabProfile": "User Profile",
+    "dash.tabListings": "Listing Management",
+    "dash.tabLedger": "Ledger & 10% GP",
+    "dash.tabEsg": "ESG Impact & Certificate",
+
+    // Profile Tab
+    "dash.profileTitle": "Enterprise & Facility Profile",
+    "dash.profileDesc": "Keep your facility credentials, contact, and logistics coordinates up to date for smooth off-taking.",
+    "dash.shopName": "Shop / Farm / Enterprise Name",
+    "dash.contactPerson": "Contact Person",
+    "dash.phone": "Phone Number",
+    "dash.email": "Business Email",
+    "dash.address": "Dispatch & Facility Pickup Bay Address",
+    "dash.role": "Platform Operating Role",
+    "dash.roleSeller": "Seller (Waste Producer / Restaurant)",
+    "dash.roleBuyer": "Buyer (Bio-Processor / Compost / Off-taker)",
+    "dash.roleBoth": "Dual Gateway (Both Seller & Buyer)",
+    "dash.taxId": "Tax Identification / Registration No.",
+    "dash.saveProfile": "Save Profile Changes",
+    "dash.profileSaved": "Profile successfully saved to verified ledger!",
+
+    // Listings Tab
+    "dash.listingsTitle": "Waste & Surplus Listing Inventory",
+    "dash.btnCreateNew": "+ Post New Stream",
+    "dash.colPhoto": "Photo",
+    "dash.colTitle": "Listing Title & Category",
+    "dash.colWeight": "Available Weight",
+    "dash.colPrice": "Unit Price",
+    "dash.colStatus": "Live Status",
+    "dash.colActions": "Actions",
+    "dash.statusAvailable": "Active / Available",
+    "dash.statusSold": "Traded / Sold",
+    "dash.statusReserved": "Reserved (Escrow)",
+    "dash.btnToggle": "Toggle Status",
+    "dash.btnDelete": "Delete",
+    "dash.noListings": "No listings recorded yet. Post a stream to begin trading.",
+
+    // Ledger Tab (Platform GP Calculation)
+    "dash.ledgerTitle": "Transaction & Settlement Ledger",
+    "dash.ledgerDesc": "Automated transparent platform reconciliation with standard 10% Platform Gross Profit (GP) deduction for buyer verification and quality escrow.",
+    "dash.statGrossRevenue": "Cumulative Gross Volume",
+    "dash.statPlatformGp": "Platform Fee (10% GP)",
+    "dash.statNetPayout": "Net Seller Payout (90%)",
+    "dash.statTotalOrders": "Completed Trades",
+    "dash.colOrderNo": "Order Ref",
+    "dash.colDate": "Date",
+    "dash.colItem": "Trade Item",
+    "dash.colBuyer": "Counterparty",
+    "dash.colGross": "Gross Value",
+    "dash.colCommission": "10% Platform GP",
+    "dash.colNet": "Net Payout",
+    "dash.colSettlement": "Settlement Status",
+    "dash.statusCompleted": "Settled & Transferred",
+    "dash.statusEscrow": "In Escrow Holding",
+
+    // ESG Engine & Impact Tab
+    "dash.esgTitle": "Certified Carbon Footprint (CO₂e) Impact Dashboard",
+    "dash.esgDesc": "Real-time calculation of avoided methane emission using IPCC & T-VER circular carbon modeling.",
+    "dash.cardTotalCo2": "Total CO₂e Saved",
+    "dash.cardTons": "Metric Tons",
+    "dash.cardWasteDiverted": "Organic Waste Diverted",
+    "dash.cardTreesEq": "Urban Tree Absorption Eq.",
+    "dash.cardTreesUnit": "Trees / Year",
+    "dash.cardCarKm": "Gasoline Car Mileage Offset",
+    "dash.cardCarUnit": "Kilometers",
+    "dash.calcTitle": "Interactive Carbon Offset Calculator",
+    "dash.calcSelectType": "Select Organic Waste Stream",
+    "dash.calcInputWeight": "Enter Weight (Tons)",
+    "dash.calcBtn": "Calculate Impact",
+    "dash.calcResult": "Calculated Avoided Emissions:",
+    "dash.certTitle": "Verified Carbon Offset & Circular Diversion Certificate",
+    "dash.certSubtitle": "Official ESG disclosure document for corporate sustainability reporting (GRI 306 & SEC ESG).",
+    "dash.certDownload": "Download / Print Official PDF Certificate",
+    "dash.certIssuer": "Issued by biotrade ESG Verification Engine",
+    "dash.certHash": "Verification Hash",
+    "dash.certStandard": "Methodology: ISO 14064-2:2019 Circular Biomass Standard",
+
+    // Dynamic Waste Categories
+    "cat.coffee": "Used Coffee Grounds",
+    "cat.spent_grain": "Brewery Spent Grain",
+    "cat.soy": "Soybean Meal / Okara Residue",
+    "cat.fruit": "Citrus & Fruit Peels",
+    "cat.rice_husk": "Rice Husk & Biomass",
+    "cat.bagasse": "Sugarcane Bagasse",
+    "cat.veg": "Vegetable Processing Waste",
+    "cat.food_waste": "Commercial Food Waste",
+    "cat.surplus_meal": "Rescued Surplus Meals",
+    "cat.other": "Organic Waste Stream"
   },
+    // ── Authentication & Supabase ──
+    "auth.signIn": "Sign In",
+    "auth.signUp": "Sign Up",
+    "auth.signOut": "Sign Out",
+    "auth.email": "Email Address",
+    "auth.password": "Password",
+    "auth.verifyNotice": "Please verify your email",
+    "auth.loginRegister": "Sign In / Register",
+
+    // ── B2B Negotiation Room & Order Confirmation ──
+    "raw.btnNegotiate": "Negotiate & Close Deal",
+    "raw.dealRoomTitle": "B2B Deal Negotiation & Escrow Room",
+    "raw.dealStatusNegotiating": "In Active Negotiation",
+    "raw.dealStatusClosed": "Order Confirmed & Deal Closed",
+    "raw.sendCounterOffer": "Submit Counter-Offer",
+    "raw.confirmDeal": "Confirm Order & Close Deal",
+    "raw.chatPlaceholder": "Type negotiation terms or ask about moisture / quality...",
+    "raw.dealSummary": "Agreed Commercial Terms",
+    "raw.orderSuccess": "Order Confirmed! Recorded in Settlement Ledger with 10% GP.",
 
   th: {
     // ── Universal Navbar ──
-    "nav.gateway": "หน้าแรก (Gateway)",
-    "nav.eats": "biotrade eats",
-    "nav.raw": "biotrade raw",
+    "nav.gateway": "หน้าแรก",
+    "nav.eats": "กู้อาหาร (Eats)",
+    "nav.raw": "ตลาดขยะ (Raw)",
     "nav.postWaste": "ลงประกาศขยะ",
+    "nav.dashboard": "แดชบอร์ด & ESG",
     "nav.enterRaw": "ตลาดขยะ",
     "nav.eatsB2c": "อาหาร",
     "nav.newListing": "+ สร้างประกาศ",
@@ -171,7 +295,7 @@ const translations = {
 
     // ── Gateway Landing Page (index.html) ──
     "gateway.badge": "ขับเคลื่อนเศรษฐกิจหมุนเวียน",
-    "gateway.heroTitle": "กู้อาหาร.<br />ค้าขยะ.<br /><span class=\"shimmer-text\">ไร้หลุมฝังกลบ.</span>",
+    "gateway.heroTitle": "กู้อาหารอร่อย แลกเปลี่ยนขยะอินทรีย์<br /><span class=\"shimmer-text\">มุ่งสู่เป้าหมายขยะเป็นศูนย์</span>",
     "gateway.heroDesc": "แพลตฟอร์มทวิภาคีที่เชื่อมต่อผู้บริโภคเข้ากับอาหารส่วนเกิน และเชื่อมโยงภาคอุตสาหกรรมสู่วงจรขยะอินทรีย์มูลค่าสูง",
     "gateway.scrollHint": "เลือกบริการที่คุณต้องการเพื่อเริ่มต้น",
     "gateway.eatsBadge": "กู้ภัยอาหารส่วนเกิน B2C",
@@ -244,7 +368,7 @@ const translations = {
     "raw.cardPrice": "ราคา",
     "raw.cardPerTon": "/ ตัน",
     "raw.cardFreePickup": "รับฟรี (ฟรี)",
-    "raw.btnMakeOffer": "ยื่นข้อเสนอ / จองสินค้า",
+    "raw.btnMakeOffer": "ยื่นข้อเสนอซื้อ / จองทันที",
     "raw.btnLoadMore": "โหลดประกาศเพิ่มเติม",
     "raw.tagGradeA": "เกรด A",
     "raw.tagGradeB": "เกรด B",
@@ -261,7 +385,7 @@ const translations = {
     "form.step1": "ประเภท & ปริมาณ",
     "form.step2": "คุณภาพ",
     "form.step3": "การขนส่ง",
-    "form.step4": "ราคา",
+    "form.step4": "ราคาและกฎหมาย",
     "form.sec1Title": "ประเภทและปริมาณขยะ",
     "form.wasteTypeLabel": "ประเภทขยะอินทรีย์",
     "form.wasteTypeSelect": "เลือกหมวดหมู่วัตถุดิบขยะ…",
@@ -304,7 +428,130 @@ const translations = {
     "form.toastTitle": "ลงประกาศสำเร็จแล้ว!",
     "form.toastLive": "ออนไลน์",
     "form.toastViewMarket": "ดูประกาศในตลาด",
-    "form.toastPostAnother": "ลงประกาศเพิ่มอีกรายการ"
+    "form.toastPostAnother": "ลงประกาศเพิ่มอีกรายการ",
+
+    // ── Legal & Compliance System (PDPA & Strict Terms) ──
+    "legal.secTitle": "การปฏิบัติตามกฎหมายและความยินยอม PDPA",
+    "legal.secDesc": "ข้อตกลงภาคบังคับภายใต้ พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) และมาตรฐานการรับรองคุณภาพของ biotrade",
+    "legal.pdpaLabel": "ข้าพเจ้ายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ในการเก็บ รวบรวม และเปิดเผยข้อมูลเพื่อการจับคู่คู่ค้า การคำนวณสิทธิคาร์บอน และการขนส่ง",
+    "legal.pdpaView": "อ่านข้อกำหนดนโยบายฉบับเต็ม",
+    "legal.tosLabel": "ข้าพเจ้ายอมรับเงื่อนไขการใช้งาน และรับทราบว่าหากขยะที่ส่งมอบมีการปนเปื้อนพลาสติกหรือเน่าเสียเกินกว่าที่ระบุ ผู้ขายจะต้องรับผิดชอบค่าใช้จ่ายในการขนส่งกลับทั้งหมด",
+    "legal.warningRequired": "กรุณายอมรับทั้งข้อกำหนด PDPA และข้อกำหนดความรับผิดชอบอย่างเคร่งครัดก่อนดำเนินการต่อ",
+    "legal.modalTitle": "นโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) และมาตรฐานคุณภาพวัตถุดิบ",
+    "legal.modalClose": "ข้าพเจ้าเข้าใจและยอมรับเงื่อนไข",
+
+    // ── User Dashboard Portal (dashboard.html) ──
+    "dash.title": "ศูนย์บัญชาการปฏิบัติการ & ผลกระทบ ESG",
+    "dash.subtitle": "จัดการประกาศวัตถุดิบชีวมวล บัญชีการเงินส่วนแบ่งแพลตฟอร์ม และใบรับรองการลดคาร์บอนเครดิต",
+    "dash.tabProfile": "โปรไฟล์สถานประกอบการ",
+    "dash.tabListings": "จัดการประกาศวัตถุดิบ",
+    "dash.tabLedger": "บัญชีการเงิน & ส่วนแบ่ง GP 10%",
+    "dash.tabEsg": "ผลกระทบ ESG & ใบรับรอง",
+
+    // Profile Tab
+    "dash.profileTitle": "ข้อมูลสถานประกอบการและโรงงาน",
+    "dash.profileDesc": "อัปเดตข้อมูลสถานที่ พิกัด และผู้ติดต่อ เพื่อความถูกต้องในการส่งมอบสินค้าและเรียกรถขนส่ง",
+    "dash.shopName": "ชื่อฟาร์ม / ร้านค้า / สถานประกอบการ",
+    "dash.contactPerson": "ชื่อผู้ติดต่อประสานงาน",
+    "dash.phone": "เบอร์โทรศัพท์ที่ติดต่อได้",
+    "dash.email": "อีเมลติดต่อทางธุรกิจ",
+    "dash.address": "ที่อยู่โรงงาน / ลานโหลดสินค้าสำหรับรับของ",
+    "dash.role": "บทบาทในแพลตฟอร์ม",
+    "dash.roleSeller": "ผู้ขาย (แหล่งกำเนิดขยะ / ร้านอาหาร)",
+    "dash.roleBuyer": "ผู้ซื้อ (โรงงานแปรรูปชีวภาพ / โรงปุ๋ย / ผู้รับซื้อ)",
+    "dash.roleBoth": "ทั้งสองบทบาท (เป็นทั้งผู้ซื้อและผู้ขาย)",
+    "dash.taxId": "เลขประจำตัวผู้เสียภาษี / ทะเบียนพาณิชย์",
+    "dash.saveProfile": "บันทึกข้อมูลโปรไฟล์",
+    "dash.profileSaved": "บันทึกข้อมูลลงฐานข้อมูลเรียบร้อยแล้ว!",
+
+    // Listings Tab
+    "dash.listingsTitle": "คลังรายการประกาศของคุณ",
+    "dash.btnCreateNew": "+ ลงประกาศใหม่",
+    "dash.colPhoto": "รูปถ่าย",
+    "dash.colTitle": "ชื่อประกาศ & หมวดหมู่",
+    "dash.colWeight": "ปริมาณที่มี",
+    "dash.colPrice": "ราคาต่อหน่วย",
+    "dash.colStatus": "สถานะการขาย",
+    "dash.colActions": "การจัดการ",
+    "dash.statusAvailable": "เปิดรับซื้อขาย",
+    "dash.statusSold": "ปิดการขายแล้ว",
+    "dash.statusReserved": "อยู่ระหว่างจอง (Escrow)",
+    "dash.btnToggle": "สลับสถานะ",
+    "dash.btnDelete": "ลบประกาศ",
+    "dash.noListings": "ยังไม่มีรายการประกาศ ลงประกาศขยะชิ้นแรกเพื่อเริ่มการซื้อขาย",
+
+    // Ledger Tab (Platform GP Calculation)
+    "dash.ledgerTitle": "บัญชีบันทึกธุรกรรมการค้า & ส่วนแบ่ง GP แพลตฟอร์ม",
+    "dash.ledgerDesc": "ระบบคำนวณหักส่วนแบ่งแพลตฟอร์มมาตรฐาน 10% (Gross Profit Commission) อัตโนมัติ เพื่อเป็นค่าตรวจสอบคุณภาพและระบบเงินประกัน Escrow",
+    "dash.statGrossRevenue": "ยอดขายรวม (Gross Volume)",
+    "dash.statPlatformGp": "ส่วนแบ่งแพลตฟอร์ม (10% GP)",
+    "dash.statNetPayout": "ยอดรับสุทธิของผู้ขาย (90%)",
+    "dash.statTotalOrders": "จำนวนธุรกรรมสำเร็จ",
+    "dash.colOrderNo": "รหัสคำสั่งซื้อ",
+    "dash.colDate": "วันที่",
+    "dash.colItem": "รายการสินค้า",
+    "dash.colBuyer": "คู่ค้าที่ทำธุรกรรม",
+    "dash.colGross": "ยอดเงินรวม (บาท)",
+    "dash.colCommission": "ค่าธรรมเนียม GP 10%",
+    "dash.colNet": "ยอดรับสุทธิ (บาท)",
+    "dash.colSettlement": "สถานะการโอนเงิน",
+    "dash.statusCompleted": "โอนเงินเรียบร้อยแล้ว",
+    "dash.statusEscrow": "รอตรวจสอบสินค้า (Escrow)",
+
+    // ESG Engine & Impact Tab
+    "dash.esgTitle": "แดชบอร์ดผลกระทบคาร์บอนฟุตพริ้นท์ (CO₂e) ที่ได้รับการรับรอง",
+    "dash.esgDesc": "คำนวณการลดก๊าซมีเทนจากการเบี่ยงเบนขยะไม่ให้ลงสู่หลุมฝังกลบตามแบบจำลอง IPCC และ T-VER",
+    "dash.cardTotalCo2": "ลดการปล่อยก๊าซ CO₂e รวม",
+    "dash.cardTons": "ตันคาร์บอน (MT)",
+    "dash.cardWasteDiverted": "ขยะอินทรีย์ที่นำกลับมาใช้ประโยชน์",
+    "dash.cardTreesEq": "เทียบเท่าการดูดซับของต้นไม้",
+    "dash.cardTreesUnit": "ต้น / ปี",
+    "dash.cardCarKm": "เทียบเท่าการลดระยะทางรถยนต์",
+    "dash.cardCarUnit": "กิโลเมตร",
+    "dash.calcTitle": "เครื่องคำนวณการลดคาร์บอนแบบจำลอง (Carbon Calculator)",
+    "dash.calcSelectType": "เลือกหมวดหมู่วัตถุดิบขยะอินทรีย์",
+    "dash.calcInputWeight": "ระบุน้ำหนัก (ตัน)",
+    "dash.calcBtn": "คำนวณปริมาณคาร์บอนที่ลดได้",
+    "dash.calcResult": "ปริมาณคาร์บอนที่คาดว่าจะลดได้:",
+    "dash.certTitle": "ใบรับรองการชดเชยคาร์บอนและการจัดการขยะหมุนเวียน",
+    "dash.certSubtitle": "เอกสารรับรองมาตรฐาน ESG สำหรับรายงานความยั่งยืนประจำปีขององค์กร (GRI 306 & ตลาดหลักทรัพย์ฯ)",
+    "dash.certDownload": "ดาวน์โหลด / สั่งพิมพ์ใบรับรองทางการ (PDF Certificate)",
+    "dash.certIssuer": "ออกโดย ระบบตรวจสอบความยั่งยืน biotrade ESG Engine",
+    "dash.certHash": "รหัสตรวจสอบความถูกต้อง (Verification Hash)",
+    "dash.certStandard": "มาตรฐานอ้างอิง: ISO 14064-2:2019 Circular Biomass Standard",
+
+    // Dynamic Waste Categories
+    "cat.coffee": "กากกาแฟใช้แล้ว",
+    "cat.spent_grain": "กากมอลต์โรงเบียร์",
+    "cat.soy": "กากถั่วเหลือง/กากเต้าหู้ (Okara)",
+    "cat.fruit": "เปลือกส้มและผลไม้รวม",
+    "cat.rice_husk": "แกลบข้าวและชีวมวล",
+    "cat.bagasse": "ชานอ้อยอุตสาหกรรม",
+    "cat.veg": "เศษผักโรงงานแปรรูป",
+    "cat.food_waste": "เศษอาหารเชิงพาณิชย์",
+    "cat.surplus_meal": "มื้ออาหารส่วนเกินที่กู้ภัย",
+    "cat.other": "วัตถุดิบขยะอินทรีย์ทั่วไป",
+
+    // ── Authentication & Supabase ──
+    "auth.signIn": "เข้าสู่ระบบ",
+    "auth.signUp": "สมัครสมาชิก",
+    "auth.signOut": "ออกจากระบบ",
+    "auth.email": "อีเมล",
+    "auth.password": "รหัสผ่าน",
+    "auth.verifyNotice": "กรุณายืนยันอีเมลของคุณ",
+    "auth.loginRegister": "เข้าสู่ระบบ / สมัคร",
+
+    // ── B2B Negotiation Room & Order Confirmation ──
+    "raw.btnNegotiate": "ยื่นข้อเสนอซื้อ / จองทันที",
+    "raw.dealRoomTitle": "ห้องเจรจาซื้อขาย & สัญญาซื้อขาย B2B",
+    "raw.dealStatusNegotiating": "กำลังเจรจาซื้อขาย (Active)",
+    "raw.dealStatusClosed": "ยืนยันการสั่งซื้อ & ปิดดีลสำเร็จ",
+    "raw.sendCounterOffer": "ส่งข้อเสนอราคาใหม่",
+    "raw.confirmDeal": "ยืนยันการสั่งซื้อ & ปิดดีล",
+    "raw.chatPlaceholder": "พิมพ์ข้อความเจรจาต่อรอง หรือสอบถามระดับความชื้น/การขนส่ง...",
+    "raw.dealSummary": "สรุปเงื่อนไขสัญญาการค้า",
+    "raw.orderSuccess": "ยืนยันการสั่งซื้อสำเร็จ! บันทึกเข้าระบบบัญชีและออกใบรับรอง ESG แล้ว"
+
   }
 };
 
@@ -312,7 +559,25 @@ const translations = {
  * Get the currently active language (defaults to 'en')
  */
 function getCurrentLanguage() {
-  return localStorage.getItem('biotrade_lang') || 'en';
+  if (typeof localStorage === 'undefined') return 'th';
+  return localStorage.getItem('biotrade_lang') || 'th';
+}
+
+/**
+ * Helper translation lookup
+ */
+function t(key, defaultVal = '') {
+  const lang = getCurrentLanguage();
+  const dict = translations[lang] || translations.en;
+  return dict[key] !== undefined ? dict[key] : (translations.en[key] !== undefined ? translations.en[key] : defaultVal || key);
+}
+
+/**
+ * Helper to translate dynamic category keys
+ */
+function translateCategory(typeKey) {
+  const k = "cat." + (typeKey || "other").toLowerCase();
+  return t(k, typeKey);
 }
 
 /**
@@ -320,7 +585,7 @@ function getCurrentLanguage() {
  * @param {string} lang - 'en' or 'th'
  */
 function setLanguage(lang) {
-  if (lang !== 'en' && lang !== 'th') lang = 'en';
+  if (lang !== 'en' && lang !== 'th') lang = 'th';
   localStorage.setItem('biotrade_lang', lang);
   document.documentElement.lang = lang;
 
@@ -366,8 +631,16 @@ function toggleLanguage() {
   setLanguage(current === 'en' ? 'th' : 'en');
 }
 
+// Attach helpers to window
+if (typeof window !== 'undefined') {
+  window.t = t;
+  window.translateCategory = translateCategory;
+}
+
 // Auto-initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
-  const lang = getCurrentLanguage();
-  setLanguage(lang);
-});
+if (typeof document !== 'undefined') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const lang = getCurrentLanguage();
+        setLanguage(lang);
+  });
+}

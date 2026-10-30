@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="th">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,10 +9,15 @@
   <!-- Google Fonts – Inter & Prompt (Thai) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- i18n Translation Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabaseClient.js"></script>
+  <script src="authModal.js"></script>
   <script src="i18n.js"></script>
+  <script src="carbonEngine.js"></script>
+  <script src="db.js"></script>
 
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -20,7 +25,7 @@
     tailwind.config = {
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'Prompt', 'system-ui', 'sans-serif'] },
+          fontFamily: { sans: ['Prompt', 'Inter', 'system-ui', 'sans-serif'] },
           colors: {
             neon: { DEFAULT: '#00FF9D', dim: '#00CC7D', dark: '#009960' },
             slate: {
@@ -268,16 +273,32 @@
 
     /* ── Nav Link ──────────────────────────────── */
     .nav-link {
-      font-size: 0.82rem; font-weight: 500;
-      color: rgba(255,255,255,0.4);
-      padding: 6px 14px; border-radius: 10px;
-      transition: all 0.3s; cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 6px 13px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      transition: all 0.2s ease;
+      cursor: pointer;
       text-decoration: none;
+      line-height: 1.5;
     }
-    .nav-link:hover { color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.04); }
+    .nav-link:hover {
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
     .nav-link.active {
-      color: #00FF9D; background: rgba(0,255,157,0.08);
-      border: 1px solid rgba(0,255,157,0.1);
+      color: #00FF9D;
+      background: rgba(0, 255, 157, 0.08);
+      border-color: rgba(0, 255, 157, 0.25);
+      box-shadow: 0 0 14px rgba(0, 255, 157, 0.12);
+      font-weight: 600;
     }
 
     /* ── Detail Row ────────────────────────────── */
@@ -335,6 +356,32 @@
       font-weight: 800;
       box-shadow: 0 2px 10px rgba(0,255,157,0.35);
     }
+  
+    /* ── Thai Typography & Tone Mark Optimization ── */
+    html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+      font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    body {
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+    }
+    h1, h2, h3, h4, .shimmer-text {
+      line-height: 1.35 !important;
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+    p, span, label, td, th {
+      line-height: 1.6;
+    }
+    button, input, select, textarea {
+      line-height: 1.5 !important;
+    }
+    .nav-link, .btn-gateway, .btn-neon, .btn-reserve, .tab-btn {
+      padding-top: 9px;
+      padding-bottom: 9px;
+    }
   </style>
 </head>
 
@@ -358,43 +405,34 @@
         </a>
 
         <!-- Center Nav Links (Standardized 4 tabs) -->
-        <nav class="hidden md:flex items-center gap-1.5 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-          <a href="index.html" data-i18n="nav.gateway" class="nav-link">Gateway</a>
-          <a href="eats.html" data-i18n="nav.eats" class="nav-link">biotrade eats</a>
-          <a href="raw.html" data-i18n="nav.raw" class="nav-link active">biotrade raw</a>
-          <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">Post Waste</a>
-        </nav>
+        <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+        <a href="index.html" data-i18n="nav.gateway" class="nav-link ">หน้าแรก</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link ">กู้อาหาร (Eats)</a>
+        <a href="raw.html" data-i18n="nav.raw" class="nav-link active">ตลาดขยะ (Raw)</a>
+        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
+        <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link ">แดชบอร์ด & ESG</a>
+      </nav>
 
         <!-- Right -->
         <div class="flex items-center gap-2.5">
+          <!-- ESG Report & My Listings Quick Buttons -->
+          <button type="button" id="nav-esg" onclick="openModal('modal-esg')" class="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span data-i18n="nav.esgReport">รายงาน ESG</span>
+          </button>
+          <button type="button" id="nav-my-listings" onclick="openModal('modal-my-listings')" class="hidden lg:inline-flex items-center gap-1.5 text-xs font-semibold text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl bg-white/[0.04] border border-white/10 hover:border-white/20 transition-all cursor-pointer">
+            <svg class="w-3.5 h-3.5 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span data-i18n="nav.myListings">ประกาศของฉัน</span>
+          </button>
+
           <!-- Language Switcher (EN | TH) -->
           <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
-            <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="en">EN</button>
-            <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="th">TH</button>
+            <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="en">EN</button>
+            <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="th">TH</button>
           </div>
 
-          <button type="button" id="nav-esg" class="hidden xl:inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-neon px-3 py-1.5 rounded-lg border border-white/8 hover:border-neon/25 transition-colors cursor-pointer">
-            <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-            <span data-i18n="nav.esgReport">ESG Report</span>
-          </button>
-          <button type="button" id="nav-my-listings" class="hidden xl:inline-flex items-center gap-1.5 text-xs text-white/50 hover:text-neon px-3 py-1.5 rounded-lg border border-white/8 hover:border-neon/25 transition-colors cursor-pointer">
-            <span data-i18n="nav.myListings">My Listings</span>
-          </button>
-          <!-- New Listing CTA -->
-          <a href="list-waste.html" id="btn-new-listing" class="hidden sm:inline-flex items-center gap-2 text-xs font-semibold text-slate-950 bg-neon hover:bg-neon-dim px-4 py-2 rounded-xl transition-colors shadow-md shadow-neon/15">
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            <span data-i18n="nav.newListing">New Listing</span>
-          </a>
-          <!-- User Icon -->
-          <button id="btn-user" class="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-neon/25 transition-colors">
-            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
-            </svg>
-          </button>
-          <!-- Mobile menu -->
-          <button id="btn-mobile-menu" class="md:hidden w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-neon/25 transition-colors">
-            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="18" x2="20" y2="18"/></svg>
-          </button>
+          <!-- Auth User Slot -->
+          <div class="auth-nav-slot"></div>
         </div>
       </div>
     </div>
@@ -409,7 +447,7 @@
       <!-- Widget 1 – Waste Traded -->
       <div class="stat-widget animate-glow">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statWasteTitle">Total Waste Traded</span>
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statWasteTitle">ปริมาณขยะที่ซื้อขายทั้งหมด</span>
           <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
             <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
@@ -417,18 +455,18 @@
           </div>
         </div>
         <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
-          <span data-count="1240">1,240</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statWasteUnit">Tons</span>
+          <span data-count="1240">1,240</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statWasteUnit">ตัน</span>
         </div>
         <div class="flex items-center gap-1 mt-3">
           <svg class="w-3 h-3 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statWasteTrend">+12.4% this month</span>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statWasteTrend">+12.4% เดือนนี้</span>
         </div>
       </div>
 
       <!-- Widget 2 – CO2 Saved -->
       <div class="stat-widget animate-glow">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statCo2Title">CO₂ Saved</span>
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statCo2Title">ลดการปล่อย CO₂</span>
           <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
             <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M2 12h20"/>
@@ -437,18 +475,18 @@
           </div>
         </div>
         <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
-          <span data-count="450">450</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statCo2Unit">MT</span>
+          <span data-count="450">450</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statCo2Unit">ตันคาร์บอน (MT)</span>
         </div>
         <div class="flex items-center gap-1 mt-3">
           <svg class="w-3 h-3 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg>
-          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statCo2Trend">+8.7% this month</span>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statCo2Trend">+8.7% เดือนนี้</span>
         </div>
       </div>
 
       <!-- Widget 3 – Active Listings -->
       <div class="stat-widget animate-glow">
         <div class="flex items-center justify-between mb-3">
-          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statActiveTitle">Active Listings</span>
+          <span class="text-[0.68rem] font-semibold uppercase tracking-widest text-white/40" data-i18n="raw.statActiveTitle">ประกาศที่เปิดรับซื้อขาย</span>
           <div class="w-8 h-8 rounded-lg bg-neon/10 flex items-center justify-center">
             <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
@@ -456,11 +494,11 @@
           </div>
         </div>
         <div class="text-2xl sm:text-3xl font-extrabold text-neon leading-none flex items-baseline gap-1.5">
-          <span data-count="24">24</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statActiveUnit">Listings</span>
+          <span data-count="24">24</span> <span class="text-xs sm:text-sm font-semibold text-white/40" data-i18n="raw.statActiveUnit">รายการ</span>
         </div>
         <div class="flex items-center gap-1 mt-3">
           <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
-          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statActiveTrend">6 new today</span>
+          <span class="text-[0.7rem] text-neon/80 font-medium" data-i18n="raw.statActiveTrend">6 รายการใหม่วันนี้</span>
         </div>
       </div>
 
@@ -481,35 +519,35 @@
           <div class="mb-8">
             <h3 class="filter-section-title flex items-center gap-2">
               <svg class="w-3 h-3 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-              <span data-i18n="raw.filterCategory">Category</span>
+              <span data-i18n="raw.filterCategory">หมวดหมู่ขยะ</span>
             </h3>
             <label class="cb-wrap">
               <input type="checkbox" value="food-waste" checked />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.catFood">Food Waste</span>
+              <span class="cb-label" data-i18n="raw.catFood">ขยะเศษอาหาร</span>
             </label>
             <label class="cb-wrap">
               <input type="checkbox" value="soy-waste" checked />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.catSoy">Soy Waste</span>
+              <span class="cb-label" data-i18n="raw.catSoy">กากถั่วเหลือง/เต้าหู้</span>
             </label>
             <label class="cb-wrap">
               <input type="checkbox" value="fruit-peels" checked />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.catFruit">Fruit Peels</span>
+              <span class="cb-label" data-i18n="raw.catFruit">เปลือกผลไม้</span>
             </label>
             <label class="cb-wrap">
               <input type="checkbox" value="biomass" />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.catBiomass">Biomass</span>
+              <span class="cb-label" data-i18n="raw.catBiomass">ชีวมวล/แกลบข้าว</span>
             </label>
           </div>
 
@@ -520,7 +558,7 @@
                 <svg class="w-3 h-3 text-neon/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
                 </svg>
-                <span data-i18n="raw.filterDistance">Distance</span>
+                <span data-i18n="raw.filterDistance">ระยะทาง</span>
               </h3>
               <span class="text-xs font-bold text-neon" id="distance-val">30 km</span>
             </div>
@@ -528,7 +566,7 @@
               <input type="range" min="1" max="30" value="30" class="range-slider" id="distance-slider" />
               <div class="flex justify-between mt-2">
                 <span class="text-[0.7rem] text-white/40">1 km</span>
-                <span class="text-[0.7rem] text-white/50 font-medium" data-i18n="raw.maxDist">Max 30km</span>
+                <span class="text-[0.7rem] text-white/50 font-medium" data-i18n="raw.maxDist">สูงสุด 30 กม.</span>
               </div>
             </div>
           </div>
@@ -537,27 +575,27 @@
           <div class="mb-8">
             <h3 class="filter-section-title flex items-center gap-2">
               <svg class="w-3 h-3 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/></svg>
-              <span data-i18n="raw.filterListingType">Listing Type</span>
+              <span data-i18n="raw.filterListingType">ประเภทประกาศ</span>
             </h3>
             <label class="cb-wrap">
               <input type="checkbox" value="sell" checked />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.typeSale">For Sale</span>
+              <span class="cb-label" data-i18n="raw.typeSale">สำหรับขาย</span>
             </label>
             <label class="cb-wrap">
               <input type="checkbox" value="free" />
               <span class="cb-box">
                 <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="#0B0F19" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               </span>
-              <span class="cb-label" data-i18n="raw.typeFree">Free Pickup</span>
+              <span class="cb-label" data-i18n="raw.typeFree">รับฟรี (ไม่คิดเงิน)</span>
             </label>
           </div>
 
           <!-- Apply Button -->
           <button class="btn-neon w-full">
-            <span data-i18n="raw.btnApply">Apply Filters</span>
+            <span data-i18n="raw.btnApply">ใช้งานตัวกรอง</span>
             <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
           </button>
         </div>
@@ -572,17 +610,17 @@
             <!-- Mobile filter toggle -->
             <button id="btn-toggle-filters" class="lg:hidden btn-ghost text-xs py-2 px-3">
               <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
-              <span data-i18n="raw.filterTitle">Filters</span>
+              <span data-i18n="raw.filterTitle">ตัวกรองค้นหา</span>
             </button>
-            <h3 class="text-base font-bold text-white/85" data-i18n="raw.gridHeading">Active Listings</h3>
+            <h3 class="text-base font-bold text-white/85" data-i18n="raw.gridHeading">ประกาศซื้อขายที่เปิดอยู่</h3>
           </div>
           <div class="flex items-center gap-2">
-            <span class="text-xs text-white/30 hidden sm:inline" data-i18n="raw.sortBy">Sort by:</span>
-            <select id="sort-select" class="bg-white/5 border border-white/8 rounded-lg text-xs text-white/60 py-1.5 px-3 outline-none focus:border-neon/30 transition-colors cursor-pointer" style="font-family: Inter, sans-serif;">
-              <option>Newest</option>
-              <option>Price: Low → High</option>
-              <option>Price: High → Low</option>
-              <option>Distance</option>
+            <span class="text-xs text-white/30 hidden sm:inline" data-i18n="raw.sortBy">เรียงตาม:</span>
+            <select id="sort-select" class="bg-white/5 border border-white/8 rounded-lg text-xs text-white/60 py-1.5 px-3 outline-none focus:border-neon/30 transition-colors cursor-pointer">
+              <option data-i18n="raw.sortNewest">ใหม่ล่าสุด</option>
+              <option data-i18n="raw.sortPriceLow">ราคา: ต่ำ → สูง</option>
+              <option data-i18n="raw.sortPriceHigh">ราคา: สูง → ต่ำ</option>
+              <option data-i18n="raw.sortDistance">ระยะทางใกล้สุด</option>
             </select>
           </div>
         </div>
@@ -599,7 +637,7 @@
                 <span class="tag-grade tag-moisture">High Moisture</span>
               </div>
               <!-- Title -->
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">10 Tons Used Coffee Grounds</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">กากกาแฟใช้แล้ว 10 ตัน (Coffee Grounds)</h4>
               <!-- Details -->
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
@@ -627,7 +665,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿500 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -638,7 +676,7 @@
               <div class="flex items-center gap-2 mb-4">
                 <span class="tag-grade tag-grade-a">Grade A</span>
               </div>
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">25 Tons Soybean Meal Residue</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">กากถั่วเหลือง/กากเต้าหู้ 25 ตัน (Okara)</h4>
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
                   <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -658,7 +696,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿350 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -670,7 +708,7 @@
                 <span class="tag-grade tag-grade-b">Grade B</span>
                 <span class="tag-grade tag-moisture">High Moisture</span>
               </div>
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">8 Tons Mixed Fruit Peels</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">เปลือกผลไม้และส้มรวม 8 ตัน (Fruit Peels)</h4>
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
                   <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -690,7 +728,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿200 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -701,7 +739,7 @@
               <div class="flex items-center gap-2 mb-4">
                 <span class="tag-grade tag-grade-a">Grade A</span>
               </div>
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">50 Tons Rice Husk Biomass</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">ชีวมวลแกลบข้าว 50 ตัน (Rice Husk)</h4>
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
                   <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -721,7 +759,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿150 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -733,7 +771,7 @@
                 <span class="tag-grade tag-grade-a">Grade A</span>
                 <span class="tag-grade tag-moisture">Fermented</span>
               </div>
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">15 Tons Brewery Spent Grain</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">กากมอลต์โรงเบียร์ 15 ตัน (Spent Grain)</h4>
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
                   <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -753,7 +791,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">฿420 <span class="text-xs font-medium text-white/30">/ Ton</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -764,7 +802,7 @@
               <div class="flex items-center gap-2 mb-4">
                 <span class="tag-grade tag-grade-b">Grade B</span>
               </div>
-              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">30 Tons Vegetable Processing Waste</h4>
+              <h4 class="text-[1.05rem] font-bold text-white mb-3 leading-snug">เศษผักแปรรูปโรงงาน 30 ตัน (Vegetable Waste)</h4>
               <div class="space-y-2.5 mb-5">
                 <div class="detail-row">
                   <svg class="w-3.5 h-3.5 text-neon/40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -784,7 +822,7 @@
                   <span class="text-[0.68rem] text-white/25 uppercase tracking-wider">Price</span>
                   <div class="text-xl font-extrabold text-neon leading-none mt-0.5">FREE <span class="text-xs font-medium text-white/30">pickup</span></div>
                 </div>
-                <button class="btn-neon text-xs py-2.5 px-4 font-semibold">Make Offer / Reserve</button>
+                <button class="btn-neon text-xs py-2.5 px-4 font-semibold" data-i18n="raw.btnNegotiate">ยื่นข้อเสนอซื้อ / จองทันที</button>
               </div>
             </div>
           </article>
@@ -840,30 +878,42 @@
       });
     }
 
-    // ── Make Offer / Reserve Button Interaction ──────
-    document.querySelectorAll('.btn-neon').forEach(btn => {
-      if (btn.closest('.filter-panel') || btn.id) return; // skip filter apply & other fixed btns
+        // ── Open B2B Negotiation Deal Room on button click ──
+    document.querySelectorAll('.listing-card .btn-neon').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const card = btn.closest('.listing-card');
+        const titleEl = card ? (card.querySelector('h4') || card.querySelector('h3')) : null;
+        const title = titleEl ? titleEl.textContent.trim() : "กากมอลต์โรงเบียร์ (Spent Grain)";
 
-      btn.addEventListener('click', function () {
-        const original = this.innerHTML;
-        this.innerHTML = `
-          <svg class="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-          </svg>
-          Processing…
-        `;
-        this.style.opacity = '0.7';
-        this.style.pointerEvents = 'none';
+        let typeKey = "spent_grain";
+        let defaultWeight = 10;
+        let defaultPrice = 500;
 
-        setTimeout(() => {
-          this.innerHTML = `
-            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="20 6 9 17 4 12"/>
-            </svg>
-            Offer Sent!
-          `;
-          this.style.opacity = '1';
-        }, 1500);
+        const lower = title.toLowerCase();
+        if (lower.includes("coffee") || lower.includes("กาแฟ")) {
+          typeKey = "coffee";
+          defaultWeight = 8;
+          defaultPrice = 420;
+        } else if (lower.includes("bagasse") || lower.includes("ชานอ้อย")) {
+          typeKey = "bagasse";
+          defaultWeight = 25;
+          defaultPrice = 350;
+        } else if (lower.includes("vegetable") || lower.includes("ผัก")) {
+          typeKey = "veg";
+          defaultWeight = 5;
+          defaultPrice = 200;
+        } else if (lower.includes("peel") || lower.includes("fruit") || lower.includes("ผลไม้")) {
+          typeKey = "fruit";
+          defaultWeight = 15;
+          defaultPrice = 150;
+        } else if (lower.includes("rice") || lower.includes("แกลบ")) {
+          typeKey = "rice_husk";
+          defaultWeight = 30;
+          defaultPrice = 280;
+        }
+
+        openNegotiationRoom(title, typeKey, defaultWeight, defaultPrice);
       });
     });
 
@@ -932,8 +982,8 @@
             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
           </div>
           <div>
-            <h3 class="text-lg font-bold text-white">ESG Impact Audit Report</h3>
-            <span class="text-xs text-neon font-mono">Verified Circular Partner 2026</span>
+            <h3 class="text-lg font-bold text-white">รายงานตรวจสอบผลกระทบ ESG</h3>
+            <span class="text-xs text-neon font-mono">พาร์ทเนอร์เศรษฐกิจหมุนเวียนที่ผ่านการรับรอง 2026</span>
           </div>
         </div>
         <button onclick="closeModal('modal-esg')" class="text-white/40 hover:text-white p-2">
@@ -969,7 +1019,7 @@
           <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download Official ESG Certificate
         </button>
-        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-esg')">Close</button>
+        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-esg')">ปิดหน้าต่าง</button>
       </div>
     </div>
   </div>
@@ -982,8 +1032,8 @@
       
       <div class="flex items-center justify-between pb-4 border-b border-white/8">
         <div>
-          <h3 class="text-lg font-bold text-white">My Active Listings</h3>
-          <span class="text-xs text-white/40">Logged in as: Green Harvest Co., Ltd.</span>
+          <h3 class="text-lg font-bold text-white">ประกาศซื้อขายของฉัน</h3>
+          <span class="text-xs text-white/40">เข้าสู่ระบบในนาม: Green Harvest Co., Ltd.</span>
         </div>
         <button onclick="closeModal('modal-my-listings')" class="text-white/40 hover:text-white p-2">
           <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -996,7 +1046,7 @@
           <div>
             <div class="flex items-center gap-2">
               <span class="tag-grade tag-grade-a">Grade A</span>
-              <span class="text-xs font-bold text-white">10 Tons Used Coffee Grounds</span>
+              <span class="text-xs font-bold text-white">กากกาแฟใช้แล้ว 10 ตัน (Coffee Grounds)</span>
             </div>
             <span class="text-[0.72rem] text-white/40 mt-1 block">฿500 / Ton · Nakhon Pathom · 4 Pending Offers</span>
           </div>
@@ -1020,10 +1070,452 @@
         <a href="list-waste.html" class="btn-neon flex-1 py-3 text-xs text-center">
           + Create New Waste Listing
         </a>
-        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-my-listings')">Close</button>
+        <button class="btn-ghost py-3 px-5 text-xs" onclick="closeModal('modal-my-listings')">ปิดหน้าต่าง</button>
       </div>
     </div>
   </div>
 
+    <!-- ═══════════════════════════════════════════════
+       B2B LIVE NEGOTIATION DEAL ROOM & ESCROW CONTRACT
+  ════════════════════════════════════════════════ -->
+  <div id="modal-negotiation-room" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-3 sm:p-5 animate-fade-in">
+    <div class="bg-slate-900 border border-white/15 rounded-3xl max-w-4xl w-full p-6 sm:p-8 space-y-6 shadow-2xl text-white max-h-[95vh] overflow-y-auto relative">
+      
+      <!-- Header -->
+      <div class="flex items-start justify-between border-b border-white/10 pb-4">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold font-mono tracking-wider bg-neon/15 text-neon border border-neon/30">
+              <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
+              <span id="deal-ref-id">DEAL-2026-8819</span>
+            </span>
+            <div id="deal-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30">
+              <span id="deal-status-text">กำลังเจรจาซื้อขาย (In Negotiation)</span>
+            </div>
+          </div>
+          <h3 id="deal-item-title" class="text-lg sm:text-xl font-bold text-white leading-snug">
+            กากมอลต์โรงเบียร์ (Brewery Spent Grain)
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">
+            คู่ค้า: GreenHarvest Bio-Farms & Agro Ltd. · สินค้าผ่านการคัดแยกปลอดพลาสติก 100%
+          </p>
+        </div>
+        <button type="button" onclick="closeNegotiationRoom()" class="text-slate-400 hover:text-white text-xl font-bold p-1 cursor-pointer">✕</button>
+      </div>
+
+      <!-- 2-Column Grid: Left Deal Terms / Right Chat -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Left Column: Commercial Sliders & Financial Settlement (7 cols) -->
+        <div class="lg:col-span-7 space-y-5">
+          
+          <!-- Interactive Term Sliders -->
+          <div class="p-4 sm:p-5 rounded-2xl bg-white/[0.03] border border-white/10 space-y-4">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+              <span>เงื่อนไขการสั่งซื้อ (Order Parameters)</span>
+              <span class="text-[0.68rem] font-normal text-neon">ปรับสเกลเพื่อคำนวณราคา</span>
+            </h4>
+
+            <!-- Weight Slider -->
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-slate-400">ปริมาณสั่งซื้อ (Weight):</span>
+                <strong id="deal-weight-display" class="text-neon font-mono text-sm">10.0 ตัน</strong>
+              </div>
+              <input type="range" id="deal-weight-slider" min="1" max="50" step="0.5" value="10" oninput="updateDealCalculations()" class="w-full accent-neon cursor-pointer" />
+              <div class="flex justify-between text-[0.65rem] text-slate-500 mt-0.5 font-mono">
+                <span>1 ตัน</span>
+                <span>25 ตัน</span>
+                <span>50 ตัน</span>
+              </div>
+            </div>
+
+            <!-- Price Slider -->
+            <div>
+              <div class="flex justify-between text-xs mb-1.5">
+                <span class="text-slate-400">ราคาเสนอซื้อ (Offer Price):</span>
+                <strong id="deal-price-display" class="text-white font-mono text-sm">฿500 / ตัน</strong>
+              </div>
+              <input type="range" id="deal-price-slider" min="100" max="1500" step="10" value="500" oninput="updateDealCalculations()" class="w-full accent-neon cursor-pointer" />
+              <div class="flex justify-between text-[0.65rem] text-slate-500 mt-0.5 font-mono">
+                <span>฿100</span>
+                <span>฿800</span>
+                <span>฿1,500</span>
+              </div>
+            </div>
+
+            <!-- Logistics Method -->
+            <div class="pt-2 border-t border-white/5">
+              <span class="block text-xs text-slate-400 mb-2">วิธีส่งมอบวัตถุดิบ:</span>
+              <div class="grid grid-cols-2 gap-2 text-xs">
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-950 border border-white/10 cursor-pointer hover:border-white/20">
+                  <input type="radio" name="deal-logistics" value="pickup" checked onchange="updateDealCalculations()" class="accent-neon" />
+                  <div>
+                    <span class="font-bold text-white block">ผู้ซื้อรับเอง</span>
+                    <span class="text-[0.65rem] text-slate-400">ที่ลานโรงงาน (ฟรี)</span>
+                  </div>
+                </label>
+                <label class="flex items-center gap-2 p-2.5 rounded-xl bg-slate-950 border border-white/10 cursor-pointer hover:border-white/20">
+                  <input type="radio" name="deal-logistics" value="delivery" onchange="updateDealCalculations()" class="accent-neon" />
+                  <div>
+                    <span class="font-bold text-white block">ผู้ขายจัดส่ง</span>
+                    <span class="text-[0.65rem] text-warm">+฿50 / ตัน</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <!-- Quick Action to send counter offer to chat -->
+            <button type="button" onclick="sendCounterOfferToChat()" class="w-full py-2 px-3 rounded-xl bg-white/[0.06] hover:bg-white/10 text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition-all border border-white/10 cursor-pointer">
+              <svg class="w-3.5 h-3.5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>ส่งข้อเสนอที่ปรับนี้เข้าห้องเจรจา (Send Counter-Offer)</span>
+            </button>
+          </div>
+
+          <!-- Financial Ledger & ESG Calculation Breakdown -->
+          <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/8 space-y-2.5 text-xs">
+            <div class="flex justify-between text-slate-300">
+              <span>มูลค่าการซื้อขายรวม (Gross Amount):</span>
+              <strong id="deal-gross-val" class="text-white font-mono text-sm">฿5,000.00</strong>
+            </div>
+            <div class="flex justify-between text-warm">
+              <span>ส่วนแบ่งแพลตฟอร์ม GP 10% (Escrow & Lab Verification):</span>
+              <strong id="deal-gp-val" class="font-mono">-฿500.00</strong>
+            </div>
+            <div class="flex justify-between text-neon pt-2 border-t border-white/10">
+              <span class="font-bold">ยอดโอนสุทธิให้ผู้ขาย (Net Seller Payout 90%):</span>
+              <strong id="deal-net-val" class="font-mono text-base font-extrabold">฿4,500.00</strong>
+            </div>
+            <div class="flex items-center justify-between text-[0.72rem] text-emerald-400 pt-2 border-t border-white/5">
+              <span class="flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66.95-2.3c.48.17.98.3 1.34.3C19 20 22 3 22 3c-1 2-8 2.25-13 3.25S2 11.5 2 13.5s1.75 3.75 1.75 3.75C7 8 17 8 17 8z"/></svg>
+                ผลประโยชน์คาร์บอนเครดิต (ESG Offset):
+              </span>
+              <strong id="deal-co2-val" class="font-mono font-bold">5.20 Metric Tons CO₂e</strong>
+            </div>
+          </div>
+
+          <!-- Strict Legal Checkbox & Actions Container -->
+          <div id="deal-actions-container" class="space-y-3">
+            <div class="flex items-start gap-2.5 p-3 rounded-xl bg-amber-500/[0.08] border border-amber-500/30">
+              <input type="checkbox" id="deal-terms-check" required class="mt-0.5 w-4 h-4 rounded text-slate-900 border-amber-400 focus:ring-amber-500 accent-amber-500 cursor-pointer" />
+              <label for="deal-terms-check" class="text-[0.72rem] text-amber-200 leading-snug cursor-pointer">
+                ข้าพเจ้ายอมรับเงื่อนไขการใช้งาน และรับทราบว่าหากขยะที่ส่งมอบมีการปนเปื้อนพลาสติกหรือเน่าเสียเกินกว่าที่ระบุ ผู้ขายจะต้องรับผิดชอบค่าใช้จ่ายในการขนส่งกลับทั้งหมด
+              </label>
+            </div>
+
+            <button type="button" id="btn-confirm-deal" onclick="confirmAndCloseDeal()" class="w-full py-3.5 px-4 rounded-xl bg-neon hover:bg-neon-dim text-slate-950 font-extrabold text-sm transition-all shadow-lg shadow-neon/20 cursor-pointer flex items-center justify-center gap-2">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <span data-i18n="raw.confirmDeal">ยืนยันการสั่งซื้อ & ปิดดีลทันที</span>
+            </button>
+          </div>
+
+          <!-- Deal Success Confirmation Card (Hidden by default) -->
+          <div id="deal-success-card" class="hidden p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-3 animate-fade-in">
+            <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto">
+              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h4 class="text-base font-bold text-white">ปิดดีลและยืนยันการสั่งซื้อสำเร็จ!</h4>
+            <p class="text-xs text-slate-300">
+              สัญญา Escrow ถูกบันทึกเข้าสู่สมุดบัญชี และระบบได้คำนวณหักส่วนแบ่ง GP 10% พร้อมออกใบรับรอง ESG เรียบร้อยแล้ว
+            </p>
+            <div class="flex items-center justify-center gap-3 pt-2">
+              <a href="dashboard.html" class="px-4 py-2 rounded-xl bg-neon text-slate-950 font-bold text-xs hover:bg-neon-dim transition-all">
+                ดูใน Dashboard บัญชีการเงิน
+              </a>
+              <button type="button" onclick="printDealAgreement()" class="px-4 py-2 rounded-xl bg-white/10 text-white font-bold text-xs hover:bg-white/20 transition-all border border-white/10 cursor-pointer">
+                พิมพ์สัญญา (Print)
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Real-Time B2B Chat Channel (5 cols) -->
+        <div class="lg:col-span-5 flex flex-col h-[520px] bg-slate-950/80 rounded-2xl border border-white/10 overflow-hidden">
+          
+          <!-- Chat Header -->
+          <div class="p-3.5 bg-white/[0.04] border-b border-white/8 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="w-7 h-7 rounded-lg bg-warm/20 text-warm flex items-center justify-center text-xs font-bold">
+                GH
+              </div>
+              <div>
+                <span class="text-xs font-bold text-white block leading-tight">GreenHarvest Agro</span>
+                <span class="text-[0.62rem] text-neon flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
+                  ออนไลน์พร้อมเจรจา
+                </span>
+              </div>
+            </div>
+            <span class="text-[0.65rem] text-slate-400 font-mono">B2B Chat</span>
+          </div>
+
+          <!-- Chat Messages Container -->
+          <div id="negotiation-chat-messages" class="flex-1 p-3.5 overflow-y-auto space-y-3 text-xs">
+            <!-- Rendered dynamically by renderChatMessages() -->
+          </div>
+
+          <!-- Quick reply suggestion pills -->
+          <div class="px-3 py-2 bg-white/[0.02] border-t border-white/5 flex gap-1.5 overflow-x-auto text-[0.65rem]">
+            <button type="button" onclick="quickSendChat('ขอต่อรองราคาเป็น ฿450/ตัน ได้ไหมครับ?')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer">
+              ต่อรองราคา ฿450
+            </button>
+            <button type="button" onclick="quickSendChat('ขอยืนยันความชื้นไม่เกิน 50% ใช่ไหมครับ')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer">
+              สอบถามความชื้น
+            </button>
+            <button type="button" onclick="quickSendChat('พร้อมจัดรถบรรทุกเข้ารับสินค้าวันพรุ่งนี้ครับ')" class="whitespace-nowrap px-2 py-1 rounded-lg bg-white/5 hover:bg-white/10 text-slate-300 transition-colors cursor-pointer">
+              นัดวันรับสินค้า
+            </button>
+          </div>
+
+          <!-- Chat Input Form -->
+          <form onsubmit="handleSendChat(event)" class="p-2.5 bg-white/[0.04] border-t border-white/10 flex items-center gap-2">
+            <input type="text" id="deal-chat-input" placeholder="พิมพ์ข้อความเจรจาต่อรอง..." class="flex-1 bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-neon" />
+            <button type="submit" class="p-2 rounded-xl bg-neon text-slate-950 font-bold hover:bg-neon-dim transition-all cursor-pointer">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+<script>
+
+  // ── B2B Negotiation Room State & Logic ──
+  let activeDealData = {
+    id: "DEAL-2026-8819",
+    title: "กากมอลต์โรงเบียร์ (Brewery Spent Grain)",
+    typeKey: "spent_grain",
+    sellerName: "GreenHarvest Bio-Farms & Agro Ltd.",
+    weight: 10.0,
+    pricePerTon: 500,
+    logistics: "pickup",
+    logisticsCostPerTon: 0,
+    status: "negotiating"
+  };
+
+  const defaultChatMessages = [
+    { sender: "system", text: "ห้องเจรจาซื้อขายแบบเปิดเผยข้อมูลและปลอดภัยเริ่มต้นแล้ว ระบบจะบันทึกข้อตกลงเข้าสู่สัญญา Escrow อัตโนมัติ", time: "10:14" },
+    { sender: "seller", name: "GreenHarvest Agro", text: "สวัสดีครับ วัตถุดิบชุดนี้เป็นกากมอลต์สดใหม่จากโรงเบียร์ ความชื้นประมาณ 55% คัดแยกปลอดพลาสติก 100% พร้อมโหลดขึ้นรถได้ทันทีครับ", time: "10:15" },
+    { sender: "buyer", name: "คุณ (ผู้ซื้อ)", text: "สวัสดีครับ สนใจรับล็อตนี้ 10 ตันครับ ถ้าสั่งซื้อต่อเนื่องทุกสัปดาห์ มีส่วนลดเพิ่มเติมไหมครับ?", time: "10:16" },
+    { sender: "seller", name: "GreenHarvest Agro", text: "ยินดีครับ หากทำสัญญารับประจำ สามารถต่อรองราคาหรือปรับรอบรถขนส่งได้เลยครับ สามารถยื่นข้อเสนอด้านซ้ายได้เลยครับ", time: "10:17" }
+  ];
+
+  let currentChatList = [...defaultChatMessages];
+
+  function openNegotiationRoom(itemTitle, streamKey, baseWeight, basePrice) {
+    activeDealData.id = "DEAL-2026-" + Math.floor(1000 + Math.random() * 9000);
+    activeDealData.title = itemTitle || "กากมอลต์โรงเบียร์ (Brewery Spent Grain)";
+    activeDealData.typeKey = streamKey || "spent_grain";
+    activeDealData.weight = parseFloat(baseWeight) || 10;
+    activeDealData.pricePerTon = parseFloat(basePrice) || 500;
+    activeDealData.status = "negotiating";
+
+    document.getElementById('deal-ref-id').textContent = activeDealData.id;
+    document.getElementById('deal-item-title').textContent = activeDealData.title;
+    document.getElementById('deal-weight-slider').value = activeDealData.weight;
+    document.getElementById('deal-price-slider').value = activeDealData.pricePerTon;
+
+    // Reset UI state
+    document.getElementById('deal-status-badge').className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-amber-500/15 text-amber-300 border border-amber-500/30";
+    document.getElementById('deal-status-text').textContent = "กำลังเจรจาซื้อขาย (In Negotiation)";
+    document.getElementById('deal-actions-container').classList.remove('hidden');
+    document.getElementById('deal-success-card').classList.add('hidden');
+
+    currentChatList = [...defaultChatMessages];
+    renderChatMessages();
+    updateDealCalculations();
+
+    const modal = document.getElementById('modal-negotiation-room');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  
+  // Fallback aliases
+  function closeOfferModal() { closeNegotiationRoom(); }
+  function confirmTradeOffer() { confirmAndCloseDeal(); }
+
+  function closeNegotiationRoom() {
+    const modal = document.getElementById('modal-negotiation-room');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+
+  function updateDealCalculations() {
+    const weight = parseFloat(document.getElementById('deal-weight-slider').value) || 10;
+    const price = parseFloat(document.getElementById('deal-price-slider').value) || 500;
+    const isDelivery = document.querySelector('input[name="deal-logistics"]:checked')?.value === 'delivery';
+    const deliveryFee = isDelivery ? 50 : 0;
+
+    activeDealData.weight = weight;
+    activeDealData.pricePerTon = price;
+    activeDealData.logisticsCostPerTon = deliveryFee;
+
+    const unitTotal = price + deliveryFee;
+    const gross = weight * unitTotal;
+    const gp = gross * 0.10;
+    const net = gross - gp;
+
+    document.getElementById('deal-weight-display').textContent = weight.toFixed(1) + " ตัน";
+    document.getElementById('deal-price-display').textContent = "฿" + price.toLocaleString() + " / ตัน" + (isDelivery ? " (+ส่ง ฿50)" : "");
+    document.getElementById('deal-gross-val').textContent = "฿" + gross.toLocaleString(undefined, {minimumFractionDigits: 2});
+    document.getElementById('deal-gp-val').textContent = "-฿" + gp.toLocaleString(undefined, {minimumFractionDigits: 2});
+    document.getElementById('deal-net-val').textContent = "฿" + net.toLocaleString(undefined, {minimumFractionDigits: 2});
+
+    if (typeof CarbonEngine !== 'undefined') {
+      const co2 = CarbonEngine.calculateCo2e(activeDealData.typeKey, weight, 'tons');
+      document.getElementById('deal-co2-val').textContent = co2.co2SavedTons.toFixed(2) + " Metric Tons CO₂e";
+    }
+  }
+
+  function renderChatMessages() {
+    const container = document.getElementById('negotiation-chat-messages');
+    container.innerHTML = '';
+
+    currentChatList.forEach(msg => {
+      const div = document.createElement('div');
+      if (msg.sender === 'system') {
+        div.className = "p-2 rounded-xl bg-white/[0.04] border border-white/5 text-[0.68rem] text-slate-400 text-center";
+        div.textContent = msg.text;
+      } else if (msg.sender === 'buyer') {
+        div.className = "flex flex-col items-end";
+        div.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="text-[0.65rem] text-neon font-bold">${msg.name}</span>
+            <span class="text-[0.6rem] text-slate-500">${msg.time}</span>
+          </div>
+          <div class="py-2 px-3 rounded-2xl rounded-tr-sm bg-neon/15 border border-neon/30 text-white max-w-[85%] leading-relaxed">
+            ${msg.text}
+          </div>
+        `;
+      } else {
+        div.className = "flex flex-col items-start";
+        div.innerHTML = `
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="text-[0.65rem] text-warm font-bold">${msg.name}</span>
+            <span class="text-[0.6rem] text-slate-500">${msg.time}</span>
+          </div>
+          <div class="py-2 px-3 rounded-2xl rounded-tl-sm bg-white/[0.06] border border-white/10 text-slate-200 max-w-[85%] leading-relaxed">
+            ${msg.text}
+          </div>
+        `;
+      }
+      container.appendChild(div);
+    });
+
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function handleSendChat(e) {
+    e.preventDefault();
+    const input = document.getElementById('deal-chat-input');
+    const text = input.value.trim();
+    if (!text) return;
+
+    const now = new Date();
+    const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+
+    currentChatList.push({
+      sender: 'buyer',
+      name: 'คุณ (ผู้ซื้อ)',
+      text: text,
+      time: timeStr
+    });
+
+    input.value = '';
+    renderChatMessages();
+
+    // Auto simulated seller reply
+    setTimeout(() => {
+      currentChatList.push({
+        sender: 'seller',
+        name: 'GreenHarvest Agro',
+        text: 'รับทราบข้อความครับ ทางเรายินดีรับเงื่อนไขนี้ สามารถกดยืนยันการสั่งซื้อด้านซ้ายเพื่อปิดดีลและออกใบสัญญาได้เลยครับ',
+        time: timeStr
+      });
+      renderChatMessages();
+    }, 1200);
+  }
+
+  function quickSendChat(text) {
+    document.getElementById('deal-chat-input').value = text;
+    handleSendChat(new Event('submit'));
+  }
+
+  function sendCounterOfferToChat() {
+    const weight = activeDealData.weight;
+    const price = activeDealData.pricePerTon;
+    const isDelivery = document.querySelector('input[name="deal-logistics"]:checked')?.value === 'delivery';
+    const total = weight * (price + (isDelivery ? 50 : 0));
+
+    const offerText = `ยื่นข้อเสนอต่อรองใหม่: ขอสั่งซื้อปริมาณ ${weight} ตัน ที่ราคา ฿${price}/ตัน (${isDelivery ? "ผู้ขายจัดส่ง" : "ผู้ซื้อรับเอง"}) รวมยอดเงิน ฿${total.toLocaleString()}`;
+    quickSendChat(offerText);
+  }
+
+  function confirmAndCloseDeal() {
+    const check = document.getElementById('deal-terms-check');
+    if (!check.checked) {
+      alert("กรุณายอมรับเงื่อนไขสัญญาและการปลอดพลาสติก 100% ก่อนยืนยันการสั่งซื้อ");
+      return;
+    }
+
+    const btn = document.getElementById('btn-confirm-deal');
+    btn.disabled = true;
+    btn.innerHTML = 'กำลังทำสัญญา & บันทึกระบบบัญชี...';
+
+    setTimeout(() => {
+      // 1. Calculate final values
+      const weight = activeDealData.weight;
+      const price = activeDealData.pricePerTon + activeDealData.logisticsCostPerTon;
+      const gross = weight * price;
+
+      // 2. Record to biotradeDB
+      if (typeof biotradeDB !== 'undefined') {
+        biotradeDB.createOrder({
+          itemTitle: activeDealData.title,
+          category: 'raw',
+          typeKey: activeDealData.typeKey,
+          weightDisplay: weight + " ตัน",
+          weightVal: weight,
+          weightKg: weight * 1000,
+          grossAmount: gross,
+          buyerName: SupabaseAuth.getCurrentUser()?.user_metadata?.shop_name || "บริษัทผู้รับซื้อชีวมวล",
+          sellerName: activeDealData.sellerName
+        });
+      }
+
+      // 3. Update Deal Room UI state
+      activeDealData.status = "closed";
+      document.getElementById('deal-status-badge').className = "inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+      document.getElementById('deal-status-text').textContent = "ปิดดีลและยืนยันการสั่งซื้อสำเร็จ (Deal Closed)";
+      document.getElementById('deal-actions-container').classList.add('hidden');
+      document.getElementById('deal-success-card').classList.remove('hidden');
+
+      // Add system announcement in chat
+      const now = new Date();
+      const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+      currentChatList.push({
+        sender: 'system',
+        text: `สัญญาซื้อขายเสร็จสมบูรณ์! ยืนยันการสั่งซื้อปริมาณ ${weight} ตัน ยอดเงิน ฿${gross.toLocaleString()} หักค่าธรรมเนียม GP 10% เรียบร้อยแล้ว`,
+        time: timeStr
+      });
+      renderChatMessages();
+
+      btn.disabled = false;
+      btn.innerHTML = 'ยืนยันการสั่งซื้อ & ปิดดีลทันที';
+    }, 1000);
+  }
+
+  function printDealAgreement() {
+    window.print();
+  }
+
+</script>
 </body>
 </html>
