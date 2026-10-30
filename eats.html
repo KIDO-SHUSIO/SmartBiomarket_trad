@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>biotrade eats – Rescue Delicious Food</title>
-  <meta name="description" content="Grab surprise bags of delicious food at 50-70% off from restaurants, bakeries, and supermarkets near you. Save food, save money." />
+  <title data-i18n="eats.heroTitle">biotrade eats – กู้ภัยอาหารอร่อย</title>
+  <meta name="description"
+    content="Grab surprise bags of delicious food at 50-70% off from restaurants, bakeries, and supermarkets near you. Save food, save money." />
 
   <!-- Google Fonts – Inter & Prompt (Thai) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
   <!-- i18n Translation Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -86,8 +90,14 @@
   </script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       height: 100%;
       margin: 0;
       font-family: 'Inter', system-ui, sans-serif;
@@ -96,61 +106,99 @@
     }
 
     /* ── Scrollbar ─────────────────────────────────── */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0B0F19; }
-    ::-webkit-scrollbar-thumb { background: rgba(245,158,11,0.3); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(245,158,11,0.5); }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(245, 158, 11, 0.3);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(245, 158, 11, 0.5);
+    }
 
     /* ── Glass ─────────────────────────────────────── */
     .glass {
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
+
     .glass-strong {
-      background: rgba(255,255,255,0.06);
+      background: rgba(255, 255, 255, 0.06);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     /* ── Surprise Bag Card ─────────────────────────── */
     .bag-card {
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 24px;
       overflow: hidden;
-      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
     }
+
     .bag-card::before {
       content: '';
       position: absolute;
       inset: 0;
-      border-radius: 20px;
+      border-radius: 24px;
       padding: 1px;
-      background: linear-gradient(160deg, rgba(255,255,255,0.08), transparent 40%);
+      background: linear-gradient(160deg, rgba(255, 255, 255, 0.1), transparent 40%);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
       mask-composite: exclude;
       pointer-events: none;
       z-index: 1;
     }
+
     .bag-card:hover {
       transform: translateY(-6px);
-      border-color: rgba(245,158,11,0.2);
+      border-color: rgba(245, 158, 11, 0.35);
       box-shadow:
-        0 20px 50px rgba(0,0,0,0.3),
-        0 0 60px rgba(245,158,11,0.06);
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        0 0 50px rgba(245, 158, 11, 0.12);
     }
+
     .bag-card:hover .bag-img {
       transform: scale(1.06);
     }
+
     .bag-card:hover .btn-reserve {
-      box-shadow: 0 6px 24px rgba(245,158,11,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 14px;
+      border: none;
+      font-family: 'Prompt', 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: #0F1423;
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.28);
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-reserve:active {
+      transform: scale(0.97);
     }
 
     /* ── Image Container ──────────────────────────── */
@@ -159,16 +207,18 @@
       overflow: hidden;
       height: 180px;
     }
+
     .bag-img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
+
     .bag-img-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, transparent 40%, rgba(11,15,25,0.8) 100%);
+      background: linear-gradient(180deg, transparent 40%, rgba(11, 15, 25, 0.8) 100%);
       pointer-events: none;
     }
 
@@ -177,28 +227,29 @@
       position: absolute;
       top: 12px;
       left: 12px;
-      background: linear-gradient(135deg, #F59E0B, #D97706);
+      background: linear-gradient(135deg, #EF4444, #F59E0B);
       color: #fff;
-      font-size: 0.7rem;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
-      letter-spacing: 0.03em;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 999px;
+      letter-spacing: 0.02em;
       z-index: 2;
-      box-shadow: 0 2px 10px rgba(245,158,11,0.4);
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
     }
+
     .badge-category {
       position: absolute;
       top: 12px;
       right: 12px;
-      background: rgba(11,15,25,0.7);
-      backdrop-filter: blur(8px);
-      color: rgba(255,255,255,0.7);
-      font-size: 0.65rem;
-      font-weight: 500;
-      padding: 4px 10px;
-      border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(11, 15, 25, 0.75);
+      backdrop-filter: blur(10px);
+      color: #f1f5f9;
+      font-size: 0.68rem;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
       z-index: 2;
     }
 
@@ -218,23 +269,28 @@
       cursor: pointer;
       background: linear-gradient(135deg, #F59E0B, #D97706);
       color: #fff;
-      box-shadow: 0 4px 16px rgba(245,158,11,0.25);
+      box-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
       transition: all 0.3s ease;
       position: relative;
       overflow: hidden;
     }
+
     .btn-reserve:hover {
       transform: translateY(-1px);
     }
+
     .btn-reserve::after {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
       opacity: 0;
       transition: opacity 0.3s;
     }
-    .btn-reserve:hover::after { opacity: 1; }
+
+    .btn-reserve:hover::after {
+      opacity: 1;
+    }
 
     /* ── Filter Pill ──────────────────────────────── */
     .filter-pill {
@@ -242,24 +298,27 @@
       border-radius: 999px;
       font-size: 0.82rem;
       font-weight: 500;
-      border: 1px solid rgba(255,255,255,0.08);
-      background: rgba(255,255,255,0.04);
-      color: rgba(255,255,255,0.55);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      color: rgba(255, 255, 255, 0.7);
       cursor: pointer;
-      transition: all 0.3s ease;
       white-space: nowrap;
-      user-select: none;
+      transition: all 0.25s ease;
+      text-decoration: none;
     }
+
     .filter-pill:hover {
-      border-color: rgba(245,158,11,0.3);
-      color: rgba(255,255,255,0.8);
-      background: rgba(245,158,11,0.08);
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
     }
+
     .filter-pill.active {
-      background: linear-gradient(135deg, #F59E0B, #D97706);
-      color: #fff;
-      border-color: transparent;
-      box-shadow: 0 2px 12px rgba(245,158,11,0.3);
+      background: rgba(245, 158, 11, 0.18);
+      border-color: rgba(245, 158, 11, 0.5);
+      color: #F59E0B;
+      font-weight: 700;
+      box-shadow: 0 0 16px rgba(245, 158, 11, 0.22);
     }
 
     /* ── Floating Bottom Nav ──────────────────────── */
@@ -269,13 +328,14 @@
       left: 0;
       right: 0;
       z-index: 50;
-      background: rgba(11,15,25,0.85);
+      background: rgba(11, 15, 25, 0.85);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
       padding: 8px 0;
       padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
     }
+
     .bottom-nav-item {
       display: flex;
       flex-direction: column;
@@ -283,16 +343,18 @@
       gap: 2px;
       font-size: 0.65rem;
       font-weight: 500;
-      color: rgba(255,255,255,0.35);
+      color: rgba(255, 255, 255, 0.35);
       cursor: pointer;
       transition: color 0.3s;
       padding: 4px 0;
       position: relative;
     }
+
     .bottom-nav-item:hover,
     .bottom-nav-item.active {
       color: #F59E0B;
     }
+
     .bottom-nav-item.active::before {
       content: '';
       position: absolute;
@@ -305,8 +367,8 @@
 
     /* ── Search Input ─────────────────────────────── */
     .search-input {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 14px;
       padding: 10px 16px 10px 42px;
       font-family: 'Inter', sans-serif;
@@ -316,11 +378,15 @@
       transition: all 0.3s ease;
       width: 100%;
     }
-    .search-input::placeholder { color: rgba(255,255,255,0.3); }
+
+    .search-input::placeholder {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
     .search-input:focus {
-      border-color: rgba(245,158,11,0.4);
-      background: rgba(255,255,255,0.08);
-      box-shadow: 0 0 0 3px rgba(245,158,11,0.08);
+      border-color: rgba(245, 158, 11, 0.4);
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
     }
 
     /* ── Hero ─────────────────────────────────────── */
@@ -331,19 +397,20 @@
       min-height: 220px;
       background:
         linear-gradient(135deg,
-          rgba(245,158,11,0.25) 0%,
-          rgba(217,119,6,0.15) 50%,
-          rgba(11,15,25,0.9) 100%),
+          rgba(245, 158, 11, 0.25) 0%,
+          rgba(217, 119, 6, 0.15) 50%,
+          rgba(11, 15, 25, 0.9) 100%),
         url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80') center/cover;
     }
+
     .hero-eats::before {
       content: '';
       position: absolute;
       inset: 0;
       background: linear-gradient(90deg,
-        rgba(11,15,25,0.85) 0%,
-        rgba(11,15,25,0.4) 60%,
-        transparent 100%);
+          rgba(11, 15, 25, 0.85) 0%,
+          rgba(11, 15, 25, 0.4) 60%,
+          transparent 100%);
     }
 
     /* ── Time Indicator ───────────────────────────── */
@@ -353,8 +420,8 @@
       gap: 6px;
       padding: 6px 10px;
       border-radius: 10px;
-      background: rgba(0,255,157,0.06);
-      border: 1px solid rgba(0,255,157,0.12);
+      background: rgba(0, 255, 157, 0.06);
+      border: 1px solid rgba(0, 255, 157, 0.12);
     }
 
     /* ── Left count pill ──────────────────────────── */
@@ -365,34 +432,55 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      background: rgba(11,15,25,0.8);
+      background: rgba(11, 15, 25, 0.8);
       backdrop-filter: blur(8px);
       padding: 4px 10px;
       border-radius: 8px;
       font-size: 0.7rem;
       font-weight: 600;
       color: #00FF9D;
-      border: 1px solid rgba(0,255,157,0.15);
+      border: 1px solid rgba(0, 255, 157, 0.15);
       z-index: 2;
     }
 
     /* ── Skeleton Shimmer (preload hint) ───────────── */
     .skeleton {
       background: linear-gradient(90deg,
-        rgba(255,255,255,0.04) 25%,
-        rgba(255,255,255,0.08) 50%,
-        rgba(255,255,255,0.04) 75%);
+          rgba(255, 255, 255, 0.04) 25%,
+          rgba(255, 255, 255, 0.08) 50%,
+          rgba(255, 255, 255, 0.04) 75%);
       background-size: 200% 100%;
     }
 
     /* ── Stagger children ─────────────────────────── */
-    .stagger > * { opacity: 0; animation: slideUp 0.5s ease-out forwards; }
-    .stagger > *:nth-child(1) { animation-delay: 0.05s; }
-    .stagger > *:nth-child(2) { animation-delay: 0.10s; }
-    .stagger > *:nth-child(3) { animation-delay: 0.15s; }
-    .stagger > *:nth-child(4) { animation-delay: 0.20s; }
-    .stagger > *:nth-child(5) { animation-delay: 0.25s; }
-    .stagger > *:nth-child(6) { animation-delay: 0.30s; }
+    .stagger>* {
+      opacity: 0;
+      animation: slideUp 0.5s ease-out forwards;
+    }
+
+    .stagger>*:nth-child(1) {
+      animation-delay: 0.05s;
+    }
+
+    .stagger>*:nth-child(2) {
+      animation-delay: 0.10s;
+    }
+
+    .stagger>*:nth-child(3) {
+      animation-delay: 0.15s;
+    }
+
+    .stagger>*:nth-child(4) {
+      animation-delay: 0.20s;
+    }
+
+    .stagger>*:nth-child(5) {
+      animation-delay: 0.25s;
+    }
+
+    .stagger>*:nth-child(6) {
+      animation-delay: 0.30s;
+    }
 
     /* ── Nav Link ──────────────────────────────── */
     .nav-link {
@@ -411,11 +499,13 @@
       text-decoration: none;
       line-height: 1.5;
     }
+
     .nav-link:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 255, 255, 0.08);
     }
+
     .nav-link.active {
       color: #00FF9D;
       background: rgba(0, 255, 157, 0.08);
@@ -426,51 +516,92 @@
 
     /* hide bottom nav on desktop */
     @media (min-width: 768px) {
-      .bottom-nav { display: none; }
+      .bottom-nav {
+        display: none;
+      }
     }
 
-    .start-hidden { opacity: 0; }
+    .start-hidden {
+      opacity: 0;
+    }
 
     /* ── Language Switcher ─────────────────────────── */
     .lang-btn {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       transition: all 0.25s ease;
       border-radius: 8px;
       letter-spacing: 0.05em;
     }
+
     .lang-btn:hover {
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.06);
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.06);
     }
+
     .lang-btn.active-lang {
       background: #00FF9D;
       color: #0B0F19 !important;
       font-weight: 800;
-      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+      box-shadow: 0 2px 10px rgba(0, 255, 157, 0.35);
     }
-  
+
     /* ── Thai Typography & Tone Mark Optimization ── */
-    html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+    html,
+    body,
+    button,
+    input,
+    select,
+    textarea,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    a,
+    label {
       font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }
+
     body {
       line-height: 1.6;
       letter-spacing: 0.01em;
     }
-    h1, h2, h3, h4, .shimmer-text {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .shimmer-text {
       line-height: 1.35 !important;
       padding-top: 2px;
       padding-bottom: 2px;
     }
-    p, span, label, td, th {
+
+    p,
+    span,
+    label,
+    td,
+    th {
       line-height: 1.6;
     }
-    button, input, select, textarea {
+
+    button,
+    input,
+    select,
+    textarea {
       line-height: 1.5 !important;
     }
-    .nav-link, .btn-gateway, .btn-neon, .btn-reserve, .tab-btn {
+
+    .nav-link,
+    .btn-gateway,
+    .btn-neon,
+    .btn-reserve,
+    .tab-btn {
       padding-top: 9px;
       padding-bottom: 9px;
     }
@@ -488,57 +619,79 @@
 
         <!-- Logo -->
         <a href="index.html" id="nav-logo" class="flex items-center gap-2 shrink-0 group">
-          <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-warm/20 to-warm/5 border border-warm/25 flex items-center justify-center group-hover:border-warm/50 transition-colors">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
-              <line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/>
+          <div
+            class="w-8 h-8 rounded-xl bg-gradient-to-br from-warm/20 to-warm/5 border border-warm/25 flex items-center justify-center group-hover:border-warm/50 transition-colors">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8h1a4 4 0 010 8h-1" />
+              <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+              <line x1="6" y1="1" x2="6" y2="4" />
+              <line x1="10" y1="1" x2="10" y2="4" />
+              <line x1="14" y1="1" x2="14" y2="4" />
             </svg>
           </div>
-          <span class="text-lg font-bold tracking-wide text-white/90">biotrade <span class="text-warm">eats</span></span>
+          <span class="text-lg font-bold tracking-wide text-white/90">biotrade <span
+              class="text-warm">eats</span></span>
         </a>
 
         <!-- Center Nav Links -->
-        <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
-        <a href="index.html" data-i18n="nav.gateway" class="nav-link ">หน้าแรก</a>
-        <a href="eats.html" data-i18n="nav.eats" class="nav-link active">กู้อาหาร (Eats)</a>
-        <a href="raw.html" data-i18n="nav.raw" class="nav-link ">ตลาดขยะ (Raw)</a>
-        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
-        <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link ">แดชบอร์ด & ESG</a>
-      </nav>
+        <nav
+          class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+          <a href="index.html" data-i18n="nav.gateway" class="nav-link ">หน้าแรก</a>
+          <a href="eats.html" data-i18n="nav.eats" class="nav-link active">อาหาร (Eats)</a>
+          <a href="raw.html" data-i18n="nav.raw" class="nav-link ">ตลาดขยะ (Raw)</a>
+          <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
+          <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link ">แดชบอร์ด & ESG</a>
+        </nav>
 
         <!-- Search (hidden on small mobile) -->
         <div class="hidden xl:flex flex-1 max-w-xs relative">
-          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+          <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
           </svg>
-          <input id="search-input" type="text" placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…" data-i18n-placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…" class="search-input" />
+          <input id="search-input" type="text" placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…"
+            data-i18n-placeholder="eats.searchPlaceholder" class="search-input" />
         </div>
 
         <!-- Right Controls -->
         <div class="flex items-center gap-3">
           <!-- Language Switcher (EN | TH) -->
-          <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
-          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="en">EN</button>
-          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="th">TH</button>
-        </div>
+          <div
+            class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+            <button type="button" onclick="setLanguage('en')"
+              class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-slate-200 cursor-pointer"
+              data-lang="en">EN</button>
+            <button type="button" onclick="setLanguage('th')"
+              class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer"
+              data-lang="th">TH</button>
+          </div>
 
-        <!-- Auth User Slot -->
-        <div class="auth-nav-slot"></div>
+          <!-- Auth User Slot -->
+          <div class="auth-nav-slot"></div>
 
           <!-- Location -->
-          <button id="btn-location" class="flex items-center gap-1.5 text-sm text-white/50 hover:text-warm transition-colors shrink-0">
-            <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/>
+          <button id="btn-location"
+            class="flex items-center gap-1.5 text-sm text-slate-200 hover:text-warm transition-colors shrink-0">
+            <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+              <circle cx="12" cy="10" r="3" />
             </svg>
             <span class="hidden md:inline">Nakhon Pathom</span>
           </button>
 
           <!-- Profile -->
-          <button id="btn-profile" class="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-warm/30 transition-colors">
-            <svg class="w-4 h-4 text-white/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          <a href="dashboard.html?tab=profile" id="btn-profile" title="โปรไฟล์สถานประกอบการ"
+            class="w-9 h-9 rounded-xl bg-white/5 border border-white/8 flex items-center justify-center hover:border-warm/30 transition-colors cursor-pointer">
+            <svg class="w-4 h-4 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+              <circle cx="12" cy="7" r="4" />
             </svg>
-          </button>
+          </a>
         </div>
       </div>
     </div>
@@ -552,16 +705,22 @@
     <!-- ── HERO BANNER ── -->
     <section id="hero-banner" class="hero-eats mb-8 start-hidden animate-slide-up">
       <div class="relative z-10 p-6 sm:p-10 flex flex-col justify-center min-h-[220px]">
-        <div class="inline-flex items-center gap-2 bg-warm/15 border border-warm/20 text-warm text-xs font-semibold px-3 py-1.5 rounded-full w-fit mb-4">
+        <div
+          class="inline-flex items-center gap-2 bg-warm/15 border border-warm/20 text-warm text-xs font-semibold px-3 py-1.5 rounded-full w-fit mb-4">
           <span class="w-1.5 h-1.5 rounded-full bg-warm animate-pulse-dot"></span>
           Limited time offers
         </div>
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight max-w-md mb-3" data-i18n="eats.heroTitle">คว้าถุงสุ่มอาหาร Surprise Bag ก่อนจะหมด!</h2>
-        <p class="text-white/50 text-sm sm:text-base max-w-sm mb-6" data-i18n="eats.heroDesc">อาหารส่วนเกินรสเลิศจากร้านอาหาร เบเกอรี่ และซูเปอร์มาร์เก็ตชั้นนำในนครปฐม ในราคาลดพิเศษสูงสุดถึง 70%</p>
-        <a href="#cards-grid" id="btn-hero-browse" class="inline-flex items-center gap-2 bg-gradient-to-r from-warm to-warm-deep text-white font-semibold text-sm px-6 py-3 rounded-2xl w-fit shadow-lg shadow-warm/20 hover:shadow-warm/35 hover:-translate-y-0.5 transition-all">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white leading-tight max-w-md mb-3"
+          data-i18n="eats.heroTitle">คว้าถุงสุ่มอาหาร Surprise Bag ก่อนจะหมด!</h2>
+        <p class="text-slate-200 text-sm sm:text-base max-w-sm mb-6" data-i18n="eats.heroDesc">
+          อาหารส่วนเกินรสเลิศจากร้านอาหาร เบเกอรี่ และซูเปอร์มาร์เก็ตชั้นนำในนครปฐม ในราคาลดพิเศษสูงสุดถึง 70%</p>
+        <a href="#cards-grid" id="btn-hero-browse"
+          class="inline-flex items-center gap-2 bg-gradient-to-r from-warm to-warm-deep text-white font-semibold text-sm px-6 py-3 rounded-2xl w-fit shadow-lg shadow-warm/20 hover:shadow-warm/35 hover:-translate-y-0.5 transition-all">
           Browse nearby
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14" />
+            <path d="M12 5l7 7-7 7" />
           </svg>
         </a>
       </div>
@@ -572,17 +731,25 @@
 
     <!-- ── Mobile Search (shown only on xs) ── -->
     <div class="sm:hidden mb-5 relative">
-      <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30 pointer-events-none"
+        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8" />
+        <path d="M21 21l-4.35-4.35" />
       </svg>
-      <input type="text" placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…" data-i18n-placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…" class="search-input" />
+      <input type="text" placeholder="ค้นหาร้านอาหาร, เบเกอรี่, ซูเปอร์มาร์เก็ต…"
+        data-i18n-placeholder="eats.searchPlaceholder" class="search-input" />
     </div>
 
     <!-- ── FILTER TAGS ── -->
-    <section id="filters" class="flex items-center gap-2.5 overflow-x-auto pb-2 mb-6 scrollbar-none start-hidden animate-slide-up" style="animation-delay:0.1s; -ms-overflow-style:none; scrollbar-width:none;">
+    <section id="filters"
+      class="flex items-center gap-2.5 overflow-x-auto pb-2 mb-6 scrollbar-none start-hidden animate-slide-up"
+      style="animation-delay:0.1s; -ms-overflow-style:none; scrollbar-width:none;">
       <button class="filter-pill active" data-filter="all">
         <span class="flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" />
+          </svg>
           <span data-i18n="eats.filterAll">ทั้งหมด</span>
         </span>
       </button>
@@ -593,7 +760,8 @@
         <span class="flex items-center gap-1.5">🍱 <span data-i18n="eats.filterMeals">อาหารจานหลัก</span></span>
       </button>
       <button class="filter-pill" data-filter="supermarket">
-        <span class="flex items-center gap-1.5">🛒 <span data-i18n="eats.filterSupermarket">ซูเปอร์มาร์เก็ต</span></span>
+        <span class="flex items-center gap-1.5">🛒 <span
+            data-i18n="eats.filterSupermarket">ซูเปอร์มาร์เก็ต</span></span>
       </button>
       <button class="filter-pill" data-filter="vegetarian">
         <span class="flex items-center gap-1.5">🥗 <span data-i18n="eats.filterVegetarian">มังสวิรัติ</span></span>
@@ -603,7 +771,7 @@
     <!-- ── Section Heading ── -->
     <div class="flex items-center justify-between mb-5 start-hidden animate-slide-up" style="animation-delay:0.15s;">
       <h3 class="text-lg font-bold text-white/90" data-i18n="eats.availTitle">ถุงสุ่มอาหาร Surprise Bag ใกล้คุณ</h3>
-      <span class="text-xs text-white/30 font-medium">24 available</span>
+      <span class="text-xs text-white/30 font-medium" data-i18n="eats.availCount">24 รายการพร้อมให้จอง</span>
     </div>
 
     <!-- ── SURPRISE BAG CARDS GRID ── -->
@@ -612,43 +780,52 @@
       <!-- ─── Card 1: Siam Bakery ─── -->
       <article class="bag-card" data-category="bakery">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80" alt="Assorted bakery pastries" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&q=80"
+            alt="Assorted bakery pastries" class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 70%</span>
-          <span class="badge-category">🥐 Bakery</span>
+          <span class="badge-save" data-i18n="eats.badgeSave70">ลด 70%</span>
+          <span class="badge-category" data-i18n="eats.badgeBakery">🥐 เบเกอรี่</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            3 bags left
+            3 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <!-- Store Info -->
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">สยามเบเกอรี่ (Siam Bakery)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag1Title">สยามเบเกอรี่ (Siam Bakery)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.8</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.8</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">1.2 km</span>
+                <span class="text-xs text-slate-300">1.2 km</span>
               </div>
             </div>
             <!-- Heart -->
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
 
           <!-- Pickup Time -->
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 20:00 – 21:00</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 20:00 – 21:00</span>
           </div>
 
           <!-- Price + Button -->
@@ -665,39 +842,48 @@
       <!-- ─── Card 2: Green Bowl Cafe ─── -->
       <article class="bag-card" data-category="vegetarian">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80" alt="Colorful vegetarian salad bowl" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600&q=80"
+            alt="Colorful vegetarian salad bowl" class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 60%</span>
-          <span class="badge-category">🥗 Vegetarian</span>
+          <span class="badge-save" data-i18n="eats.badgeSave60">ลด 60%</span>
+          <span class="badge-category" data-i18n="eats.badgeVegetarian">🥗 มังสวิรัติ</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            5 bags left
+            5 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">กรีนโบว์ คาเฟ่ (Green Bowl Café)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag2Title">กรีนโบว์ คาเฟ่ (Green Bowl Café)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.6</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.6</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">0.8 km</span>
+                <span class="text-xs text-slate-300">0.8 km</span>
               </div>
             </div>
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 18:30 – 19:30</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 18:30 – 19:30</span>
           </div>
           <div class="flex items-end justify-between gap-3">
             <div>
@@ -712,39 +898,48 @@
       <!-- ─── Card 3: Thai Kitchen Express ─── -->
       <article class="bag-card" data-category="meals">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600&q=80" alt="Thai cuisine pad thai and spring rolls" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?w=600&q=80"
+            alt="Thai cuisine pad thai and spring rolls" class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 55%</span>
-          <span class="badge-category">🍱 Meals</span>
+          <span class="badge-save" data-i18n="eats.badgeSave50">ลด 50%</span>
+          <span class="badge-category" data-i18n="eats.badgeMeals">🍱 อาหารจานหลัก</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            2 bags left
+            2 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">ครัวไทยเอ็กซ์เพรส (Thai Kitchen)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag3Title">ครัวไทยเอ็กซ์เพรส (Thai Kitchen)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.9</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.9</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">2.1 km</span>
+                <span class="text-xs text-slate-300">2.1 km</span>
               </div>
             </div>
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="0">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor"
+                stroke-width="0">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 20:00 – 21:00</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 20:00 – 21:00</span>
           </div>
           <div class="flex items-end justify-between gap-3">
             <div>
@@ -759,39 +954,48 @@
       <!-- ─── Card 4: Tops Supermarket ─── -->
       <article class="bag-card" data-category="supermarket">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80" alt="Fresh grocery produce and fruits" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&q=80"
+            alt="Fresh grocery produce and fruits" class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 65%</span>
-          <span class="badge-category">🛒 Supermarket</span>
+          <span class="badge-save" data-i18n="eats.badgeSave60">ลด 60%</span>
+          <span class="badge-category" data-i18n="eats.badgeSupermarket">🛒 ซูเปอร์มาร์เก็ต</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            8 bags left
+            8 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">ท็อปส์ ซูเปอร์มาร์เก็ต (Tops)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag4Title">ท็อปส์ ซูเปอร์มาร์เก็ต (Tops)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.3</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.3</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">3.5 km</span>
+                <span class="text-xs text-slate-300">3.5 km</span>
               </div>
             </div>
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 21:00 – 22:00</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 21:00 – 22:00</span>
           </div>
           <div class="flex items-end justify-between gap-3">
             <div>
@@ -806,39 +1010,48 @@
       <!-- ─── Card 5: Baan Kanom Thai ─── -->
       <article class="bag-card" data-category="bakery">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80" alt="Thai desserts and sweets" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&q=80" alt="Thai desserts and sweets"
+            class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 50%</span>
-          <span class="badge-category">🥐 Bakery</span>
+          <span class="badge-save" data-i18n="eats.badgeSave50">ลด 50%</span>
+          <span class="badge-category" data-i18n="eats.badgeBakery">🥐 เบเกอรี่</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            4 bags left
+            4 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">บ้านขนมไทย (Baan Kanom Thai)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag5Title">บ้านขนมไทย (Baan Kanom Thai)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.7</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.7</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">0.5 km</span>
+                <span class="text-xs text-slate-300">0.5 km</span>
               </div>
             </div>
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 17:00 – 18:00</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 17:00 – 18:00</span>
           </div>
           <div class="flex items-end justify-between gap-3">
             <div>
@@ -853,39 +1066,48 @@
       <!-- ─── Card 6: Panda Fresh Mart ─── -->
       <article class="bag-card" data-category="supermarket">
         <div class="bag-img-wrap">
-          <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc608a?w=600&q=80" alt="Fresh fruits and groceries" class="bag-img" loading="lazy" />
+          <img src="https://images.unsplash.com/photo-1607349913338-fca6f7fc608a?w=600&q=80"
+            alt="Fresh fruits and groceries" class="bag-img" loading="lazy" />
           <div class="bag-img-overlay"></div>
-          <span class="badge-save">Save 60%</span>
-          <span class="badge-category">🛒 Supermarket</span>
+          <span class="badge-save" data-i18n="eats.badgeSave60">ลด 60%</span>
+          <span class="badge-category" data-i18n="eats.badgeSupermarket">🛒 ซูเปอร์มาร์เก็ต</span>
           <div class="bags-left">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse-dot"></span>
-            6 bags left
+            6 <span data-i18n="eats.bagsLeftPrefix">ถุงเหลืออยู่</span>
           </div>
         </div>
         <div class="p-5">
           <div class="flex items-start justify-between mb-2">
             <div>
-              <h4 class="font-bold text-white text-[0.95rem]">แพนด้า เฟรชมาร์ท (Panda Fresh)</h4>
+              <h4 class="font-bold text-white text-[0.95rem]" data-i18n="eats.bag6Title">แพนด้า เฟรชมาร์ท (Panda Fresh)</h4>
               <div class="flex items-center gap-2 mt-0.5">
                 <div class="flex items-center gap-0.5">
-                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  <span class="text-xs text-white/50 font-medium">4.5</span>
+                  <svg class="w-3 h-3 text-warm" viewBox="0 0 24 24" fill="currentColor">
+                    <path
+                      d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.27 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  <span class="text-xs text-slate-200 font-medium">4.5</span>
                 </div>
                 <span class="text-white/15">·</span>
-                <span class="text-xs text-white/40">1.8 km</span>
+                <span class="text-xs text-slate-300">1.8 km</span>
               </div>
             </div>
-            <button class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
-              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+            <button
+              class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-warm/10 transition-colors group/fav">
+              <svg class="w-4 h-4 text-white/25 group-hover/fav:text-warm transition-colors" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
               </svg>
             </button>
           </div>
           <div class="time-block mb-4">
-            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            <svg class="w-3.5 h-3.5 text-neon/70 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
-            <span class="text-xs text-white/60 font-medium">Today 19:00 – 20:00</span>
+            <span class="text-xs text-white/60 font-medium"><span data-i18n="eats.today">วันนี้</span> 19:00 – 20:00</span>
           </div>
           <div class="flex items-end justify-between gap-3">
             <div>
@@ -907,32 +1129,42 @@
     <div class="flex items-center justify-around max-w-md mx-auto">
 
       <button class="bottom-nav-item active" id="nav-home">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+          <polyline points="9 22 9 12 15 12 15 22" />
         </svg>
         <span data-i18n="eats.bottomHome">หน้าแรก</span>
       </button>
 
       <button class="bottom-nav-item" id="nav-map">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/>
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+          <line x1="8" y1="2" x2="8" y2="18" />
+          <line x1="16" y1="6" x2="16" y2="22" />
         </svg>
         <span data-i18n="eats.bottomMap">แผนที่ร้าน</span>
       </button>
 
       <button class="bottom-nav-item" id="nav-orders">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/>
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
         </svg>
         <span data-i18n="eats.bottomOrders">คำสั่งซื้อ</span>
       </button>
 
-      <button class="bottom-nav-item" id="nav-profile">
-        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      <a href="dashboard.html?tab=profile" class="bottom-nav-item" id="nav-profile">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
         <span data-i18n="eats.bottomProfile">โปรไฟล์</span>
-      </button>
+      </a>
 
     </div>
   </nav>
@@ -994,7 +1226,7 @@
 
     // ── Reserve Button Micro-Interaction ─────────────
     document.querySelectorAll('.btn-reserve').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const original = this.textContent;
         this.innerHTML = `
           <svg class="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -1022,7 +1254,7 @@
 
     // ── Favourite Heart Toggle ────────────────────────
     document.querySelectorAll('.group\\/fav').forEach(btn => {
-      btn.addEventListener('click', function() {
+      btn.addEventListener('click', function () {
         const svg = this.querySelector('svg');
         const isFilled = svg.getAttribute('fill') === 'currentColor' && svg.getAttribute('stroke-width') === '0';
         if (isFilled) {
@@ -1139,20 +1371,29 @@
   <!-- ═══════════════════════════════════════════════
        GOOGLE MAP MODAL (EATS SURPRISE BAG FINDER)
   ════════════════════════════════════════════════ -->
-  <div id="modal-eats-map" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in" onclick="if(event.target===this)closeEatsMapModal()">
-    <div class="bg-slate-900 border border-warm/30 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+  <div id="modal-eats-map"
+    class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-fade-in"
+    onclick="if(event.target===this)closeEatsMapModal()">
+    <div
+      class="bg-slate-900 border border-warm/30 rounded-3xl max-w-2xl w-full p-5 sm:p-7 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
       <div class="flex items-center justify-between pb-3 border-b border-white/8 shrink-0">
         <div class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-xl bg-warm/20 text-warm flex items-center justify-center">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/></svg>
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+            </svg>
           </div>
           <div>
             <h3 class="text-base font-bold text-white" data-i18n="eats.mapTitle">แผนที่ร้าน Surprise Bag</h3>
-            <span class="text-xs text-warm" data-i18n="eats.mapSubtitle">จุดกู้ภัยอาหารที่เปิดให้บริการ 6 แห่งในนครปฐม</span>
+            <span class="text-xs text-warm" data-i18n="eats.mapSubtitle">จุดกู้ภัยอาหารที่เปิดให้บริการ 6
+              แห่งในนครปฐม</span>
           </div>
         </div>
-        <button onclick="closeEatsMapModal()" class="text-white/40 hover:text-white p-1.5 cursor-pointer">
-          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <button onclick="closeEatsMapModal()" class="text-slate-300 hover:text-white p-1.5 cursor-pointer">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
         </button>
       </div>
 
@@ -1161,80 +1402,90 @@
         <div id="eats-google-map" class="w-full h-full min-h-[350px] bg-slate-950"></div>
       </div>
 
-      <div class="mt-4 flex items-center justify-between text-xs text-white/50 shrink-0">
-        <span>Click any orange pin to view bag details & pricing</span>
-        <button onclick="closeEatsMapModal()" data-i18n="eats.mapClose" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold cursor-pointer">ปิดแผนที่</button>
+      <div class="mt-4 flex items-center justify-between text-xs text-slate-200 shrink-0">
+        <span data-i18n="eats.mapClickPin">คลิกหมุดสีส้มเพื่อดูรายละเอียดถุงและราคา</span>
+        <button onclick="closeEatsMapModal()" data-i18n="eats.mapClose"
+          class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold cursor-pointer">ปิดแผนที่</button>
       </div>
     </div>
   </div>
 
   <!-- Google Maps API with user key -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCtGCYw5n9W7Igirw661E-Wdc0vJGiST0&callback=initEatsMap&v=weekly" async defer></script>
+  <script
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCtGCYw5n9W7Igirw661E-Wdc0vJGiST0&callback=initEatsMap&v=weekly"
+    async defer></script>
 
   <!-- ═══════ B2C Food Rescue Checkout Modal with PDPA Consent ═══════ -->
-  <div id="modal-eats-checkout" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
-    <div class="bg-slate-900 border border-white/15 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl text-white">
+  <div id="modal-eats-checkout"
+    class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
+    <div
+      class="bg-slate-900 border border-white/15 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-4 shadow-2xl text-white">
       <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <div>
-          <span class="inline-block px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-warm/15 text-warm border border-warm/30">
-            กู้ภัยอาหารส่วนเกิน (Surprise Bag)
+          <span
+            class="inline-block px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase tracking-wider bg-warm/15 text-warm border border-warm/30">
+            <span data-i18n="eats.reserveModalTag">กู้ภัยอาหารส่วนเกิน (Surprise Bag)</span>
           </span>
           <h3 id="eats-modal-title" class="text-base font-bold text-white mt-1">จองถุงสุ่มอาหาร Surprise Bag</h3>
         </div>
-        <button type="button" onclick="closeEatsCheckoutModal()" class="text-slate-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
+        <button type="button" onclick="closeEatsCheckoutModal()"
+          class="text-slate-400 hover:text-white text-lg font-bold cursor-pointer">✕</button>
       </div>
 
       <!-- Order Details -->
       <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 space-y-2 text-xs">
         <div class="flex justify-between text-slate-300">
-          <span>ร้านค้า / สถานที่รับ:</span>
+          <span data-i18n="eats.storeLocation">ร้านค้า / สถานที่รับ:</span>
           <strong id="eats-modal-store" class="text-white">Artisan French Bakery</strong>
         </div>
         <div class="flex justify-between text-slate-300">
-          <span>ช่วงเวลารับสินค้า:</span>
+          <span data-i18n="eats.pickupWindow">ช่วงเวลารับสินค้า:</span>
           <strong class="text-neon">วันนี้, 19:30 – 20:30 น.</strong>
         </div>
         <div class="flex justify-between text-slate-300">
-          <span>ช่วยลดคาร์บอนฟุตพริ้นท์:</span>
+          <span data-i18n="eats.carbonOffset">ช่วยลดคาร์บอนฟุตพริ้นท์:</span>
           <strong class="text-emerald-400">ลดคาร์บอน 2.5 กก. CO₂e</strong>
         </div>
         <div class="flex justify-between text-slate-300 pt-2 border-t border-white/5">
-          <span>ราคาถุงสุ่มอาหาร:</span>
+          <span data-i18n="eats.bagPrice">ราคาถุงสุ่มอาหาร:</span>
           <strong id="eats-modal-price" class="text-white font-bold text-sm">฿89.00</strong>
         </div>
         <div class="flex justify-between text-slate-400 text-[0.68rem]">
-          <span>ส่วนแบ่งแพลตฟอร์ม GP (10%):</span>
+          <span data-i18n="eats.platformGp">ส่วนแบ่งแพลตฟอร์ม GP (10%):</span>
           <span id="eats-modal-gp">฿8.90</span>
         </div>
         <div class="flex justify-between text-warm font-semibold text-[0.68rem]">
-          <span>ยอดโอนให้ร้านค้า (90%):</span>
+          <span data-i18n="eats.storePayout">ยอดโอนให้ร้านค้า (90%):</span>
           <span id="eats-modal-net">฿80.10</span>
         </div>
       </div>
 
       <!-- Mandatory PDPA Consent -->
       <div class="space-y-2 pt-1">
-        <div id="eats-error-alert" class="hidden p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
+        <div id="eats-error-alert"
+          class="hidden p-2.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
           กรุณายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ก่อนทำการจอง
         </div>
         <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-950 border border-white/10">
-          <input type="checkbox" id="eats-pdpa-check" required class="mt-0.5 w-4 h-4 rounded text-slate-900 border-slate-400 focus:ring-warm accent-warm cursor-pointer" />
+          <input type="checkbox" id="eats-pdpa-check" required
+            class="mt-0.5 w-4 h-4 rounded text-slate-900 border-slate-400 focus:ring-warm accent-warm cursor-pointer" />
           <label for="eats-pdpa-check" class="text-[0.72rem] text-slate-300 leading-snug cursor-pointer">
-            ข้าพเจ้ายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ของ biotrade และยืนยันว่าจะมารับอาหารในช่วงเวลาที่ร้านกำหนด
+            <span data-i18n="eats.pdpaConsent">ข้าพเจ้ายินยอมตามนโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) ของ biotrade และยืนยันว่าจะมารับอาหารในช่วงเวลาที่ร้านกำหนด</span>
           </label>
         </div>
       </div>
 
       <!-- Action Button -->
       <div class="pt-2">
-        <button type="button" onclick="confirmEatsReservation()" id="btn-confirm-eats" class="w-full py-3.5 px-4 rounded-xl bg-warm hover:bg-warm-deep text-slate-950 text-sm font-extrabold transition-all shadow-lg shadow-warm/20 cursor-pointer">
+        <button type="button" onclick="confirmEatsReservation()" id="btn-confirm-eats"
+          class="w-full py-3.5 px-4 rounded-xl bg-warm hover:bg-warm-deep text-slate-950 text-sm font-extrabold transition-all shadow-lg shadow-warm/20 cursor-pointer">
           ยืนยันการจองรับอาหาร & ชำระเงิน ฿89
         </button>
       </div>
     </div>
   </div>
 
-<script>
+  <script>
     let currentEatsPayload = null;
 
     function openEatsCheckoutModal(bagTitle, storeName, priceNum) {
@@ -1299,7 +1550,7 @@
 
     // Attach click handlers to all Reserve Now buttons
     document.querySelectorAll('.btn-reserve').forEach(btn => {
-      btn.onclick = function() {
+      btn.onclick = function () {
         const card = btn.closest('.bag-card') || btn.parentElement.parentElement;
         const storeEl = card ? card.querySelector('h4') : null;
         const categoryEl = card ? card.querySelector('.badge-category') : null;
@@ -1309,7 +1560,7 @@
         const store = storeEl ? storeEl.textContent.trim() : "ร้านอาหารพาร์ทเนอร์";
         const category = categoryEl ? categoryEl.textContent.trim() : "ถุงสุ่มอาหาร";
         const title = `${category} - ${store}`;
-        
+
         let price = 89;
         if (priceEl) {
           const match = priceEl.textContent.match(/\d+/);
@@ -1319,6 +1570,7 @@
         openEatsCheckoutModal(title, store, price);
       };
     });
-</script>
+  </script>
 </body>
+
 </html>

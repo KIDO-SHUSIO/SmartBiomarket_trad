@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biotrade – Save Food. Trade Waste. Zero Landfill.</title>
-  <meta name="description" content="biotrade is a dual-gateway platform: rescue delicious food at 50-70% off with biotrade eats, or trade organic waste on the B2B marketplace with biotrade raw. Zero landfill starts here." />
+  <meta name="description"
+    content="biotrade is a dual-gateway platform: rescue delicious food at 50-70% off with biotrade eats, or trade organic waste on the B2B marketplace with biotrade raw. Zero landfill starts here." />
 
-  <!-- Google Fonts – Inter & Prompt (Thai) -->
+  <!-- Google Fonts – Prompt (Thai Primary) & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
-  <!-- i18n Translation Engine -->
+  <!-- Supabase & App Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabaseClient.js"></script>
   <script src="authModal.js"></script>
@@ -52,19 +56,19 @@
             'slide-up': 'slideUp 0.8s ease-out forwards',
             'slide-up-delay': 'slideUp 0.8s ease-out 0.2s forwards',
             'fade-in': 'fadeIn 1s ease-out forwards',
-            'shimmer': 'shimmer 3s ease-in-out infinite',
+            'shimmer': 'shimmer 4s ease-in-out infinite',
           },
           keyframes: {
             float: {
               '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-20px)' },
+              '50%': { transform: 'translateY(-14px)' },
             },
             pulseGlow: {
               '0%, 100%': { opacity: '0.4' },
               '50%': { opacity: '0.8' },
             },
             slideUp: {
-              '0%': { opacity: '0', transform: 'translateY(30px)' },
+              '0%': { opacity: '0', transform: 'translateY(24px)' },
               '100%': { opacity: '1', transform: 'translateY(0)' },
             },
             fadeIn: {
@@ -83,14 +87,42 @@
 
   <style>
     /* ── Base ──────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body {
-      height: 100%;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
       margin: 0;
-      font-family: 'Inter', system-ui, sans-serif;
       background: #0B0F19;
       color: #f1f5f9;
       overflow-x: hidden;
+      font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
+      line-height: 1.6;
+      letter-spacing: 0.01em;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .shimmer-text {
+      line-height: 1.35 !important;
+      padding-top: 2px;
+      padding-bottom: 2px;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font-family: inherit;
+      line-height: 1.5 !important;
     }
 
     /* ── Animated Grid Background ─────────────────── */
@@ -98,8 +130,8 @@
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(rgba(0,255,157,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,255,157,0.03) 1px, transparent 1px);
+        linear-gradient(rgba(0, 255, 157, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 157, 0.03) 1px, transparent 1px);
       background-size: 60px 60px;
       pointer-events: none;
       z-index: 0;
@@ -109,130 +141,124 @@
     .orb {
       position: fixed;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 0;
     }
+
     .orb-1 {
-      width: 400px; height: 400px;
-      background: radial-gradient(circle, rgba(0,255,157,0.15), transparent 70%);
-      top: -100px; left: -100px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(0, 255, 157, 0.14), transparent 70%);
+      top: -100px;
+      left: -100px;
     }
+
     .orb-2 {
-      width: 350px; height: 350px;
-      background: radial-gradient(circle, rgba(245,158,11,0.12), transparent 70%);
-      bottom: -80px; right: -80px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.14), transparent 70%);
+      bottom: -80px;
+      right: -80px;
     }
+
     .orb-3 {
-      width: 250px; height: 250px;
-      background: radial-gradient(circle, rgba(59,130,246,0.08), transparent 70%);
-      top: 50%; left: 50%;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08), transparent 70%);
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
     }
 
     /* ── Glass Card ────────────────────────────────── */
     .glass-card {
-      background: rgba(255,255,255,0.04);
+      background: rgba(255, 255, 255, 0.04);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 24px;
-      transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
       overflow: hidden;
     }
-    .glass-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: 24px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent 50%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-    }
+
     .glass-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      border-color: rgba(255,255,255,0.15);
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.18);
     }
 
-    /* ── Eats Card Specifics ──────────────────────── */
+    /* Eats Card */
     .card-eats {
       background: linear-gradient(160deg,
-        rgba(245,158,11,0.12) 0%,
-        rgba(245,158,11,0.04) 40%,
-        rgba(255,255,255,0.03) 100%);
-    }
-    .card-eats:hover {
-      background: linear-gradient(160deg,
-        rgba(245,158,11,0.20) 0%,
-        rgba(245,158,11,0.08) 40%,
-        rgba(255,255,255,0.05) 100%);
-      box-shadow:
-        0 20px 60px rgba(245,158,11,0.15),
-        0 0 80px rgba(245,158,11,0.05);
+          rgba(245, 158, 11, 0.12) 0%,
+          rgba(245, 158, 11, 0.04) 40%,
+          rgba(255, 255, 255, 0.03) 100%);
     }
 
-    /* ── Raw Card Specifics ───────────────────────── */
+    .card-eats:hover {
+      background: linear-gradient(160deg,
+          rgba(245, 158, 11, 0.20) 0%,
+          rgba(245, 158, 11, 0.08) 40%,
+          rgba(255, 255, 255, 0.05) 100%);
+      box-shadow:
+        0 20px 60px rgba(245, 158, 11, 0.15),
+        0 0 80px rgba(245, 158, 11, 0.05);
+    }
+
+    /* Raw Card */
     .card-raw {
       background: linear-gradient(160deg,
-        rgba(0,255,157,0.08) 0%,
-        rgba(0,255,157,0.02) 40%,
-        rgba(255,255,255,0.03) 100%);
+          rgba(0, 255, 157, 0.08) 0%,
+          rgba(0, 255, 157, 0.02) 40%,
+          rgba(255, 255, 255, 0.03) 100%);
     }
+
     .card-raw:hover {
       background: linear-gradient(160deg,
-        rgba(0,255,157,0.18) 0%,
-        rgba(0,255,157,0.06) 40%,
-        rgba(255,255,255,0.05) 100%);
+          rgba(0, 255, 157, 0.18) 0%,
+          rgba(0, 255, 157, 0.06) 40%,
+          rgba(255, 255, 255, 0.05) 100%);
       box-shadow:
-        0 20px 60px rgba(0,255,157,0.12),
-        0 0 80px rgba(0,255,157,0.04);
+        0 20px 60px rgba(0, 255, 157, 0.12),
+        0 0 80px rgba(0, 255, 157, 0.04);
     }
 
     /* ── Buttons ──────────────────────────────────── */
     .btn-gateway {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
-      padding: 14px 32px;
+      padding: 13px 30px;
       border-radius: 14px;
-      font-weight: 600;
-      font-size: 0.95rem;
+      font-weight: 700;
+      font-size: 0.92rem;
       letter-spacing: 0.02em;
-      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-      position: relative;
-      overflow: hidden;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      cursor: pointer;
     }
-    .btn-gateway::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-      opacity: 0;
-      transition: opacity 0.35s;
-    }
-    .btn-gateway:hover::after { opacity: 1; }
 
     .btn-eats {
       background: linear-gradient(135deg, #F59E0B, #D97706);
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+      color: #0F1423;
+      box-shadow: 0 4px 20px rgba(245, 158, 11, 0.3);
     }
+
     .btn-eats:hover {
-      box-shadow: 0 8px 36px rgba(245,158,11,0.45);
+      box-shadow: 0 8px 30px rgba(245, 158, 11, 0.45);
       transform: translateY(-2px);
     }
 
     .btn-raw {
       background: linear-gradient(135deg, #00FF9D, #00CC7D);
       color: #0B0F19;
-      box-shadow: 0 4px 20px rgba(0,255,157,0.25);
+      box-shadow: 0 4px 20px rgba(0, 255, 157, 0.25);
     }
+
     .btn-raw:hover {
-      box-shadow: 0 8px 36px rgba(0,255,157,0.4);
+      box-shadow: 0 8px 30px rgba(0, 255, 157, 0.4);
       transform: translateY(-2px);
     }
 
@@ -244,63 +270,45 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0 auto 24px;
+      margin: 0 auto 20px;
       position: relative;
     }
-    .icon-circle::after {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 2px solid transparent;
-      animation: pulseGlow 4s ease-in-out infinite;
-    }
+
     .icon-eats {
-      background: rgba(245,158,11,0.15);
-      border: 1px solid rgba(245,158,11,0.3);
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
     }
-    .icon-eats::after { border-color: rgba(245,158,11,0.2); }
+
     .icon-raw {
-      background: rgba(0,255,157,0.1);
-      border: 1px solid rgba(0,255,157,0.25);
+      background: rgba(0, 255, 157, 0.1);
+      border: 1px solid rgba(0, 255, 157, 0.25);
     }
-    .icon-raw::after { border-color: rgba(0,255,157,0.15); }
 
     /* ── Tag Pill ─────────────────────────────────── */
     .tag-pill {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 14px;
+      padding: 5px 14px;
       border-radius: 999px;
       font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.03em;
     }
 
     /* ── Shimmer Title ────────────────────────────── */
     .shimmer-text {
-      background: linear-gradient(
-        90deg,
-        #f1f5f9 0%,
-        #00FF9D 25%,
-        #f1f5f9 50%,
-        #F59E0B 75%,
-        #f1f5f9 100%
-      );
-      background-size: 200% auto;
+      background: linear-gradient(90deg,
+          #f1f5f9 0%,
+          #00FF9D 25%,
+          #F59E0B 50%,
+          #00FF9D 75%,
+          #f1f5f9 100%);
+      background-size: 250% auto;
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
-    }
-
-    /* ── Particle Canvas ──────────────────────────── */
-    #particles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
+      animation: shimmer 5s ease-in-out infinite;
     }
 
     /* ── Nav Link ──────────────────────────────── */
@@ -320,11 +328,13 @@
       text-decoration: none;
       line-height: 1.5;
     }
+
     .nav-link:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 255, 255, 0.08);
     }
+
     .nav-link.active {
       color: #00FF9D;
       background: rgba(0, 255, 157, 0.08);
@@ -333,193 +343,228 @@
       font-weight: 600;
     }
 
-    /* ── Scroll indicator ─────────────────────────── */
-    .scroll-hint {
-      animation: float 3s ease-in-out infinite;
-    }
-
-    /* ── Opacity-0 for animations ─────────────────── */
-    .start-hidden { opacity: 0; }
-
     /* ── Language Switcher ─────────────────────────── */
     .lang-btn {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       transition: all 0.25s ease;
       border-radius: 8px;
-      letter-spacing: 0.05em;
     }
+
     .lang-btn:hover {
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.06);
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.06);
     }
+
     .lang-btn.active-lang {
       background: #00FF9D;
       color: #0B0F19 !important;
       font-weight: 800;
-      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+      box-shadow: 0 2px 10px rgba(0, 255, 157, 0.35);
     }
-  
-    /* ── Thai Typography & Tone Mark Optimization ── */
-    html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
-      font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-    }
-    body {
-      line-height: 1.6;
-      letter-spacing: 0.01em;
-    }
-    h1, h2, h3, h4, .shimmer-text {
-      line-height: 1.35 !important;
-      padding-top: 2px;
-      padding-bottom: 2px;
-    }
-    p, span, label, td, th {
-      line-height: 1.6;
-    }
-    button, input, select, textarea {
-      line-height: 1.5 !important;
-    }
-    .nav-link, .btn-gateway, .btn-neon, .btn-reserve, .tab-btn {
-      padding-top: 9px;
-      padding-bottom: 9px;
+
+    #particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
     }
   </style>
 </head>
 
-<body class="min-h-screen flex flex-col relative">
+<body class="min-h-screen flex flex-col relative selection:bg-neon selection:text-slate-950">
 
-  <!-- ═══════ Background Layers ═══════ -->
+  <!-- ═══════ Background Ambient ═══════ -->
   <div class="bg-grid"></div>
   <div class="orb orb-1 animate-float"></div>
   <div class="orb orb-2 animate-float-delayed"></div>
   <div class="orb orb-3 animate-pulse-glow"></div>
   <canvas id="particles"></canvas>
 
-  <!-- ═══════ Universal Top Bar ═══════ -->
-  <header class="sticky top-0 z-40 w-full bg-[#0B0F19]/80 backdrop-blur-xl border-b border-white/5 py-3 px-4 sm:px-6 lg:px-8 animate-fade-in">
+  <!-- ═══════ Universal Navigation Bar ═══════ -->
+  <header
+    class="sticky top-0 z-40 w-full bg-[#0B0F19]/85 backdrop-blur-xl border-b border-white/8 py-3 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-      
+
       <!-- Brand Logo -->
       <a href="index.html" id="logo-link" class="group flex items-center gap-2.5 shrink-0">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-neon/20 to-neon/5 border border-neon/25 flex items-center justify-center group-hover:border-neon/50 transition-colors duration-300">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-            <path d="M2 17l10 5 10-5"/>
-            <path d="M2 12l10 5 10-5"/>
+        <div
+          class="w-9 h-9 rounded-xl bg-gradient-to-br from-neon/20 to-neon/5 border border-neon/30 flex items-center justify-center group-hover:border-neon transition-colors duration-300 shadow-sm shadow-neon/15">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+            <path d="M2 17l10 5 10-5" />
+            <path d="M2 12l10 5 10-5" />
           </svg>
         </div>
-        <span class="text-lg font-bold tracking-[0.1em] text-white/95 group-hover:text-neon transition-colors duration-300">
+        <span class="text-lg font-extrabold tracking-wide text-white group-hover:text-neon transition-colors">
           biotrade
         </span>
       </a>
 
       <!-- Center Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+      <nav
+        class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
         <a href="index.html" data-i18n="nav.gateway" class="nav-link active">หน้าแรก</a>
-        <a href="eats.html" data-i18n="nav.eats" class="nav-link ">กู้อาหาร (Eats)</a>
-        <a href="raw.html" data-i18n="nav.raw" class="nav-link ">ตลาดขยะ (Raw)</a>
-        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
-        <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link ">แดชบอร์ด & ESG</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link">อาหาร (Eats)</a>
+        <a href="raw.html" data-i18n="nav.raw" class="nav-link">ตลาดขยะ (Raw)</a>
+        <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link">ลงประกาศขยะ</a>
+        <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link">แดชบอร์ด & ESG</a>
       </nav>
 
       <!-- Right Controls -->
-      <div class="flex items-center gap-2.5">
+      <div class="flex items-center gap-3">
         <!-- Language Switcher (EN | TH) -->
-        <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
-          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="en">EN</button>
-          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="th">TH</button>
+        <div
+          class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+          <button type="button" onclick="setLanguage('en')"
+            class="lang-btn lang-btn-en px-2.5 py-1 transition-all text-white/50 cursor-pointer"
+            data-lang="en">EN</button>
+          <button type="button" onclick="setLanguage('th')"
+            class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 cursor-pointer"
+            data-lang="th">TH</button>
         </div>
 
         <!-- Auth User Slot -->
         <div class="auth-nav-slot"></div>
-
-        <a href="eats.html" data-i18n="nav.eatsB2c" class="hidden sm:inline-block text-xs font-semibold text-amber-300 hover:text-amber-200 px-3 py-1.5 rounded-lg hover:bg-amber-500/10 transition-colors">อาหาร</a>
-        <a href="raw.html" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-950 bg-neon hover:bg-neon-dim px-3.5 py-1.5 rounded-xl transition-all shadow-sm shadow-neon/20">
-          <span data-i18n="nav.enterRaw">ตลาดขยะ</span>
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-        </a>
       </div>
 
     </div>
   </header>
 
   <!-- ═══════ Main Content ═══════ -->
-  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 pb-8">
+  <main class="relative z-10 flex-1 flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 py-10 md:py-14">
 
     <!-- ── Hero Title Section ── -->
-    <div class="text-center mb-10 md:mb-14 start-hidden animate-slide-up max-w-2xl">
-      <div class="tag-pill bg-neon/10 text-neon border border-neon/20 mx-auto mb-6">
+    <div class="text-center mb-10 md:mb-14 max-w-3xl animate-slide-up">
+      <div class="tag-pill bg-neon/10 text-neon border border-neon/20 mx-auto mb-5">
         <span class="w-2 h-2 rounded-full bg-neon inline-block animate-pulse"></span>
         <span data-i18n="gateway.badge">ขับเคลื่อนเศรษฐกิจหมุนเวียน</span>
       </div>
-      <h1 data-i18n="gateway.heroTitle" class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-normal mb-4 shimmer-text animate-shimmer">กู้อาหารอร่อย แลกเปลี่ยนขยะอินทรีย์<br /><span class="shimmer-text">มุ่งสู่เป้าหมายขยะเป็นศูนย์</span></h1>
-      <p data-i18n="gateway.heroDesc" class="text-base sm:text-lg text-white/60 max-w-lg mx-auto font-normal leading-relaxed">แพลตฟอร์มทวิภาคีที่เชื่อมต่อผู้บริโภคเข้ากับอาหารส่วนเกิน และเชื่อมโยงภาคอุตสาหกรรมสู่วงจรขยะอินทรีย์มูลค่าสูง</p>
+
+      <h1 data-i18n="gateway.heroTitle"
+        class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight sm:leading-tight mb-4 shimmer-text">
+        
+        อาหารอร่อย แลกเปลี่ยนขยะอินทรีย์<br />
+        <span class="shimmer-text">มุ่งสู่เป้าหมายขยะเป็นศูนย์</span>
+      </h1>
+
+      <p data-i18n="gateway.heroDesc"
+        class="text-sm sm:text-base md:text-lg text-slate-300 max-w-xl mx-auto font-normal leading-relaxed">
+        แพลตฟอร์มทวิภาคีที่เชื่อมต่อผู้บริโภคเข้ากับอาหารส่วนเกิน และเชื่อมโยงภาคอุตสาหกรรมสู่วงจรขยะอินทรีย์มูลค่าสูง
+      </p>
     </div>
 
-    <!-- ── Gateway Cards ── -->
-    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 start-hidden animate-slide-up-delay">
+    <!-- ── Gateway Cards (Clean Dual Portals) ── -->
+    <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12 animate-slide-up-delay">
 
       <!-- Card 1 – biotrade eats -->
-      <div id="card-eats" class="glass-card card-eats p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
+      <div id="card-eats"
+        class="glass-card card-eats p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
         <!-- Icon -->
         <div class="icon-circle icon-eats">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8h1a4 4 0 010 8h-1"/>
-            <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
-            <line x1="6" y1="1" x2="6" y2="4"/>
-            <line x1="10" y1="1" x2="10" y2="4"/>
-            <line x1="14" y1="1" x2="14" y2="4"/>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 010 8h-1" />
+            <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z" />
+            <line x1="6" y1="1" x2="6" y2="4" />
+            <line x1="10" y1="1" x2="10" y2="4" />
+            <line x1="14" y1="1" x2="14" y2="4" />
           </svg>
         </div>
 
         <!-- Title -->
-        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
-          biotrade <span class="text-warm">eats (กู้อาหารราคาประหยัด)</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+          biotrade <span class="text-warm">eats</span>
         </h2>
 
         <!-- Tag -->
-        <div data-i18n="gateway.eatsBadge" class="tag-pill bg-warm/10 text-warm/80 border border-warm/15 mb-5">กู้ภัยอาหารส่วนเกิน B2C</div>
+        <div data-i18n="gateway.eatsBadge" class="tag-pill bg-warm/15 text-warm border border-warm/25 mb-4">
+          กู้ภัยอาหารส่วนเกิน B2C
+        </div>
 
         <!-- Description -->
-        <p data-i18n="gateway.eatsDesc" class="text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">ช่วยกู้อาหารส่วนเกินแสนอร่อย เบเกอรี่ และผลผลิตสดจากร้านอาหาร คาเฟ่ และซูเปอร์มาร์เก็ตในราคาลด 50–70% ทุกถุงช่วยลดคาร์บอนและช่วยโลก</p>
+        <p data-i18n="gateway.eatsDesc" class="text-slate-300 text-sm leading-relaxed mb-5 max-w-xs">
+          ช่วยกู้อาหารส่วนเกินแสนอร่อย เบเกอรี่ และผลผลิตสดจากร้านอาหาร คาเฟ่ และซูเปอร์มาร์เก็ตในราคาลด 50–70%
+          ทุกถุงช่วยลดคาร์บอนและช่วยโลก
+        </p>
 
-        <!-- CTA -->
-        <a href="eats.html" id="btn-explore-eats" class="btn-gateway btn-eats mt-auto">
+        <!-- Visual highlight pills -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 mb-7 max-w-xs">
+          <span data-i18n="index.eatsBullet1"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-warm/10 text-warm text-[0.72rem] font-semibold border border-warm/20">
+            🥐 เบเกอรี่ & ข้าวกล่อง
+          </span>
+          <span data-i18n="index.eatsBullet2"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-warm/10 text-warm text-[0.72rem] font-semibold border border-warm/20">
+            💰 ลดสูงสุด 70%
+          </span>
+          <span data-i18n="index.eatsBullet3"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-warm/10 text-warm text-[0.72rem] font-semibold border border-warm/20">
+            📍 รับสะดวกใกล้บ้าน
+          </span>
+        </div>
+
+        <!-- CTA Button -->
+        <a href="eats.html" id="btn-explore-eats" class="btn-gateway btn-eats mt-auto w-full sm:w-auto">
           <span data-i18n="gateway.eatsBtn">เข้าสู่ biotrade eats</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
-            <path d="M5 12h14"/>
-            <path d="M12 5l7 7-7 7"/>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+            <path d="M5 12h14" />
+            <path d="M12 5l7 7-7 7" />
           </svg>
         </a>
       </div>
 
       <!-- Card 2 – biotrade raw -->
-      <div id="card-raw" class="glass-card card-raw p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
+      <div id="card-raw"
+        class="glass-card card-raw p-8 sm:p-10 flex flex-col items-center text-center cursor-pointer group">
         <!-- Icon -->
         <div class="icon-circle icon-raw">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
           </svg>
         </div>
 
         <!-- Title -->
-        <h2 class="text-xl sm:text-2xl font-bold text-white mb-2">
-          biotrade <span class="text-neon">raw (ตลาดขยะ B2B)</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-2">
+          biotrade <span class="text-neon">raw</span>
         </h2>
 
         <!-- Tag -->
-        <div data-i18n="gateway.rawBadge" class="tag-pill bg-neon/8 text-neon/70 border border-neon/12 mb-5">เปลี่ยนขยะเป็นมูลค่า B2B</div>
+        <div data-i18n="gateway.rawBadge" class="tag-pill bg-neon/15 text-neon border border-neon/25 mb-4">
+          เปลี่ยนขยะเป็นมูลค่า B2B
+        </div>
 
         <!-- Description -->
-        <p data-i18n="gateway.rawDesc" class="text-white/70 text-sm sm:text-base leading-relaxed mb-8 max-w-xs">เชื่อมโยงโรงงานแปรรูปอาหาร โรงเบียร์ และภาคเกษตรเข้ากับผู้รับซื้อที่ผ่านการตรวจสอบ ซื้อขายกากกาแฟ กากเบียร์ เปลือกผลไม้ และชีวมวลในระดับอุตสาหกรรม</p>
+        <p data-i18n="gateway.rawDesc" class="text-slate-300 text-sm leading-relaxed mb-5 max-w-xs">
+          เชื่อมโยงโรงงานแปรรูปอาหาร โรงเบียร์ และภาคเกษตรเข้ากับผู้รับซื้อที่ผ่านการตรวจสอบ ซื้อขายกากกาแฟ กากเบียร์
+          เปลือกผลไม้ และชีวมวลในระดับอุตสาหกรรม
+        </p>
 
-        <!-- CTA -->
-        <a href="raw.html" id="btn-enter-raw" class="btn-gateway btn-raw mt-auto">
+        <!-- Visual highlight pills -->
+        <div class="flex flex-wrap items-center justify-center gap-1.5 mb-7 max-w-xs">
+          <span data-i18n="index.rawBullet1"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neon/10 text-neon text-[0.72rem] font-semibold border border-neon/20">
+            ☕ กากกาแฟ & ชีวมวล
+          </span>
+          <span data-i18n="index.rawBullet2"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neon/10 text-neon text-[0.72rem] font-semibold border border-neon/20">
+            🛡️ สัญญา Escrow ปลอดภัย
+          </span>
+          <span data-i18n="index.rawBullet3"
+            class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-neon/10 text-neon text-[0.72rem] font-semibold border border-neon/20">
+            📜 ใบรับรองลดคาร์บอน ESG
+          </span>
+        </div>
+
+        <!-- CTA Button -->
+        <a href="raw.html" id="btn-enter-raw" class="btn-gateway btn-raw mt-auto w-full sm:w-auto">
           <span data-i18n="gateway.rawBtn">เข้าสู่ตลาด biotrade raw</span>
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
-            <path d="M5 12h14"/>
-            <path d="M12 5l7 7-7 7"/>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round" class="transition-transform group-hover:translate-x-1">
+            <path d="M5 12h14" />
+            <path d="M12 5l7 7-7 7" />
           </svg>
         </a>
       </div>
@@ -527,44 +572,39 @@
     </div>
 
     <!-- ── Bottom Stats ── -->
-    <div class="mt-10 md:mt-14 flex flex-wrap items-center justify-center gap-8 sm:gap-12 text-center start-hidden animate-fade-in" style="animation-delay: 0.6s;">
-      <div>
-        <div class="text-2xl sm:text-3xl font-bold text-neon">12K+</div>
-        <div data-i18n="gateway.statMeals" class="text-xs text-white/50 mt-1 font-medium tracking-wide">มื้ออาหารที่กู้ภัยได้</div>
+    <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-5 text-center animate-fade-in">
+      <div
+        class="p-3.5 px-5 rounded-2xl bg-white/[0.035] border border-white/8 hover:border-neon/30 transition-all min-w-[150px]">
+        <div class="text-2xl sm:text-3xl font-extrabold text-neon tracking-tight">12K+</div>
+        <div data-i18n="gateway.statMeals" class="text-xs text-slate-300 mt-0.5 font-medium">มื้ออาหารที่กู้ภัยได้</div>
       </div>
-      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
-      <div>
-        <div class="text-2xl sm:text-3xl font-bold text-warm">340+</div>
-        <div data-i18n="gateway.statPartners" class="text-xs text-white/50 mt-1 font-medium tracking-wide">ธุรกิจพาร์ทเนอร์</div>
+      <div
+        class="p-3.5 px-5 rounded-2xl bg-white/[0.035] border border-white/8 hover:border-warm/30 transition-all min-w-[150px]">
+        <div class="text-2xl sm:text-3xl font-extrabold text-warm tracking-tight">340+</div>
+        <div data-i18n="gateway.statPartners" class="text-xs text-slate-300 mt-0.5 font-medium">ธุรกิจพาร์ทเนอร์</div>
       </div>
-      <div class="w-px h-8 bg-white/10 hidden sm:block"></div>
-      <div>
-        <div class="text-2xl sm:text-3xl font-bold text-white/80">98%</div>
-        <div data-i18n="gateway.statWaste" class="text-xs text-white/50 mt-1 font-medium tracking-wide">ขยะที่เบี่ยงเบนจากหลุมฝังกลบ</div>
+      <div
+        class="p-3.5 px-5 rounded-2xl bg-white/[0.035] border border-white/8 hover:border-white/20 transition-all min-w-[150px]">
+        <div class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">98%</div>
+        <div data-i18n="gateway.statWaste" class="text-xs text-slate-300 mt-0.5 font-medium">
+          ขยะที่เบี่ยงเบนจากหลุมฝังกลบ</div>
       </div>
     </div>
+
   </main>
 
   <!-- ═══════ Footer ═══════ -->
-  <footer class="relative z-10 py-6 text-center animate-fade-in" style="animation-delay: 0.8s;">
-    <p data-i18n="gateway.footerCopy" class="text-xs text-white/25 tracking-wide">&copy; 2026 biotrade · ขับเคลื่อนเศรษฐกิจ BCG ในเอเชียตะวันออกเฉียงใต้</p>
-
-
-
-
-
-
-
-
-
-
-
+  <footer class="relative z-10 py-6 text-center border-t border-white/5 bg-slate-950/40">
+    <p data-i18n="gateway.footerCopy" class="text-xs text-slate-500 tracking-wide">
+      &copy; 2026 biotrade · ขับเคลื่อนเศรษฐกิจ BCG ในเอเชียตะวันออกเฉียงใต้
+    </p>
   </footer>
 
   <!-- ═══════ Particle Animation ═══════ -->
   <script>
     (function () {
       const canvas = document.getElementById('particles');
+      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let width, height, particles;
 
@@ -574,15 +614,15 @@
       }
 
       function createParticles() {
-        const count = Math.min(Math.floor((width * height) / 18000), 80);
+        const count = Math.min(Math.floor((width * height) / 20000), 75);
         particles = [];
         for (let i = 0; i < count; i++) {
           particles.push({
             x: Math.random() * width,
             y: Math.random() * height,
             r: Math.random() * 1.5 + 0.5,
-            dx: (Math.random() - 0.5) * 0.3,
-            dy: (Math.random() - 0.5) * 0.3,
+            dx: (Math.random() - 0.5) * 0.25,
+            dy: (Math.random() - 0.5) * 0.25,
             opacity: Math.random() * 0.4 + 0.1,
             color: Math.random() > 0.5 ? '0,255,157' : '245,158,11',
           });
@@ -627,9 +667,11 @@
         const y = e.clientY - rect.top;
         const cx = rect.width / 2;
         const cy = rect.height / 2;
-        const rotateX = ((y - cy) / cy) * -4;
-        const rotateY = ((x - cx) / cx) * 4;
-        card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+        const rotateX = ((y - cy) / cy) * -3;
+        const rotateY = ((x - cx) / cx) * 3;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-6px)`;
+
+
       });
       card.addEventListener('mouseleave', () => {
         card.style.transform = '';
@@ -638,4 +680,5 @@
   </script>
 
 </body>
+
 </html>

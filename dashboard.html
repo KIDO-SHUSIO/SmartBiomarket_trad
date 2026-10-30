@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="th">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>biotrade – Operations & ESG Command Center</title>
-  <meta name="description" content="Manage your organic waste listings, financial ledger with 10% GP calculation, user profile, and certified ESG Carbon offset impact." />
+  <meta name="description"
+    content="Manage your organic waste listings, financial ledger with 10% GP calculation, user profile, and certified ESG Carbon offset impact." />
 
   <!-- Google Fonts – Inter & Prompt (Thai) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
   <!-- Core Engines -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -56,8 +60,14 @@
   </script>
 
   <style>
-    *, *::before, *::after { box-sizing: border-box; }
-    html, body {
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
       min-height: 100%;
       margin: 0;
       font-family: 'Inter', system-ui, sans-serif;
@@ -66,65 +76,88 @@
     }
 
     /* ── Scrollbars ── */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0B0F19; }
-    ::-webkit-scrollbar-thumb { background: rgba(0,255,157,0.25); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,157,0.5); }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #0B0F19;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 157, 0.25);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 255, 157, 0.5);
+    }
 
     /* ── Glass Panels ── */
     .glass {
-      background: rgba(255,255,255,0.03);
+      background: rgba(255, 255, 255, 0.03);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255,255,255,0.07);
+      border: 1px solid rgba(255, 255, 255, 0.07);
     }
+
     .glass-strong {
-      background: rgba(15,20,35,0.85);
+      background: rgba(15, 20, 35, 0.85);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     /* ── Tab Navigation ── */
     .tab-btn {
       position: relative;
-      padding: 10px 20px;
+      padding: 10px 22px;
       font-size: 0.88rem;
       font-weight: 600;
-      color: rgba(255,255,255,0.5);
+      color: rgba(255, 255, 255, 0.6);
       border-radius: 12px;
       transition: all 0.25s ease;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      border: 1px solid transparent;
+      white-space: nowrap;
     }
+
     .tab-btn:hover {
       color: #ffffff;
-      background: rgba(255,255,255,0.05);
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.1);
     }
+
     .tab-btn.active {
       color: #00FF9D;
-      background: rgba(0,255,157,0.1);
-      border: 1px solid rgba(0,255,157,0.25);
+      background: rgba(0, 255, 157, 0.12);
+      border-color: rgba(0, 255, 157, 0.3);
+      font-weight: 700;
+      box-shadow: 0 0 16px rgba(0, 255, 157, 0.15);
     }
 
     /* ── Language Switcher ── */
     .lang-btn {
-      color: rgba(255,255,255,0.4);
+      color: rgba(255, 255, 255, 0.4);
       transition: all 0.25s ease;
       border-radius: 8px;
       letter-spacing: 0.05em;
     }
+
     .lang-btn:hover {
-      color: rgba(255,255,255,0.85);
-      background: rgba(255,255,255,0.06);
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(255, 255, 255, 0.06);
     }
+
     .lang-btn.active-lang {
       background: #00FF9D;
       color: #0B0F19 !important;
       font-weight: 800;
-      box-shadow: 0 2px 10px rgba(0,255,157,0.35);
+      box-shadow: 0 2px 10px rgba(0, 255, 157, 0.35);
     }
 
     /* ── Nav Links ── */
@@ -144,11 +177,13 @@
       text-decoration: none;
       line-height: 1.5;
     }
+
     .nav-link:hover {
       color: #ffffff;
       background: rgba(255, 255, 255, 0.06);
       border-color: rgba(255, 255, 255, 0.08);
     }
+
     .nav-link.active {
       color: #00FF9D;
       background: rgba(0, 255, 157, 0.08);
@@ -162,9 +197,12 @@
       body * {
         visibility: hidden;
       }
-      #printable-certificate, #printable-certificate * {
+
+      #printable-certificate,
+      #printable-certificate * {
         visibility: visible;
       }
+
       #printable-certificate {
         position: absolute;
         left: 0;
@@ -176,33 +214,69 @@
         box-shadow: none !important;
         padding: 40px !important;
       }
+
       .no-print {
         display: none !important;
       }
     }
-  
+
     /* ── Thai Typography & Tone Mark Optimization ── */
-    html, body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, a, label {
+    html,
+    body,
+    button,
+    input,
+    select,
+    textarea,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    p,
+    span,
+    a,
+    label {
       font-family: 'Prompt', 'Inter', system-ui, -apple-system, sans-serif !important;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
     }
+
     body {
       line-height: 1.6;
       letter-spacing: 0.01em;
     }
-    h1, h2, h3, h4, .shimmer-text {
+
+    h1,
+    h2,
+    h3,
+    h4,
+    .shimmer-text {
       line-height: 1.35 !important;
       padding-top: 2px;
       padding-bottom: 2px;
     }
-    p, span, label, td, th {
+
+    p,
+    span,
+    label,
+    td,
+    th {
       line-height: 1.6;
     }
-    button, input, select, textarea {
+
+    button,
+    input,
+    select,
+    textarea {
       line-height: 1.5 !important;
     }
-    .nav-link, .btn-gateway, .btn-neon, .btn-reserve, .tab-btn {
+
+    .nav-link,
+    .btn-gateway,
+    .btn-neon,
+    .btn-reserve,
+    .tab-btn {
       padding-top: 9px;
       padding-bottom: 9px;
     }
@@ -212,25 +286,30 @@
 <body class="min-h-screen flex flex-col bg-[#0B0F19]">
 
   <!-- ═══════ Universal Top Bar ═══════ -->
-  <header class="sticky top-0 z-40 w-full bg-[#0B0F19]/90 backdrop-blur-xl border-b border-white/5 py-3 px-4 sm:px-6 lg:px-8">
+  <header
+    class="sticky top-0 z-40 w-full bg-[#0B0F19]/90 backdrop-blur-xl border-b border-white/5 py-3 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
-      
+
       <!-- Brand Logo -->
       <a href="index.html" id="logo-link" class="group flex items-center gap-2.5 shrink-0">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-br from-neon/20 to-neon/5 border border-neon/25 flex items-center justify-center group-hover:border-neon/50 transition-colors duration-300">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        <div
+          class="w-8 h-8 rounded-xl bg-gradient-to-br from-neon/20 to-neon/5 border border-neon/25 flex items-center justify-center group-hover:border-neon/50 transition-colors duration-300">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00FF9D" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
           </svg>
         </div>
-        <span class="text-lg font-bold tracking-[0.1em] text-white/95 group-hover:text-neon transition-colors duration-300">
+        <span
+          class="text-lg font-bold tracking-[0.1em] text-white/95 group-hover:text-neon transition-colors duration-300">
           biotrade
         </span>
       </a>
 
       <!-- Center Nav Links -->
-      <nav class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
+      <nav
+        class="hidden md:flex items-center gap-1 p-1 rounded-xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md">
         <a href="index.html" data-i18n="nav.gateway" class="nav-link ">หน้าแรก</a>
-        <a href="eats.html" data-i18n="nav.eats" class="nav-link ">กู้อาหาร (Eats)</a>
+        <a href="eats.html" data-i18n="nav.eats" class="nav-link ">อาหาร (Eats)</a>
         <a href="raw.html" data-i18n="nav.raw" class="nav-link ">ตลาดขยะ (Raw)</a>
         <a href="list-waste.html" data-i18n="nav.postWaste" class="nav-link ">ลงประกาศขยะ</a>
         <a href="dashboard.html" data-i18n="nav.dashboard" class="nav-link active">แดชบอร์ด & ESG</a>
@@ -239,16 +318,22 @@
       <!-- Right Controls -->
       <div class="flex items-center gap-3">
         <!-- Language Switcher (EN | TH) -->
-        <div class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
-          <button type="button" onclick="setLanguage('en')" class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer" data-lang="en">EN</button>
-          <button type="button" onclick="setLanguage('th')" class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer" data-lang="th">TH</button>
+        <div
+          class="lang-switcher flex items-center p-0.5 rounded-xl bg-white/[0.05] border border-white/10 text-[0.72rem] font-bold shrink-0">
+          <button type="button" onclick="setLanguage('en')"
+            class="lang-btn lang-btn-en px-2.5 py-1 rounded-lg transition-all text-white/50 cursor-pointer"
+            data-lang="en">EN</button>
+          <button type="button" onclick="setLanguage('th')"
+            class="lang-btn lang-btn-th active-lang bg-neon text-slate-950 font-extrabold shadow-sm shadow-neon/30 px-2.5 py-1 rounded-lg transition-all cursor-pointer"
+            data-lang="th">TH</button>
         </div>
 
         <!-- Auth User Slot -->
         <div class="auth-nav-slot"></div>
 
         <!-- Post Waste Direct CTA -->
-        <a href="list-waste.html" class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-950 bg-neon hover:bg-neon-dim px-3.5 py-1.5 rounded-xl transition-all shadow-sm shadow-neon/20">
+        <a href="list-waste.html"
+          class="hidden sm:inline-flex items-center gap-1.5 text-xs font-bold text-slate-950 bg-neon hover:bg-neon-dim px-3.5 py-1.5 rounded-xl transition-all shadow-sm shadow-neon/20">
           <span data-i18n="nav.newListing">+ สร้างประกาศ</span>
         </a>
       </div>
@@ -263,46 +348,69 @@
     <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
       <div>
         <div class="flex items-center gap-2 mb-2">
-          <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[0.68rem] font-bold uppercase tracking-wider bg-neon/10 text-neon border border-neon/20">
+          <span
+            class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[0.68rem] font-bold uppercase tracking-wider bg-neon/10 text-neon border border-neon/20">
             <span class="w-1.5 h-1.5 rounded-full bg-neon animate-pulse"></span>
             <span>B2B Operational Suite</span>
           </span>
-          <span id="header-pdpa-badge" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span id="header-pdpa-badge"
+            class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[0.65rem] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
             PDPA Verified
           </span>
         </div>
-        <h1 data-i18n="dash.title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-normal">ศูนย์บัญชาการปฏิบัติการ & ผลกระทบ ESG</h1>
-        <p data-i18n="dash.subtitle" class="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">จัดการประกาศวัตถุดิบชีวมวล บัญชีการเงินส่วนแบ่งแพลตฟอร์ม และใบรับรองการลดคาร์บอนเครดิต</p>
+        <h1 data-i18n="dash.title" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-normal">
+          ศูนย์บัญชาการปฏิบัติการ & ผลกระทบ ESG</h1>
+        <p data-i18n="dash.subtitle" class="text-sm text-slate-300 mt-1 max-w-2xl leading-relaxed">
+          จัดการประกาศวัตถุดิบชีวมวล บัญชีการเงินส่วนแบ่งแพลตฟอร์ม และใบรับรองการลดคาร์บอนเครดิต</p>
       </div>
 
       <div class="flex items-center gap-3">
-        <a href="list-waste.html" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neon text-slate-950 text-xs font-bold hover:bg-neon-dim transition-all shadow-lg shadow-neon/10">
-          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <a href="list-waste.html"
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neon text-slate-950 text-xs font-bold hover:bg-neon-dim transition-all shadow-lg shadow-neon/10">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19" />
+            <line x1="5" y1="12" x2="19" y2="12" />
+          </svg>
           <span data-i18n="dash.btnCreateNew">+ ลงประกาศใหม่</span>
         </a>
       </div>
     </div>
 
     <!-- ── Dashboard Tab Navigation ── -->
-    <div class="flex items-center gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] mb-8 overflow-x-auto">
+    <div
+      class="flex items-center gap-2 p-1.5 rounded-2xl bg-white/[0.03] border border-white/[0.06] mb-8 overflow-x-auto">
       <button type="button" onclick="switchDashboardTab('esg')" id="btn-tab-esg" class="tab-btn active">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/><path d="M12 6v6l4 2"/></svg>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z" />
+          <path d="M12 6v6l4 2" />
+        </svg>
         <span data-i18n="dash.tabEsg">ผลกระทบ ESG & ใบรับรอง</span>
       </button>
 
       <button type="button" onclick="switchDashboardTab('ledger')" id="btn-tab-ledger" class="tab-btn">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="5" width="20" height="14" rx="2" />
+          <line x1="2" y1="10" x2="22" y2="10" />
+        </svg>
         <span data-i18n="dash.tabLedger">บัญชีการเงิน & ส่วนแบ่ง GP 10%</span>
       </button>
 
       <button type="button" onclick="switchDashboardTab('listings')" id="btn-tab-listings" class="tab-btn">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path
+            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+        </svg>
         <span data-i18n="dash.tabListings">จัดการประกาศวัตถุดิบ</span>
       </button>
 
       <button type="button" onclick="switchDashboardTab('profile')" id="btn-tab-profile" class="tab-btn">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
         <span data-i18n="dash.tabProfile">โปรไฟล์สถานประกอบการ</span>
       </button>
     </div>
@@ -311,7 +419,7 @@
     <!-- TAB 1: ESG IMPACT & CERTIFICATE (Carbon Engine)                    -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <section id="tab-content-esg" class="space-y-8">
-      
+
       <!-- Cumulative KPI Metrics -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="glass p-5 rounded-2xl border-neon/20 bg-neon/[0.02]">
@@ -329,7 +437,9 @@
         <div class="glass p-5 rounded-2xl">
           <div class="flex items-center justify-between text-xs text-slate-400 mb-2">
             <span data-i18n="dash.cardWasteDiverted">ขยะอินทรีย์ที่นำกลับมาใช้ประโยชน์</span>
-            <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <svg class="w-4 h-4 text-warm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+            </svg>
           </div>
           <div class="text-3xl font-extrabold text-white" id="esg-waste-tons">27.00</div>
           <div class="text-xs text-white/50 mt-1" data-i18n="dash.cardTons">ตันคาร์บอน (MT)</div>
@@ -358,43 +468,59 @@
       <div class="glass p-6 sm:p-8 rounded-3xl">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 data-i18n="dash.calcTitle" class="text-lg font-bold text-white flex items-center gap-2"><svg class="w-5 h-5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg> <span>เครื่องคำนวณการลดคาร์บอนแบบจำลอง (Carbon Calculator)</span></h3>
-            <p class="text-xs text-slate-400 mt-1">Simulate avoided landfill methane emissions based on prospective waste volume.</p>
+            <h3 data-i18n="dash.calcTitle" class="text-lg font-bold text-white flex items-center gap-2"><svg
+                class="w-5 h-5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+                <line x1="9" y1="9" x2="9.01" y2="9" />
+                <line x1="15" y1="9" x2="15.01" y2="9" />
+              </svg> <span><span data-i18n="dash.calcTitle">เครื่องคำนวณการลดคาร์บอนแบบจำลอง (Carbon Calculator)</span></span></h3>
+            <p class="text-xs text-slate-400 mt-1">Simulate avoided landfill methane emissions based on prospective
+              waste volume.</p>
           </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label data-i18n="dash.calcSelectType" class="block text-xs font-semibold text-slate-300 mb-1.5">เลือกหมวดหมู่วัตถุดิบขยะอินทรีย์</label>
-            <select id="calc-stream" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
-              <option value="spent_grain">กากข้าวมอลต์เบียร์ (0.52 กก. CO₂e/กก.)</option>
-              <option value="coffee">กากกาแฟใช้แล้ว (0.65 กก. CO₂e/กก.)</option>
-              <option value="soy">กากถั่วเหลือง / กากเต้าหู้ (0.78 กก. CO₂e/กก.)</option>
-              <option value="fruit">เปลือกส้มและผลไม้รวม (0.45 กก. CO₂e/กก.)</option>
-              <option value="rice_husk">ชีวมวลแกลบข้าว (0.92 กก. CO₂e/กก.)</option>
-              <option value="bagasse">ชานอ้อย (0.85 กก. CO₂e/กก.)</option>
-              <option value="veg">เศษผักจากโรงงานอาหาร (0.58 กก. CO₂e/กก.)</option>
+            <label data-i18n="dash.calcSelectType"
+              class="block text-xs font-semibold text-slate-300 mb-1.5">เลือกหมวดหมู่วัตถุดิบขยะอินทรีย์</label>
+            <select id="calc-stream"
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
+              <option value="spent_grain" data-i18n="dash.optSpentGrain">กากข้าวมอลต์เบียร์ (0.52 กก. CO₂e/กก.)</option>
+              <option value="coffee" data-i18n="dash.optCoffee">กากกาแฟใช้แล้ว (0.65 กก. CO₂e/กก.)</option>
+              <option value="soy" data-i18n="dash.optSoy">กากถั่วเหลือง / กากเต้าหู้ (0.78 กก. CO₂e/กก.)</option>
+              <option value="fruit" data-i18n="dash.optFruit">เปลือกส้มและผลไม้รวม (0.45 กก. CO₂e/กก.)</option>
+              <option value="rice_husk" data-i18n="dash.optHusk">ชีวมวลแกลบข้าว (0.92 กก. CO₂e/กก.)</option>
+              <option value="bagasse" data-i18n="dash.optBagasse">ชานอ้อย (0.85 กก. CO₂e/กก.)</option>
+              <option value="veg" data-i18n="dash.optVeg">เศษผักจากโรงงานอาหาร (0.58 กก. CO₂e/กก.)</option>
               <option value="food_waste">ขยะเศษอาหารทั่วไป (1.25 กก. CO₂e/กก.)</option>
             </select>
           </div>
 
           <div>
-            <label data-i18n="dash.calcInputWeight" class="block text-xs font-semibold text-slate-300 mb-1.5">ระบุน้ำหนัก (ตัน)</label>
-            <input type="number" id="calc-weight" min="0.1" step="0.5" value="10" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+            <label data-i18n="dash.calcInputWeight"
+              class="block text-xs font-semibold text-slate-300 mb-1.5">ระบุน้ำหนัก (ตัน)</label>
+            <input type="number" id="calc-weight" min="0.1" step="0.5" value="10"
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
           </div>
 
           <div class="flex items-end">
-            <button type="button" onclick="runCarbonCalculation()" class="w-full bg-neon hover:bg-neon-dim text-slate-950 font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow-md shadow-neon/20 cursor-pointer">
+            <button type="button" onclick="runCarbonCalculation()"
+              class="w-full bg-neon hover:bg-neon-dim text-slate-950 font-bold py-2.5 px-4 rounded-xl text-sm transition-all shadow-md shadow-neon/20 cursor-pointer">
               <span data-i18n="dash.calcBtn">คำนวณปริมาณคาร์บอนที่ลดได้</span>
             </button>
           </div>
         </div>
 
         <!-- Real-time calculation output banner -->
-        <div id="calc-output-box" class="mt-4 p-4 rounded-2xl bg-white/[0.02] border border-neon/20 flex flex-wrap items-center justify-between gap-4">
+        <div id="calc-output-box"
+          class="mt-4 p-4 rounded-2xl bg-white/[0.02] border border-neon/20 flex flex-wrap items-center justify-between gap-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-neon/10 border border-neon/30 flex items-center justify-center text-neon">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <div
+              class="w-10 h-10 rounded-xl bg-neon/10 border border-neon/30 flex items-center justify-center text-neon">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+              </svg>
             </div>
             <div>
               <div data-i18n="dash.calcResult" class="text-xs text-slate-400">ปริมาณคาร์บอนที่คาดว่าจะลดได้:</div>
@@ -402,8 +528,10 @@
             </div>
           </div>
           <div class="flex items-center gap-6 text-xs text-slate-300">
-            <div><span class="text-slate-400">Tree Absorption:</span> <strong id="calc-trees-text" class="text-white">238 Trees</strong></div>
-            <div><span class="text-slate-400">Car Mileage:</span> <strong id="calc-cars-text" class="text-white">30,588 km</strong></div>
+            <div><span class="text-slate-400" data-i18n="dash.treeAbsorption">เทียบเท่าการดูดซับของต้นไม้:</span> <strong id="calc-trees-text"
+                class="text-white">238 Trees</strong></div>
+            <div><span class="text-slate-400" data-i18n="dash.carMileage">เทียบเท่าระยะทางวิ่งรถยนต์:</span> <strong id="calc-cars-text" class="text-white">30,588
+                km</strong></div>
           </div>
         </div>
       </div>
@@ -412,22 +540,30 @@
       <div class="relative">
         <div class="flex items-center justify-between mb-4">
           <div>
-            <h3 data-i18n="dash.certTitle" class="text-lg font-bold text-white">ใบรับรองการชดเชยคาร์บอนและการจัดการขยะหมุนเวียน</h3>
-            <p data-i18n="dash.certSubtitle" class="text-xs text-slate-400">เอกสารรับรองมาตรฐาน ESG สำหรับรายงานความยั่งยืนประจำปีขององค์กร (GRI 306 & ตลาดหลักทรัพย์ฯ)</p>
+            <h3 data-i18n="dash.certTitle" class="text-lg font-bold text-white">
+              ใบรับรองการชดเชยคาร์บอนและการจัดการขยะหมุนเวียน</h3>
+            <p data-i18n="dash.certSubtitle" class="text-xs text-slate-400">เอกสารรับรองมาตรฐาน ESG
+              สำหรับรายงานความยั่งยืนประจำปีขององค์กร (GRI 306 & ตลาดหลักทรัพย์ฯ)</p>
           </div>
-          <button type="button" onclick="printEsgCertificate()" class="no-print inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition-all border border-white/15 cursor-pointer">
-            <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          <button type="button" onclick="printEsgCertificate()"
+            class="no-print inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/15 text-white text-xs font-semibold transition-all border border-white/15 cursor-pointer">
+            <svg class="w-4 h-4 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6 9 6 2 18 2 18 9" />
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+              <rect x="6" y="14" width="12" height="8" />
+            </svg>
             <span data-i18n="dash.certDownload">ดาวน์โหลด / สั่งพิมพ์ใบรับรองทางการ (PDF Certificate)</span>
           </button>
         </div>
 
         <!-- The Certificate Design -->
-        <div id="printable-certificate" class="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#121929] to-[#0A0E18] border-2 border-neon/30 shadow-2xl overflow-hidden">
-          
+        <div id="printable-certificate"
+          class="relative p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-[#121929] to-[#0A0E18] border-2 border-neon/30 shadow-2xl overflow-hidden">
+
           <!-- Background Watermark Pattern -->
           <div class="absolute inset-0 opacity-[0.03] pointer-events-none flex items-center justify-center">
             <svg class="w-96 h-96" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </div>
 
@@ -436,15 +572,19 @@
             <div class="flex items-start justify-between border-b border-white/10 pb-6 mb-8">
               <div>
                 <div class="flex items-center gap-2 mb-2">
-                  <div class="w-7 h-7 rounded-lg bg-neon/20 border border-neon/40 flex items-center justify-center text-neon font-bold text-sm">
+                  <div
+                    class="w-7 h-7 rounded-lg bg-neon/20 border border-neon/40 flex items-center justify-center text-neon font-bold text-sm">
                     β
                   </div>
-                  <span class="text-xl font-bold tracking-widest text-white uppercase">biotrade ESG Impact Registry</span>
+                  <span class="text-xl font-bold tracking-widest text-white uppercase">biotrade ESG Impact
+                    Registry</span>
                 </div>
-                <div class="text-xs text-slate-400 font-mono">SERIAL: <span id="cert-serial" class="text-neon">BIO-ESG-2026-9842F</span></div>
+                <div class="text-xs text-slate-400 font-mono">SERIAL: <span id="cert-serial"
+                    class="text-neon">BIO-ESG-2026-9842F</span></div>
               </div>
               <div class="text-right">
-                <span class="inline-block px-3 py-1 rounded-full text-[0.65rem] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-widest">
+                <span
+                  class="inline-block px-3 py-1 rounded-full text-[0.65rem] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 uppercase tracking-widest">
                   Verified Audit Standard
                 </span>
                 <div class="text-xs text-slate-400 mt-1" id="cert-date">Issued: 30 Oct 2026</div>
@@ -453,57 +593,64 @@
 
             <!-- Body -->
             <div class="text-center max-w-2xl mx-auto my-6">
-              <div class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-semibold">Certificate of Environmental Stewardship</div>
-              <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
+              <div class="text-xs uppercase tracking-widest text-slate-400 mb-2 font-semibold">Certificate of
+                Environmental Stewardship</div>
+              <h2 data-i18n="dash.certMainTitle" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight mb-2">
                 ใบรับรองการเบี่ยงเบนขยะจากหลุมฝังกลบ & การลดคาร์บอนฟุตพริ้นท์
               </h2>
               <p class="text-xs sm:text-sm text-slate-300">
-                This certifies that the operational facility specified below has successfully diverted verified organic byproducts from landfill degradation under the circular bio-economy framework.
+                This certifies that the operational facility specified below has successfully diverted verified organic
+                byproducts from landfill degradation under the circular bio-economy framework.
               </p>
             </div>
 
             <!-- Enterprise Card -->
             <div class="p-4 rounded-2xl bg-white/[0.03] border border-white/10 max-w-xl mx-auto my-6 text-center">
-              <div class="text-xs text-slate-400 uppercase tracking-wider mb-1">Presented To:</div>
+              <div data-i18n="dash.certPresentedTo" class="text-xs text-slate-400 uppercase tracking-wider mb-1">มอบให้แก่:</div>
               <div class="text-lg font-bold text-neon" id="cert-company-name">GreenHarvest Bio-Farms & Agro Ltd.</div>
-              <div class="text-xs text-slate-300 mt-1" id="cert-company-tax">Tax ID: 0105562098711 · Nakhon Pathom, Thailand</div>
+              <div class="text-xs text-slate-300 mt-1" id="cert-company-tax">Tax ID: 0105562098711 · Nakhon Pathom,
+                Thailand</div>
             </div>
 
             <!-- Verified Metrics Grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 my-8 text-center">
               <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5">
                 <div class="text-2xl font-black text-neon" id="cert-metric-co2">16.65 MT</div>
-                <div class="text-[0.68rem] text-slate-400 uppercase mt-1">Avoided CO₂e</div>
+                <div class="text-[0.68rem] text-slate-400 uppercase mt-1" data-i18n="dash.certAvoidedCo2">ลดการปล่อย CO₂e</div>
               </div>
               <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5">
                 <div class="text-2xl font-black text-white" id="cert-metric-waste">27.0 Tons</div>
-                <div class="text-[0.68rem] text-slate-400 uppercase mt-1">Diverted Waste</div>
+                <div class="text-[0.68rem] text-slate-400 uppercase mt-1" data-i18n="dash.certDivertedWaste">ขยะที่เบี่ยงเบน</div>
               </div>
               <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5">
                 <div class="text-2xl font-black text-emerald-400" id="cert-metric-trees">765</div>
-                <div class="text-[0.68rem] text-slate-400 uppercase mt-1">Trees Equivalent</div>
+                <div class="text-[0.68rem] text-slate-400 uppercase mt-1" data-i18n="dash.certTrees">เทียบเท่าต้นไม้</div>
               </div>
               <div class="p-4 rounded-xl bg-slate-900/60 border border-white/5">
                 <div class="text-2xl font-black text-blue-400" id="cert-metric-cars">97,941 km</div>
-                <div class="text-[0.68rem] text-slate-400 uppercase mt-1">Car Mileage Offset</div>
+                <div class="text-[0.68rem] text-slate-400 uppercase mt-1" data-i18n="dash.certCar">เทียบเท่าระยะทางรถยนต์</div>
               </div>
             </div>
 
             <!-- Footer Seal & Signatures -->
-            <div class="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div
+              class="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-400">
               <div>
-                <div data-i18n="dash.certStandard" class="font-semibold text-slate-300">มาตรฐานอ้างอิง: ISO 14064-2:2019 Circular Biomass Standard</div>
-                <div data-i18n="dash.certIssuer" class="text-[0.68rem] mt-0.5">ออกโดย ระบบตรวจสอบความยั่งยืน biotrade ESG Engine</div>
+                <div data-i18n="dash.certStandard" class="font-semibold text-slate-300">มาตรฐานอ้างอิง: ISO 14064-2:2019
+                  Circular Biomass Standard</div>
+                <div data-i18n="dash.certIssuer" class="text-[0.68rem] mt-0.5">ออกโดย ระบบตรวจสอบความยั่งยืน biotrade
+                  ESG Engine</div>
               </div>
               <div class="flex items-center gap-4">
                 <div class="w-14 h-14 rounded-xl bg-white p-1 flex items-center justify-center">
                   <!-- QR Code Mock -->
-                  <div class="w-full h-full bg-slate-950 flex flex-col items-center justify-center text-[0.5rem] font-mono text-neon font-bold">
+                  <div
+                    class="w-full h-full bg-slate-950 flex flex-col items-center justify-center text-[0.5rem] font-mono text-neon font-bold">
                     [QR-ESG]
                   </div>
                 </div>
                 <div class="text-right">
-                  <div class="font-bold text-white uppercase text-[0.7rem]">Digital Stamp Verified</div>
+                  <div class="font-bold text-white uppercase text-[0.7rem]" data-i18n="dash.certDigitalStamp">รับรองตราประทับดิจิทัล</div>
                   <div class="text-[0.65rem] text-neon font-mono">HASH: SHA256-OK-2026</div>
                 </div>
               </div>
@@ -519,31 +666,31 @@
     <!-- TAB 2: TRANSACTION & LEDGER (Platform GP Calculation)             -->
     <!-- ═══════════════════════════════════════════════════════════════════ -->
     <section id="tab-content-ledger" class="hidden space-y-8">
-      
+
       <!-- Financial Summary Cards with 10% GP Breakdown -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="glass p-5 rounded-2xl">
           <div data-i18n="dash.statGrossRevenue" class="text-xs text-slate-400 mb-2">ยอดขายรวม (Gross Volume)</div>
           <div class="text-3xl font-extrabold text-white" id="ledger-gross-total">฿13,207.00</div>
-          <div class="text-xs text-slate-400 mt-1">100% Total Settled Sales</div>
+          <div class="text-xs text-slate-400 mt-1" data-i18n="dash.ledgerTotalSales">ยอดขายสะสมรวม 100%</div>
         </div>
 
         <div class="glass p-5 rounded-2xl border-warm/20 bg-warm/[0.02]">
           <div data-i18n="dash.statPlatformGp" class="text-xs text-warm mb-2 font-bold">ส่วนแบ่งแพลตฟอร์ม (10% GP)</div>
           <div class="text-3xl font-extrabold text-warm" id="ledger-gp-total">฿1,320.70</div>
-          <div class="text-xs text-white/50 mt-1">Platform Commission Deducted</div>
+          <div class="text-xs text-white/50 mt-1" data-i18n="dash.ledgerGpDeducted">หักค่าบริการแพลตฟอร์ม GP</div>
         </div>
 
         <div class="glass p-5 rounded-2xl border-neon/20 bg-neon/[0.02]">
           <div data-i18n="dash.statNetPayout" class="text-xs text-neon mb-2 font-bold">ยอดรับสุทธิของผู้ขาย (90%)</div>
           <div class="text-3xl font-extrabold text-neon" id="ledger-net-total">฿11,886.30</div>
-          <div class="text-xs text-white/50 mt-1">Disbursed to Bank Account</div>
+          <div class="text-xs text-white/50 mt-1" data-i18n="dash.ledgerNetPayout">โอนเข้าบัญชีธนาคารสุทธิ</div>
         </div>
 
         <div class="glass p-5 rounded-2xl">
           <div data-i18n="dash.statTotalOrders" class="text-xs text-slate-400 mb-2">จำนวนธุรกรรมสำเร็จ</div>
           <div class="text-3xl font-extrabold text-white" id="ledger-orders-count">4</div>
-          <div class="text-xs text-slate-400 mt-1">100% Escrow Verified</div>
+          <div class="text-xs text-slate-400 mt-1" data-i18n="dash.ledgerEscrowVerified">ยืนยันสัญญา Escrow 100%</div>
         </div>
       </div>
 
@@ -551,8 +698,11 @@
       <div class="glass p-6 sm:p-8 rounded-3xl overflow-hidden">
         <div class="flex items-center justify-between mb-6">
           <div>
-            <h3 data-i18n="dash.ledgerTitle" class="text-lg font-bold text-white">บัญชีบันทึกธุรกรรมการค้า & ส่วนแบ่ง GP แพลตฟอร์ม</h3>
-            <p data-i18n="dash.ledgerDesc" class="text-xs text-slate-400 mt-1 max-w-2xl">ระบบคำนวณหักส่วนแบ่งแพลตฟอร์มมาตรฐาน 10% (Gross Profit Commission) อัตโนมัติ เพื่อเป็นค่าตรวจสอบคุณภาพและระบบเงินประกัน Escrow</p>
+            <h3 data-i18n="dash.ledgerTitle" class="text-lg font-bold text-white">บัญชีบันทึกธุรกรรมการค้า & ส่วนแบ่ง GP
+              แพลตฟอร์ม</h3>
+            <p data-i18n="dash.ledgerDesc" class="text-xs text-slate-400 mt-1 max-w-2xl">
+              ระบบคำนวณหักส่วนแบ่งแพลตฟอร์มมาตรฐาน 10% (Gross Profit Commission) อัตโนมัติ
+              เพื่อเป็นค่าตรวจสอบคุณภาพและระบบเงินประกัน Escrow</p>
           </div>
         </div>
 
@@ -586,9 +736,10 @@
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h3 data-i18n="dash.listingsTitle" class="text-lg font-bold text-white">คลังรายการประกาศของคุณ</h3>
-          <p class="text-xs text-slate-400 mt-0.5">Control live availability, update weight, and monitor active buyer interest.</p>
+          <p class="text-xs text-slate-400 mt-0.5" data-i18n="dash.listingsSub">จัดการสถานะการเปิดรับซื้อขาย ปริมาณสต็อก และตรวจสอบรายการที่เปิดอยู่</p>
         </div>
-        <a href="list-waste.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neon text-slate-950 text-xs font-bold hover:bg-neon-dim transition-all">
+        <a href="list-waste.html"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-neon text-slate-950 text-xs font-bold hover:bg-neon-dim transition-all">
           <span data-i18n="dash.btnCreateNew">+ ลงประกาศใหม่</span>
         </a>
       </div>
@@ -622,71 +773,93 @@
       <div class="glass p-6 sm:p-8 rounded-3xl max-w-3xl">
         <div class="border-b border-white/10 pb-4 mb-6">
           <h3 data-i18n="dash.profileTitle" class="text-lg font-bold text-white">ข้อมูลสถานประกอบการและโรงงาน</h3>
-          <p data-i18n="dash.profileDesc" class="text-xs text-slate-400 mt-1">อัปเดตข้อมูลสถานที่ พิกัด และผู้ติดต่อ เพื่อความถูกต้องในการส่งมอบสินค้าและเรียกรถขนส่ง</p>
+          <p data-i18n="dash.profileDesc" class="text-xs text-slate-400 mt-1">อัปเดตข้อมูลสถานที่ พิกัด และผู้ติดต่อ
+            เพื่อความถูกต้องในการส่งมอบสินค้าและเรียกรถขนส่ง</p>
         </div>
 
         <form id="profile-form" onsubmit="handleProfileSubmit(event)" class="space-y-5">
           <div>
-            <label data-i18n="dash.shopName" class="block text-xs font-semibold text-slate-300 mb-1.5">ชื่อฟาร์ม / ร้านค้า / สถานประกอบการ</label>
-            <input type="text" id="prof-shop-name" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+            <label data-i18n="dash.shopName" class="block text-xs font-semibold text-slate-300 mb-1.5">ชื่อฟาร์ม /
+              ร้านค้า / สถานประกอบการ</label>
+            <input type="text" id="prof-shop-name" required
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label data-i18n="dash.contactPerson" class="block text-xs font-semibold text-slate-300 mb-1.5">ชื่อผู้ติดต่อประสานงาน</label>
-              <input type="text" id="prof-contact" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+              <label data-i18n="dash.contactPerson"
+                class="block text-xs font-semibold text-slate-300 mb-1.5">ชื่อผู้ติดต่อประสานงาน</label>
+              <input type="text" id="prof-contact" required
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
             </div>
             <div>
-              <label data-i18n="dash.phone" class="block text-xs font-semibold text-slate-300 mb-1.5">เบอร์โทรศัพท์ที่ติดต่อได้</label>
-              <input type="tel" id="prof-phone" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+              <label data-i18n="dash.phone"
+                class="block text-xs font-semibold text-slate-300 mb-1.5">เบอร์โทรศัพท์ที่ติดต่อได้</label>
+              <input type="tel" id="prof-phone" required
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label data-i18n="dash.email" class="block text-xs font-semibold text-slate-300 mb-1.5">อีเมลติดต่อทางธุรกิจ</label>
-              <input type="email" id="prof-email" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+              <label data-i18n="dash.email"
+                class="block text-xs font-semibold text-slate-300 mb-1.5">อีเมลติดต่อทางธุรกิจ</label>
+              <input type="email" id="prof-email" required
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
             </div>
             <div>
-              <label data-i18n="dash.taxId" class="block text-xs font-semibold text-slate-300 mb-1.5">เลขประจำตัวผู้เสียภาษี / ทะเบียนพาณิชย์</label>
-              <input type="text" id="prof-tax-id" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
+              <label data-i18n="dash.taxId"
+                class="block text-xs font-semibold text-slate-300 mb-1.5">เลขประจำตัวผู้เสียภาษี /
+                ทะเบียนพาณิชย์</label>
+              <input type="text" id="prof-tax-id"
+                class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon" />
             </div>
           </div>
 
           <div>
-            <label data-i18n="dash.role" class="block text-xs font-semibold text-slate-300 mb-1.5">บทบาทในแพลตฟอร์ม</label>
-            <select id="prof-role" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
-              <option value="seller">ผู้ขาย (แหล่งกำเนิดขยะ / ร้านอาหาร)</option>
-              <option value="buyer">ผู้ซื้อ (โรงงานแปรรูปชีวภาพ / โรงปุ๋ย / ผู้รับซื้อ)</option>
-              <option value="both">ทั้งสองบทบาท (เป็นทั้งผู้ซื้อและผู้ขาย)</option>
+            <label data-i18n="dash.role"
+              class="block text-xs font-semibold text-slate-300 mb-1.5">บทบาทในแพลตฟอร์ม</label>
+            <select id="prof-role"
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon">
+              <option value="seller" data-i18n="dash.roleSeller">ผู้ขาย (แหล่งกำเนิดขยะ / ร้านอาหาร)</option>
+              <option value="buyer" data-i18n="dash.roleBuyer">ผู้ซื้อ (โรงงานแปรรูปชีวภาพ / โรงปุ๋ย / ผู้รับซื้อ)</option>
+              <option value="both" data-i18n="dash.roleBoth">ทั้งสองบทบาท (เป็นทั้งผู้ซื้อและผู้ขาย)</option>
             </select>
           </div>
 
           <div>
-            <label data-i18n="dash.address" class="block text-xs font-semibold text-slate-300 mb-1.5">ที่อยู่โรงงาน / ลานโหลดสินค้าสำหรับรับของ</label>
-            <textarea id="prof-address" rows="3" required class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon"></textarea>
+            <label data-i18n="dash.address" class="block text-xs font-semibold text-slate-300 mb-1.5">ที่อยู่โรงงาน /
+              ลานโหลดสินค้าสำหรับรับของ</label>
+            <textarea id="prof-address" rows="3" required
+              class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-neon"></textarea>
           </div>
 
           <!-- PDPA Consent Status Card -->
           <div class="p-4 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              <div
+                class="w-8 h-8 rounded-lg bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
               </div>
               <div>
-                <div class="text-xs font-bold text-white">PDPA Data Consent Confirmed</div>
-                <div class="text-[0.68rem] text-slate-400" id="prof-pdpa-date">Consent timestamp: 2026-10-15 09:30 UTC</div>
+                <div class="text-xs font-bold text-white" data-i18n="dash.pdpaConsentConfirmed">ยืนยันการยินยอมตามนโยบาย PDPA แล้ว</div>
+                <div class="text-[0.68rem] text-slate-400" id="prof-pdpa-date">Consent timestamp: 2026-10-15 09:30 UTC
+                </div>
               </div>
             </div>
-            <button type="button" onclick="openPdpaModal()" class="text-xs text-neon hover:underline cursor-pointer" data-i18n="legal.pdpaView">อ่านข้อกำหนดนโยบายฉบับเต็ม</button>
+            <button type="button" onclick="openPdpaModal()" class="text-xs text-neon hover:underline cursor-pointer"
+              data-i18n="legal.pdpaView">อ่านข้อกำหนดนโยบายฉบับเต็ม</button>
           </div>
 
           <div class="pt-4 flex items-center justify-between">
-            <button type="submit" class="px-6 py-3 rounded-xl bg-neon hover:bg-neon-dim text-slate-950 text-sm font-bold transition-all shadow-md shadow-neon/20 cursor-pointer">
+            <button type="submit"
+              class="px-6 py-3 rounded-xl bg-neon hover:bg-neon-dim text-slate-950 text-sm font-bold transition-all shadow-md shadow-neon/20 cursor-pointer">
               <span data-i18n="dash.saveProfile">บันทึกข้อมูลโปรไฟล์</span>
             </button>
             <span id="profile-save-msg" class="text-xs text-neon font-semibold hidden">
-              ✓ Saved successfully!
+              <span data-i18n="dash.savedSuccess">✓ บันทึกข้อมูลสำเร็จเรียบร้อยแล้ว!</span>
             </span>
           </div>
         </form>
@@ -697,32 +870,44 @@
 
   <!-- ═══════ Legal Compliance & PDPA Modal ═══════ -->
   <div id="pdpa-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md items-center justify-center p-4">
-    <div class="bg-slate-900 border border-white/15 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-4 shadow-2xl overflow-y-auto max-h-[90vh]">
+    <div
+      class="bg-slate-900 border border-white/15 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-4 shadow-2xl overflow-y-auto max-h-[90vh]">
       <div class="flex items-center justify-between border-b border-white/10 pb-3">
         <h3 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-          <svg class="w-5 h-5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <svg class="w-5 h-5 text-neon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          </svg>
           <span data-i18n="legal.modalTitle">นโยบายคุ้มครองข้อมูลส่วนบุคคล (PDPA) และมาตรฐานคุณภาพวัตถุดิบ</span>
         </h3>
-        <button type="button" onclick="closePdpaModal()" class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
+        <button type="button" onclick="closePdpaModal()"
+          class="text-slate-400 hover:text-white text-lg font-bold">✕</button>
       </div>
 
       <div class="text-xs text-slate-300 space-y-3 leading-relaxed">
         <p>
-          <strong>1. Personal & Enterprise Data Processing (PDPA B.E. 2562):</strong> biotrade processes business and personal contact details solely for facilitating biological resource trade transactions, generating certified ESG Carbon Offset certificates, dispatching carrier pickup fleets, and managing escrow settlements.
+          <strong><span data-i18n="legal.pdpaHeading">1. การประมวลผลข้อมูลส่วนบุคคลและข้อมูลธุรกิจ (พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562):</span></strong> biotrade processes business and
+          personal contact details solely for facilitating biological resource trade transactions, generating certified
+          ESG Carbon Offset certificates, dispatching carrier pickup fleets, and managing escrow settlements.
         </p>
         <p>
-          <strong>2. Cross-Party Disclosure:</strong> You authorize biotrade to disclose your facility coordinates and pickup bay instructions to verified off-takers and contracted third-party logistics carriers.
+          <strong><span data-i18n="legal.disclosureHeading">2. การเปิดเผยข้อมูลระหว่างคู่ค้า:</span></strong> You authorize biotrade to disclose your facility coordinates and
+          pickup bay instructions to verified off-takers and contracted third-party logistics carriers.
         </p>
         <p class="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-200">
-          <strong>3. Strict Terms of Service (ToS) & Contamination Liability:</strong> Sellers are fully responsible for all return shipping costs and platform penalties if the delivered waste contains plastic contamination or exceeds the declared rot/moisture levels. All organic streams must adhere to zero inorganic packaging standards.
+          <strong><span data-i18n="legal.tosHeading">3. ข้อกำหนดและเงื่อนไขการใช้งานที่เคร่งครัด (ToS) & ความรับผิดชอบต่อการปนเปื้อน:</span></strong> Sellers are fully responsible for
+          all return shipping costs and platform penalties if the delivered waste contains plastic contamination or
+          exceeds the declared rot/moisture levels. All organic streams must adhere to zero inorganic packaging
+          standards.
         </p>
         <p>
-          <strong>4. Data Subject Rights:</strong> You retain full rights under Thailand PDPA to access, rectify, or request erasure of your registration records upon formal notice to privacy@biotrade.asia.
+          <strong><span data-i18n="legal.rightsHeading">4. สิทธิของเจ้าของข้อมูลส่วนบุคคล:</span></strong> You retain full rights under Thailand PDPA to access, rectify, or
+          request erasure of your registration records upon formal notice to privacy@biotrade.asia.
         </p>
       </div>
 
       <div class="pt-3 border-t border-white/10 flex justify-end">
-        <button type="button" onclick="closePdpaModal()" class="px-5 py-2.5 rounded-xl bg-neon text-slate-950 font-bold text-xs hover:bg-neon-dim transition-all">
+        <button type="button" onclick="closePdpaModal()"
+          class="px-5 py-2.5 rounded-xl bg-neon text-slate-950 font-bold text-xs hover:bg-neon-dim transition-all">
           <span data-i18n="legal.modalClose">ข้าพเจ้าเข้าใจและยอมรับเงื่อนไข</span>
         </button>
       </div>
@@ -751,6 +936,11 @@
           btn.classList.remove('active');
         }
       });
+
+      // Update URL hash without jumping
+      if (history.replaceState) {
+        history.replaceState(null, '', tabName === 'esg' ? window.location.pathname + window.location.search : '#' + tabName);
+      }
     }
 
     // Load & Render User Profile
@@ -887,9 +1077,9 @@
             <div class="text-[0.68rem] text-slate-400">${ord.weight} · ${translateCategory(ord.typeKey)}</div>
           </td>
           <td class="py-3 px-3 text-slate-300 text-xs">${ord.buyerName}</td>
-          <td class="py-3 px-3 text-right font-semibold text-white text-xs">฿${(ord.grossAmount || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-          <td class="py-3 px-3 text-right font-bold text-warm text-xs">-฿${(ord.platformFee || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
-          <td class="py-3 px-3 text-right font-extrabold text-neon text-xs">฿${(ord.netPayout || 0).toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+          <td class="py-3 px-3 text-right font-semibold text-white text-xs">฿${(ord.grossAmount || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+          <td class="py-3 px-3 text-right font-bold text-warm text-xs">-฿${(ord.platformFee || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
+          <td class="py-3 px-3 text-right font-extrabold text-neon text-xs">฿${(ord.netPayout || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}</td>
           <td class="py-3 px-3 text-center">
             <span class="inline-block px-2.5 py-0.5 rounded-full text-[0.65rem] font-bold uppercase bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
               Settled (90%)
@@ -899,9 +1089,9 @@
         tbody.appendChild(tr);
       });
 
-      document.getElementById('ledger-gross-total').textContent = `฿${grossSum.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-      document.getElementById('ledger-gp-total').textContent = `฿${gpSum.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-      document.getElementById('ledger-net-total').textContent = `฿${netSum.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+      document.getElementById('ledger-gross-total').textContent = `฿${grossSum.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      document.getElementById('ledger-gp-total').textContent = `฿${gpSum.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
+      document.getElementById('ledger-net-total').textContent = `฿${netSum.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
       document.getElementById('ledger-orders-count').textContent = orders.length;
     }
 
@@ -924,7 +1114,7 @@
     function runCarbonCalculation() {
       const stream = document.getElementById('calc-stream').value;
       const weight = parseFloat(document.getElementById('calc-weight').value) || 0;
-      
+
       const res = CarbonEngine.calculateCo2e(stream, weight, 'tons');
       document.getElementById('calc-result-text').textContent = `${res.co2SavedTons.toFixed(2)} Metric Tons CO₂e (${res.co2SavedKg.toLocaleString()} kg)`;
       document.getElementById('calc-trees-text').textContent = `${res.equivalencies.treesPlantedYear} Trees`;
@@ -966,9 +1156,23 @@
       renderLedger();
       renderEsgDashboard();
       runCarbonCalculation();
+
+      // Check URL query parameters or hash to directly open profile or other tabs
+      const urlParams = new URLSearchParams(window.location.search);
+      const targetTab = urlParams.get('tab') || window.location.hash.replace('#', '');
+      if (targetTab && ['esg', 'ledger', 'listings', 'profile'].includes(targetTab)) {
+        switchDashboardTab(targetTab);
+      }
+    });
+
+    window.addEventListener('hashchange', () => {
+      const targetTab = window.location.hash.replace('#', '');
+      if (targetTab && ['esg', 'ledger', 'listings', 'profile'].includes(targetTab)) {
+        switchDashboardTab(targetTab);
+      }
     });
   </script>
 
 </body>
-</html>
 
+</html>
